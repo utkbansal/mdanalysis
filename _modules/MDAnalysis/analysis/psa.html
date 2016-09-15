@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MDAnalysis.analysis.psa &mdash; MDAnalysis 0.15.1-dev0 documentation</title>
+    <title>MDAnalysis.analysis.psa &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.15.1-dev0',
+        VERSION:     '0.16.0-dev0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,10 +25,10 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within MDAnalysis 0.15.1-dev0 documentation"
+          title="Search within MDAnalysis 0.16.0-dev0 documentation"
           href="../../../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../../../_static/mdanalysis-logo.ico"/>
-    <link rel="top" title="MDAnalysis 0.15.1-dev0 documentation" href="../../../index.html" />
+    <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body role="document">
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MDAnalysis 0.15.1-dev0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>
@@ -379,18 +379,21 @@
 <span class="sd">    The *path* is assumed to be a :class:`numpy.ndarray` where the 0th axis</span>
 <span class="sd">    corresponds to a frame (a snapshot of coordinates). The :math:`3N`</span>
 <span class="sd">    (Cartesian) coordinates are assumed to be either:</span>
-<span class="sd">        (1) all in the 1st axis, starting with the x,y,z coordinates of the</span>
-<span class="sd">            first atom, followed by the *x*,*y*,*z* coordinates of the 2nd, etc.</span>
-<span class="sd">        (2) in the 1st *and* 2nd axis, where the 1st axis indexes the atom</span>
-<span class="sd">            number and the 2nd axis contains the *x*,*y*,*z* coordinates of each</span>
-<span class="sd">            atom.</span>
+
+<span class="sd">    1. all in the 1st axis, starting with the x,y,z coordinates of the</span>
+<span class="sd">       first atom, followed by the *x*,*y*,*z* coordinates of the 2nd, etc.</span>
+<span class="sd">    2. in the 1st *and* 2nd axis, where the 1st axis indexes the atom</span>
+<span class="sd">       number and the 2nd axis contains the *x*,*y*,*z* coordinates of</span>
+<span class="sd">       each atom.</span>
 
 <span class="sd">    :Arguments:</span>
 <span class="sd">      *path*</span>
 <span class="sd">         :class:`numpy.ndarray` representing a path</span>
 
 <span class="sd">    :Returns:</span>
-<span class="sd">      (int, (int, ...)), the number of atoms and the axes containing coordinates</span>
+<span class="sd">      ``(int, (int, ...))``, the number of atoms and the axes</span>
+<span class="sd">      containing coordinates</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">path_dimensions</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">path_dimensions</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
@@ -536,11 +539,6 @@
 
 <div class="viewcode-block" id="hausdorff_neighbors"><a class="viewcode-back" href="../../../documentation_pages/analysis/psa.html#MDAnalysis.analysis.psa.hausdorff_neighbors">[docs]</a><span class="k">def</span> <span class="nf">hausdorff_neighbors</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Calculate the Hausdorff distance between two paths.</span>
-
-<span class="sd">    .. |3Dp| replace:: :math:`N_p \times N \times 3`</span>
-<span class="sd">    .. |2Dp| replace:: :math:`N_p \times (3N)`</span>
-<span class="sd">    .. |3Dq| replace:: :math:`N_q \times N \times 3`</span>
-<span class="sd">    .. |2Dq| replace:: :math:`N_q \times (3N)`</span>
 
 <span class="sd">    *P* (*Q*) is a :class:`numpy.ndarray` of :math:`N_p` (:math:`N_q`) time</span>
 <span class="sd">    steps, :math:`N` atoms, and :math:`3N` coordinates (e.g.,</span>
@@ -898,10 +896,11 @@
 <div class="viewcode-block" id="Path.get_num_atoms"><a class="viewcode-back" href="../../../documentation_pages/analysis/psa.html#MDAnalysis.analysis.psa.Path.get_num_atoms">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of atoms used to construct the :class:`Path`.</span>
 
-<span class="sd">        Must run :method:`Path.to_path()` prior to calling this method.</span>
+<span class="sd">        Must run :meth:`Path.to_path` prior to calling this method.</span>
 
 <span class="sd">        :Returns:</span>
-<span class="sd">          int, the number of atoms in the :class:`Path`</span>
+<span class="sd">          ``int``, the number of atoms in the :class:`Path`</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;No path data; do &#39;Path.to_path()&#39; first.&quot;</span>
@@ -1002,7 +1001,7 @@
 <span class="sd">        *distances* for *this* pair of paths corresponding to distance matrix</span>
 <span class="sd">        indices (*i*,*j*).</span>
 
-<span class="sd">        :method:`PSAPair.compute_nearest_neighbors` calls</span>
+<span class="sd">        :meth:`PSAPair.compute_nearest_neighbors` calls</span>
 <span class="sd">        :func:`hausdorff_neighbors` to populate the dictionary of the nearest</span>
 <span class="sd">        neighbor lists of frames (by index) and distances</span>
 <span class="sd">        (:attr:`PSAPair.nearest_neighbors`). This method must explicitly take as</span>
@@ -1026,8 +1025,8 @@
     <span class="k">def</span> <span class="nf">find_hausdorff_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Find the Hausdorff pair (of frames) for *this* pair of paths.</span>
 
-<span class="sd">        :method:`PSAPair.find_hausdorff_pair` requires that</span>
-<span class="sd">        `:method:`PSAPair.compute_nearest_neighbors` be called first to</span>
+<span class="sd">        :meth:`PSAPair.find_hausdorff_pair` requires that</span>
+<span class="sd">        `:meth:`PSAPair.compute_nearest_neighbors` be called first to</span>
 <span class="sd">        generate the nearest neighbors (and corresponding distances) for each</span>
 <span class="sd">        path in *this* :class:`PSAPair`. The Hausdorff pair is the nearest</span>
 <span class="sd">        neighbor pair (of snapshots/frames), one in the first path and one in</span>
@@ -1056,9 +1055,9 @@
         <span class="sd">&quot;&quot;&quot;Returns the nearest neighbor frame indices, distances, or both, for</span>
 <span class="sd">        each path in *this* :class:`PSAPair`.</span>
 
-<span class="sd">        :method:`PSAPair.get_nearest_neighbors` requires that the nearest</span>
+<span class="sd">        :meth:`PSAPair.get_nearest_neighbors` requires that the nearest</span>
 <span class="sd">        neighbors (:attr:`nearest_neighbors`) be initially computed by first</span>
-<span class="sd">        calling :method:`compute_nearest_neighbors`. At least one of *frames*</span>
+<span class="sd">        calling :meth:`compute_nearest_neighbors`. At least one of *frames*</span>
 <span class="sd">        or *distances* must be ``True``, or else a ``NoDataError`` is raised.</span>
 
 <span class="sd">        :Arguments:</span>
@@ -1100,9 +1099,9 @@
         <span class="sd">&quot;&quot;&quot;Returns the Hausdorff pair of frames indices, the Hausdorff distance,</span>
 <span class="sd">        or both, for the paths in *this* :class:`PSAPair`.</span>
 
-<span class="sd">        :method:`PSAPair.get_hausdorff_pair` requires that the Hausdorff pair</span>
+<span class="sd">        :meth:`PSAPair.get_hausdorff_pair` requires that the Hausdorff pair</span>
 <span class="sd">        (and distance) be initially found by first calling</span>
-<span class="sd">        :method:`find_hausdorff_pair`. At least one of *frames* or *distance*</span>
+<span class="sd">        :meth:`find_hausdorff_pair`. At least one of *frames* or *distance*</span>
 <span class="sd">        must be ``True``, or else a ``NoDataError`` is raised.</span>
 
 <span class="sd">        :Arguments:</span>
@@ -1842,13 +1841,12 @@
 
 
 <div class="viewcode-block" id="PSAnalysis.get_num_atoms"><a class="viewcode-back" href="../../../documentation_pages/analysis/psa.html#MDAnalysis.analysis.psa.PSAnalysis.get_num_atoms">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the number of atoms used to construct the :class:`Path`s in</span>
+        <span class="sd">&quot;&quot;&quot;Return the number of atoms used to construct the :class:`Path` instances in</span>
 <span class="sd">        :class:`PSA`.</span>
 
 <span class="sd">        .. note::</span>
-
-<span class="sd">        Must run :method:`PSAnalysis.generate_paths()` prior to calling this</span>
-<span class="sd">        method.</span>
+<span class="sd">           Must run :meth:`PSAnalysis.generate_paths` prior to calling this</span>
+<span class="sd">           method.</span>
 
 <span class="sd">        :Returns:</span>
 <span class="sd">          int, the number of atoms in :class:`PSA`&#39;s :class:`Path`s&#39;</span>
@@ -1863,9 +1861,8 @@
         <span class="sd">&quot;&quot;&quot;Return the number of paths in :class:`PSA`.</span>
 
 <span class="sd">        .. note::</span>
-
-<span class="sd">        Must run :method:`PSAnalysis.generate_paths()` prior to calling this</span>
-<span class="sd">        method.</span>
+<span class="sd">           Must run :meth:`PSAnalysis.generate_paths` prior to calling this</span>
+<span class="sd">           method.</span>
 
 <span class="sd">        :Returns:</span>
 <span class="sd">          int, the number of paths in :class:`PSA`</span>
@@ -1880,9 +1877,8 @@
         <span class="sd">&quot;&quot;&quot;Return the paths in :class:`PSA`.</span>
 
 <span class="sd">        .. note::</span>
-
-<span class="sd">        Must run :method:`PSAnalysis.generate_paths()` prior to calling this</span>
-<span class="sd">        method.</span>
+<span class="sd">           Must run :meth:`PSAnalysis.generate_paths` prior to calling this</span>
+<span class="sd">           method.</span>
 
 <span class="sd">        :Returns:</span>
 <span class="sd">          list of :class:`numpy.ndarray` representations of paths in</span>
@@ -1898,9 +1894,8 @@
         <span class="sd">&quot;&quot;&quot;Return the distance matrix (or vector) of pairwise path distances.</span>
 
 <span class="sd">        .. note::</span>
-
-<span class="sd">        Must run :method:`PSAnalysis.run(store=True)` prior to calling this</span>
-<span class="sd">        method.</span>
+<span class="sd">           Must run :meth:`PSAnalysis.run` with ``store=True`` prior to</span>
+<span class="sd">           calling this method.</span>
 
 <span class="sd">        :Arguments:</span>
 <span class="sd">          *vectorform*</span>
@@ -1909,6 +1904,7 @@
 <span class="sd">        :Returns:</span>
 <span class="sd">          :class:`numpy.ndarray` representation of the distance matrix (or</span>
 <span class="sd">          vector)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;No distance data; do &#39;PSAnalysis.run(store=True)&#39; first.&quot;</span>
@@ -1922,11 +1918,11 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">psa_pairs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the list of :class:`PSAPair`s for each pair of paths.</span>
+        <span class="sd">&quot;&quot;&quot;Get the list of :class:`PSAPair` instances for each pair of paths.</span>
 
-<span class="sd">        :method:`psa_pairs` is a list of :class:`PSAPair` whose elements are</span>
+<span class="sd">        :meth:`psa_pairs` is a list of :class:`PSAPair` whose elements are</span>
 <span class="sd">        pairs of paths that have been compared using</span>
-<span class="sd">        :method:`PSAnalysis.run_pairs_analysis()`. Each :class:`PSAPair`</span>
+<span class="sd">        :meth:`PSAnalysis.run_pairs_analysis`. Each :class:`PSAPair`</span>
 <span class="sd">        contains nearest neighbor and Hausdorff pair information specific to a</span>
 <span class="sd">        pair of paths. The nearest neighbor frames and distances for a</span>
 <span class="sd">        :class:`PSAPair` can be accessed in the nearest neighbor dictionary</span>
@@ -1938,12 +1934,12 @@
 <span class="sd">        &#39;distance&#39;.</span>
 
 <span class="sd">        .. note::</span>
-
-<span class="sd">        Must run :method:`PSAnalysis.run_pairs_analysis()` prior to calling this</span>
-<span class="sd">        method.</span>
+<span class="sd">           Must run :meth:`PSAnalysis.run_pairs_analysis` prior to calling this</span>
+<span class="sd">           method.</span>
 
 <span class="sd">        :Returns:</span>
 <span class="sd">          list of all :class:`PSAPair` objects (in distance vector order)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psa_pairs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;No nearest neighbors data; do&quot;</span>                           \
@@ -1959,16 +1955,16 @@
 <span class="sd">        This method returns a list of Hausdorff pair information, where each</span>
 <span class="sd">        element is a dictionary containing the pair of frames and the</span>
 <span class="sd">        (Hausdorff) distance between a pair of paths. See</span>
-<span class="sd">        :method:`PSAnalysis.psa_pairs` and :attr:`PSAPair.hausdorff_pair` for</span>
+<span class="sd">        :meth:`PSAnalysis.psa_pairs` and :attr:`PSAPair.hausdorff_pair` for</span>
 <span class="sd">        more information about accessing Hausdorff pair data.</span>
 
 <span class="sd">        .. note::</span>
-
-<span class="sd">        Must run :method:`PSAnalysis.run_pairs_analysis(hausdorff_pairs=True)`</span>
-<span class="sd">        prior to calling this method.</span>
+<span class="sd">           Must run :meth:`PSAnalysis.run_pairs_analysis` with</span>
+<span class="sd">           ``hausdorff_pairs=True`` prior to calling this method.</span>
 
 <span class="sd">        :Returns:</span>
 <span class="sd">          list of all Hausdorff pairs (in distance vector order)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_HP</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;No Hausdorff pairs data; do &quot;</span>                            \
@@ -1983,17 +1979,17 @@
 
 <span class="sd">        This method returns a list of nearest neighbor information, where each</span>
 <span class="sd">        element is a dictionary containing the nearest neighbor frames and</span>
-<span class="sd">        distances between a pair of paths. See :method:`PSAnalysis.psa_pairs`</span>
+<span class="sd">        distances between a pair of paths. See :meth:`PSAnalysis.psa_pairs`</span>
 <span class="sd">        and :attr:`PSAPair.nearest_neighbors` for more information about</span>
 <span class="sd">        accessing nearest neighbor data.</span>
 
 <span class="sd">        .. note::</span>
-
-<span class="sd">        Must run :method:`PSAnalysis.run_pairs_analysis(neighbors=True)` prior</span>
-<span class="sd">        to calling this method.</span>
+<span class="sd">           Must run :meth:`PSAnalysis.run_pairs_analysis` with</span>
+<span class="sd">           ``neighbors=True`` prior to calling this method.</span>
 
 <span class="sd">        :Returns:</span>
 <span class="sd">          list of all nearest neighbors (in distance vector order)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_NN</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;No nearest neighbors data; do&quot;</span>                           \
@@ -2016,12 +2012,12 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MDAnalysis 0.15.1-dev0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Alejandro Bernardin, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

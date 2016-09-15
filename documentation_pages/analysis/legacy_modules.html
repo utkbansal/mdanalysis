@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MDAnalysis.analysis.legacy — Legacy analysis code &mdash; MDAnalysis 0.15.1-dev0 documentation</title>
+    <title>3.10.1. MDAnalysis.analysis.legacy — Legacy analysis code &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.15.1-dev0',
+        VERSION:     '0.16.0-dev0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,10 +25,13 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within MDAnalysis 0.15.1-dev0 documentation"
+          title="Search within MDAnalysis 0.16.0-dev0 documentation"
           href="../../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
-    <link rel="top" title="MDAnalysis 0.15.1-dev0 documentation" href="../../index.html" /> 
+    <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../index.html" />
+    <link rel="up" title="3. Analysis modules" href="../analysis_modules.html" />
+    <link rel="next" title="4. Topology modules" href="../topology_modules.html" />
+    <link rel="prev" title="3.9.2. Principal Component Analysis (PCA) — MDAnalysis.analysis.pca" href="pca.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,7 +43,14 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.15.1-dev0 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="../topology_modules.html" title="4. Topology modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pca.html" title="3.9.2. Principal Component Analysis (PCA) — MDAnalysis.analysis.pca"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../analysis_modules.html" accesskey="U">3. Analysis modules</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -50,12 +60,18 @@
             </a></p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">MDAnalysis.analysis.legacy</span></code> &#8212; Legacy analysis code</a><ul>
-<li><a class="reference internal" href="#legacy-modules">Legacy modules</a></li>
+<li><a class="reference internal" href="#">3.10.1. <code class="docutils literal"><span class="pre">MDAnalysis.analysis.legacy</span></code> &#8212; Legacy analysis code</a><ul>
+<li><a class="reference internal" href="#legacy-modules">3.10.1.1. Legacy modules</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pca.html"
+                        title="previous chapter">3.9.2. Principal Component Analysis (PCA) &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.pca</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../topology_modules.html"
+                        title="next chapter">4. Topology modules</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -85,29 +101,30 @@
           <div class="body" role="main">
             
   <div class="section" id="mdanalysis-analysis-legacy-legacy-analysis-code">
-<h1><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.analysis.legacy</span></code> &#8212; Legacy analysis code<a class="headerlink" href="#mdanalysis-analysis-legacy-legacy-analysis-code" title="Permalink to this headline">¶</a></h1>
+<h1>3.10.1. <code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.analysis.legacy</span></code> &#8212; Legacy analysis code<a class="headerlink" href="#mdanalysis-analysis-legacy-legacy-analysis-code" title="Permalink to this headline">¶</a></h1>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.16.0.</span></p>
 </div>
 <p>The <code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.analysis.legacy</span></code> package contains analysis
 modules that are not or only incompletely tested and not regularly
 maintained. They nevertheless still provide useful and sometimes
-unique analysis capabilities and are therefore provided <strong>as is</strong>.</p>
+unique analysis capabilities and are therefore provided <strong>as
+is</strong>. (For further discussion, see <a class="reference external" href="https://github.com/MDAnalysis/mdanalysis/issues/743">Issue 743</a>.)</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Code in this module is not regularly maintained. Please use it very
-carefully.</p>
+<p class="last">Code in the <code class="xref py py-mod docutils literal"><span class="pre">legacy</span></code> package is not
+regularly maintained. Please use it very carefully.</p>
 </div>
-<p>If you want to use code from this module then you will have to import
-it explicitly. For example,</p>
+<p>If you want to use modules from this package then you will have to import
+them explicitly. For example,</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDAnalysis.analysis.legacy</span> <span class="kn">import</span> <span class="n">x3dna</span>
 </pre></div>
 </div>
-<p>(For further discussion, see <a class="reference external" href="https://github.com/MDAnalysis/mdanalysis/issues/743">Issue 743</a>.)</p>
 <div class="section" id="legacy-modules">
-<h2>Legacy modules<a class="headerlink" href="#legacy-modules" title="Permalink to this headline">¶</a></h2>
+<h2>3.10.1.1. Legacy modules<a class="headerlink" href="#legacy-modules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul class="simple">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="legacy/x3dna.html">3.5.2. Generation and Analysis of X3DNA helicoidal parameter profiles &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.legacy.x3dna</span></code></a></li>
 </ul>
 </div>
 </div>
@@ -128,11 +145,18 @@ it explicitly. For example,</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.15.1-dev0 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="../topology_modules.html" title="4. Topology modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pca.html" title="3.9.2. Principal Component Analysis (PCA) — MDAnalysis.analysis.pca"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../analysis_modules.html" >3. Analysis modules</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Alejandro Bernardin, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
