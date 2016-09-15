@@ -1475,6 +1475,7 @@
 <span class="sd">        --------</span>
 <span class="sd">        :meth:`iter_as_aux`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        
         <span class="n">aux</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_for_aux</span><span class="p">(</span><span class="n">auxname</span><span class="p">)</span>
         <span class="n">ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ts</span>
         <span class="c1"># catch up auxiliary if it starts earlier than trajectory</span>
@@ -1490,7 +1491,7 @@
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">!=</span> <span class="n">next_frame</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_frame&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="c1"># iterate trajectory until frame is reached</span>
             <span class="n">ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>       
-        <span class="k">return</span> <span class="n">ts</span> </div>
+        <span class="k">return</span> <span class="n">ts</span></div>
 
 <div class="viewcode-block" id="ProtoReader.iter_as_aux"><a class="viewcode-back" href="../../../documentation_pages/coordinates/base.html#MDAnalysis.coordinates.DCD.ProtoReader.iter_as_aux">[docs]</a>    <span class="k">def</span> <span class="nf">iter_as_aux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auxname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Iterate through timesteps for which there is at least one assigned </span>

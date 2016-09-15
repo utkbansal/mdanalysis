@@ -467,6 +467,13 @@ Universe with matching <em>anchor_name</em> is found. <em>is_anchor</em> will be
 this case but will still be honored when unpickling <a class="reference internal" href="#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code></a>
 instances pickled with <a href="#id1"><span class="problematic" id="id2">*</span></a>anchor_name*==``None``. [<code class="docutils literal"><span class="pre">None</span></code>]</p>
 </dd>
+<dt><em>in_memory</em></dt>
+<dd><p class="first last">After reading in the trajectory, transfer it to an in-memory
+representations, which allow for manipulation of coordinates.</p>
+</dd>
+<dt><a href="#id3"><span class="problematic" id="id4">*</span></a>in_memory_frame_interval</dt>
+<dd><p class="first last">Only read every nth frame into in-memory representation.</p>
+</dd>
 </dl>
 </td>
 </tr>
@@ -689,9 +696,9 @@ This will be removed in version 0.16.0</p>
 <div><dl class="docutils">
 <dt>sel <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
 <dd>The selection string to be parsed (following the language below)</dd>
-<dt><a href="#id3"><span class="problematic" id="id4">*</span></a>othersel <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dt><a href="#id5"><span class="problematic" id="id6">*</span></a>othersel <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
 <dd>More selection strings to be parsed</dd>
-<dt><a href="#id5"><span class="problematic" id="id6">**</span></a>selgroups <span class="classifier-delimiter">:</span> <span class="classifier">AtomGroup(s), optional</span></dt>
+<dt><a href="#id7"><span class="problematic" id="id8">**</span></a>selgroups <span class="classifier-delimiter">:</span> <span class="classifier">AtomGroup(s), optional</span></dt>
 <dd>groups to be referred to using the &#8216;group&#8217; keyword</dd>
 </dl>
 <p>A <a class="reference internal" href="#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>, with atoms sorted according to their
@@ -738,6 +745,30 @@ even if the original selection had so.</p>
 <dt id="MDAnalysis.core.AtomGroup.Universe.trajectory">
 <code class="descname">trajectory</code><a class="headerlink" href="#MDAnalysis.core.AtomGroup.Universe.trajectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reference to trajectory reader object containing trajectory data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.core.AtomGroup.Universe.transfer_to_memory">
+<code class="descname">transfer_to_memory</code><span class="sig-paren">(</span><em>frame_interval=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/AtomGroup.html#Universe.transfer_to_memory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.AtomGroup.Universe.transfer_to_memory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace the current trajectory reader object with one of type
+<code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.coordinates.memory.MemoryReader</span></code> to support in-place
+editing of coordinates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><dl class="first last docutils">
+<dt><em>frame_interval</em></dt>
+<dd><p class="first last">Read in every nth frame.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.15.0.</span></p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -853,7 +884,7 @@ and <code class="xref py py-attr docutils literal"><span class="pre">Universe.an
 <table class="docutils citation" frame="void" id="dima2004" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[Dima2004]</td><td><em>(<a class="fn-backref" href="#id15">1</a>, <a class="fn-backref" href="#id28">2</a>, <a class="fn-backref" href="#id29">3</a>)</em> Dima, R. I., &amp; Thirumalai, D. (2004). Asymmetry in the
+<tr><td class="label">[Dima2004]</td><td><em>(<a class="fn-backref" href="#id17">1</a>, <a class="fn-backref" href="#id30">2</a>, <a class="fn-backref" href="#id31">3</a>)</em> Dima, R. I., &amp; Thirumalai, D. (2004). Asymmetry in the
 shapes of folded and denatured states of proteins. <em>J
 Phys Chem B</em>, 108(21),
 6564-6570. doi:<a class="reference external" href="http://dx.doi.org/10.1021/jp037128y">10.1021/jp037128y</a></td></tr>
@@ -1065,7 +1096,7 @@ i.e. <em>axis</em> = 0) with the z-axis:</p>
 <dt id="MDAnalysis.core.AtomGroup.AtomGroup.asphericity">
 <code class="descname">asphericity</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/AtomGroup.html#AtomGroup.asphericity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.AtomGroup.AtomGroup.asphericity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Asphericity.</p>
-<p>See <a class="reference internal" href="#dima2004" id="id15">[Dima2004]</a> for background information.</p>
+<p>See <a class="reference internal" href="#dima2004" id="id17">[Dima2004]</a> for background information.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1942,9 +1973,9 @@ This will be removed in version 0.16.0</p>
 <div><dl class="docutils">
 <dt>sel <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
 <dd>The selection string to be parsed (following the language below)</dd>
-<dt><a href="#id16"><span class="problematic" id="id17">*</span></a>othersel <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dt><a href="#id18"><span class="problematic" id="id19">*</span></a>othersel <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
 <dd>More selection strings to be parsed</dd>
-<dt><a href="#id18"><span class="problematic" id="id19">**</span></a>selgroups <span class="classifier-delimiter">:</span> <span class="classifier">AtomGroup(s), optional</span></dt>
+<dt><a href="#id20"><span class="problematic" id="id21">**</span></a>selgroups <span class="classifier-delimiter">:</span> <span class="classifier">AtomGroup(s), optional</span></dt>
 <dd>groups to be referred to using the &#8216;group&#8217; keyword</dd>
 </dl>
 <p>A <a class="reference internal" href="#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>, with atoms sorted according to their
@@ -3233,7 +3264,7 @@ attribute access.</p>
 This will be removed in version 0.16.0</p>
 <p>Shape parameter.</p>
 <blockquote>
-<div><p>See <a class="reference internal" href="#dima2004" id="id28">[Dima2004]</a> for background information.</p>
+<div><p>See <a class="reference internal" href="#dima2004" id="id30">[Dima2004]</a> for background information.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -3265,7 +3296,7 @@ flag to be used by default.</p>
 <dt id="MDAnalysis.core.AtomGroup.AtomGroup.shape_parameter">
 <code class="descname">shape_parameter</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/AtomGroup.html#AtomGroup.shape_parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.AtomGroup.AtomGroup.shape_parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shape parameter.</p>
-<p>See <a class="reference internal" href="#dima2004" id="id29">[Dima2004]</a> for background information.</p>
+<p>See <a class="reference internal" href="#dima2004" id="id31">[Dima2004]</a> for background information.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
