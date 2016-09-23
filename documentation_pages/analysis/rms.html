@@ -110,9 +110,9 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Oliver Beckstein, David L. Dotson</td>
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Oliver Beckstein, David L. Dotson, John Detlefs</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Year:</th><td class="field-body">2012</td>
+<tr class="field-even field"><th class="field-name">Year:</th><td class="field-body">2016</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Copyright:</th><td class="field-body">GNU Public License v2</td>
 </tr>
@@ -123,6 +123,9 @@
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 0.11.0: </span>Added <a class="reference internal" href="#MDAnalysis.analysis.rms.RMSF" title="MDAnalysis.analysis.rms.RMSF"><code class="xref py py-class docutils literal"><span class="pre">RMSF</span></code></a> analysis.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.16.0: </span>Refactored RMSD to fit AnalysisBase API</p>
 </div>
 <p>The module contains code to analyze root mean square quantities such
 as the coordinat root mean square distance (<a class="reference internal" href="#MDAnalysis.analysis.rms.RMSD" title="MDAnalysis.analysis.rms.RMSD"><code class="xref py py-class docutils literal"><span class="pre">RMSD</span></code></a>) or the
@@ -238,9 +241,9 @@ RMSD between a and b</p>
 <h3>3.2.4.1.2. Analysis classes<a class="headerlink" href="#analysis-classes" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="MDAnalysis.analysis.rms.RMSD">
-<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.rms.</code><code class="descname">RMSD</code><span class="sig-paren">(</span><em>traj</em>, <em>reference=None</em>, <em>select='all'</em>, <em>groupselections=None</em>, <em>filename='rmsd.dat'</em>, <em>mass_weighted=False</em>, <em>tol_mass=0.1</em>, <em>ref_frame=0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/rms.html#RMSD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.rms.RMSD" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.rms.</code><code class="descname">RMSD</code><span class="sig-paren">(</span><em>atomgroup</em>, <em>reference=None</em>, <em>select='all'</em>, <em>groupselections=None</em>, <em>filename='rmsd.dat'</em>, <em>mass_weighted=False</em>, <em>tol_mass=0.1</em>, <em>ref_frame=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/rms.html#RMSD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.rms.RMSD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to perform RMSD analysis on a trajectory.</p>
-<p>Run the analysis with <a class="reference internal" href="#MDAnalysis.analysis.rms.RMSD.run" title="MDAnalysis.analysis.rms.RMSD.run"><code class="xref py py-meth docutils literal"><span class="pre">RMSD.run()</span></code></a>, which stores the results
+<p>Run the analysis with <code class="xref py py-meth docutils literal"><span class="pre">RMSD.run()</span></code>, which stores the results
 in the array <a class="reference internal" href="#MDAnalysis.analysis.rms.RMSD.rmsd" title="MDAnalysis.analysis.rms.RMSD.rmsd"><code class="xref py py-attr docutils literal"><span class="pre">RMSD.rmsd</span></code></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>frame    time (ps)    RMSD (A)
 </pre></div>
@@ -258,8 +261,12 @@ all frames in the trajectory in <em>universe</em>.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>traj</strong> (<code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.Universe</span></code>) &#8211; universe that contains a trajectory</li>
-<li><strong>reference</strong> (<code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.Universe</span></code> (optional)) &#8211; reference coordinates, if <code class="docutils literal"><span class="pre">None</span></code> current frame of <em>traj</em> is used</li>
+<li><strong>atomgroup</strong> (<code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.AtomGroup</span></code> or) &#8211; <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.Universe</span></code>
+MDAnlysis AtomGroup or Universe with an associated Trajectory
+to be RMSD fit.</li>
+<li><strong>reference</strong> (<code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.AtomGroup</span></code> or) &#8211; <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.Universe</span></code>, optional
+Reference coordinates, if <code class="docutils literal"><span class="pre">None</span></code> current frame of <em>atomgroup</em> is
+used</li>
 <li><strong>select</strong> (<em>str / dict / tuple (optional)</em>) &#8211; <p>The selection to operate on; can be one of:</p>
 <ol class="arabic">
 <li>any valid selection string for
@@ -307,27 +314,6 @@ than <cite>tol_mass</cite></li>
 <code class="descname">rmsd</code><a class="headerlink" href="#MDAnalysis.analysis.rms.RMSD.rmsd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Results are stored in this N×3 <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.11)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a> array,
 (frame, time (ps), RMSD (Å)).</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.analysis.rms.RMSD.run">
-<code class="descname">run</code><span class="sig-paren">(</span><em>start=None</em>, <em>stop=None</em>, <em>step=None</em>, <em>mass_weighted=None</em>, <em>ref_frame=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/rms.html#RMSD.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.rms.RMSD.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform RMSD analysis on the trajectory.</p>
-<p>A number of parameters can be changed from the defaults. The
-result is stored as the array <a class="reference internal" href="#MDAnalysis.analysis.rms.RMSD.rmsd" title="MDAnalysis.analysis.rms.RMSD.rmsd"><code class="xref py py-attr docutils literal"><span class="pre">RMSD.rmsd</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>stop, step</strong> (<em>start,</em>) &#8211; start and stop frame index with step size</li>
-<li><strong>mass_weighted</strong> (<em>bool (optional)</em>) &#8211; overwrite object default to do a mass-weighted RMSD fit</li>
-<li><strong>ref_frame</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; frame index to select frame from <em>reference</em></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
