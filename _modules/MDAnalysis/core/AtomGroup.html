@@ -4587,6 +4587,10 @@
 <span class="sd">        Generally built on demand by an Atom querying its fragment property.</span>
 
 <span class="sd">        .. versionadded:: 0.9.0</span>
+
+<span class="sd">        .. versionchanged:: 0.16.0</span>
+<span class="sd">           Fragment atoms are sorted by their index, and framgents are sorted</span>
+<span class="sd">           by their first atom index so their order is predictable.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check that bond information is present, else inform</span>
         <span class="n">bonds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bonds</span>
@@ -4639,7 +4643,12 @@
         <span class="n">f</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">_fragset</span><span class="p">((</span><span class="n">a</span><span class="p">,)))</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">val</span><span class="p">))</span>
 
         <span class="c1"># All the unique values in f are the fragments</span>
-        <span class="n">frags</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">AtomGroup</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ats</span><span class="p">))</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">values</span><span class="p">())])</span>
+        <span class="n">frags</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="nb">sorted</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">AtomGroup</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ats</span><span class="p">)))</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">values</span><span class="p">())],</span>
+                <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">frags</span>
 
