@@ -492,7 +492,7 @@ class Masses(AtomAttr):
     def __init__(self, values, guessed=False):
         self.values = np.asarray(values, dtype=np.float64)
         self._guessed = guessed
-    
+
     def get_residues(self, rg):
         resatoms = self.top.tt.residues2atoms_2d(rg._ix)
 
@@ -515,9 +515,7 @@ class Masses(AtomAttr):
             masses = self.values[segatoms].sum()
         else:
             # for a segmentgroup
-            masses = np.empty(len(sg))
-            for i, row in enumerate(segatoms):
-                masses[i] = self.values[row].sum()
+            masses = np.array([self.values[row].sum() for row in segatoms])
 
         return masses
 
