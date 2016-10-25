@@ -121,6 +121,11 @@ class TestAtomids(TestAtomAttr):
     attrclass = tpattrs.Atomids
 
 
+# TODO: unusable because __init__ doesn't take any parameter
+# class TestAtomindices(TestAtomAttr):
+#     attrclass = tpattrs.Atomindices
+
+
 class TestAtomnames(TestAtomAttr):
     values = np.array(['O', 'C', 'CA', 'N', 'CB', 'CG', 'CD', 'NA', 'CL', 'OW'],
                       dtype=np.object)
