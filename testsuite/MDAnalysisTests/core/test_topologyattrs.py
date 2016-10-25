@@ -21,6 +21,7 @@ from numpy.testing import (
     assert_,
     assert_array_equal,
     assert_array_almost_equal,
+    assert_equal,
 )
 from nose.tools import assert_raises
 from MDAnalysisTests.plugins.knownfailure import knownfailure
@@ -29,7 +30,7 @@ from MDAnalysisTests.datafiles import PSF, DCD
 import MDAnalysis as mda
 import MDAnalysis.core.topologyattrs as tpattrs
 from MDAnalysis.core.topology import Topology
-from MDAnalysis.exceptions import NoDataError
+from MDAnalysis.exceptions import NoDataError, SelectionError
 
 
 class DummyGroup(object):
@@ -219,8 +220,17 @@ class TestResids(TestResidueAttr):
 
 
 class TestResnames(TestResidueAttr):
-    values = np.array(['ARG', 'LYS', 'VAL', 'POPG'], dtype=np.object)
+    values = np.array(['VAL', 'LYS', 'VAL', 'POPG'], dtype=np.object)
     attrclass = tpattrs.Resnames
+
+    def test_get_named_residue(self):
+        res = self.attr._get_named_residue('LYS')
+        assert_equal(res.name, 'LYS')
+
+        assert_raises(SelectionError, self.attr._get_named_residue, 'Foo')
+
+        res = self.attr._get_named_residue('VAL')
+        assert_equal(len(res), 2)
 
 
 class TestSegmentAttr(TopologyAttrMixin):
