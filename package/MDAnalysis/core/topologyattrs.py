@@ -147,10 +147,6 @@ class Atomindices(TopologyAttr):
     def __init__(self):
         self._guessed = False
 
-    def __len__(self):
-        """Length of the TopologyAttr at its intrinsic level."""
-        return self.top.n_atoms
-
     def set_atoms(self, ag, values):
         raise AttributeError("Atom indices are fixed; they cannot be reset")
 
@@ -182,10 +178,6 @@ class Resindices(TopologyAttr):
 
     def __init__(self):
         self._guessed = False
-
-    def __len__(self):
-        """Length of the TopologyAttr at its intrinsic level."""
-        return self.top.n_residues
 
     def get_atoms(self, ag):
         return self.top.tt.atoms2residues(ag._ix)
@@ -219,10 +211,6 @@ class Segindices(TopologyAttr):
 
     def __init__(self):
         self._guessed = False
-
-    def __len__(self):
-        """Length of the TopologyAttr at its intrinsic level."""
-        return self.top.n_segments
 
     def get_atoms(self, ag):
         return self.top.tt.atoms2segments(ag._ix)
