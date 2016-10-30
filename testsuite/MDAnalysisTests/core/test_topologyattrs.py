@@ -21,9 +21,8 @@ from numpy.testing import (
     assert_,
     assert_array_equal,
     assert_array_almost_equal,
-    assert_equal,
 )
-from nose.tools import assert_raises
+from nose.tools import assert_raises, raises
 from MDAnalysisTests.plugins.knownfailure import knownfailure
 from MDAnalysisTests.datafiles import PSF, DCD
 
@@ -132,9 +131,24 @@ class TestAtomids(TestAtomAttr):
     attrclass = tpattrs.Atomids
 
 
-# TODO: unusable because __init__ doesn't take any parameter
-# class TestAtomindices(TestAtomAttr):
-#     attrclass = tpattrs.Atomindices
+class TestIndicesClasses():
+    def setUp(self):
+        self.u = mda.Universe(PSF, DCD)
+
+    def tearDown(self):
+        del self.u
+
+    @raises(AttributeError)
+    def test_cant_set_atom_indices(self):
+        self.u.atoms.indices = 1
+
+    @raises(AttributeError)
+    def test_cant_set_residue_indices(self):
+        self.u.atoms.residues.resindices = 1
+
+    @raises(AttributeError)
+    def test_cant_set_segment_indices(self):
+        self.u.atoms.segments.segindices = 1
 
 
 class TestAtomnames(TestAtomAttr):
