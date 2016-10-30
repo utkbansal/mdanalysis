@@ -824,22 +824,26 @@ class Charges(AtomAttr):
     transplants = defaultdict(list)
 
     def get_residues(self, rg):
-        charges = np.empty(len(rg))
-
         resatoms = self.top.tt.residues2atoms_2d(rg._ix)
 
-        for i, row in enumerate(resatoms):
-            charges[i] = self.values[row].sum()
+        if isinstance(rg._ix, int):
+            charges = self.values[resatoms].sum()
+        else:
+            charges = np.empty(len(rg))
+            for i, row in enumerate(resatoms):
+                charges[i] = self.values[row].sum()
 
         return charges
 
     def get_segments(self, sg):
-        charges = np.empty(len(sg))
-
         segatoms = self.top.tt.segments2atoms_2d(sg._ix)
 
-        for i, row in enumerate(segatoms):
-            charges[i] = self.values[row].sum()
+        if isinstance(sg._ix, int):
+            # for a single segment
+            charges = self.values[segatoms].sum()
+        else:
+            # for a segmentgroup
+            charges = np.array([self.values[row].sum() for row in segatoms])
 
         return charges
 

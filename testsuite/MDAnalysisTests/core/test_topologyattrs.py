@@ -153,6 +153,10 @@ class AggregationMixin(TestAtomAttr):
         assert_array_equal(self.attr.get_segments(DummyGroup([1])),
                            np.array([self.values[[4, 5, 8, 2, 3, 9]].sum()]))
 
+    def test_get_segment(self):
+        assert_array_equal(self.attr.get_segments(DummyGroup(1)),
+                           np.sum(self.values[[4, 5, 8, 2, 3, 9]]))
+
 
 class TestMasses(AggregationMixin):
     attrclass = tpattrs.Masses
