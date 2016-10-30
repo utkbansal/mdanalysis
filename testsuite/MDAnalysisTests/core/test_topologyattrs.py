@@ -60,8 +60,6 @@ class TopologyAttrMixin(object):
     Ridx = np.array([0, 0, 2, 2, 1, 1, 3, 3, 1, 2])
     Sidx = np.array([0, 1, 1, 0])
 
-    # single_idx = np.array([0])
-
     def setUp(self):
         self.top = Topology(10, 4, 2,
                             attrs=[self.attrclass(self.values.copy())],
@@ -69,17 +67,8 @@ class TopologyAttrMixin(object):
                             residue_segindex=self.Sidx)
         self.attr = getattr(self.top, self.attrclass.attrname)
 
-        # TODO: should we treat single element attr specially. We do that
-        # currently for masses.
-        # self.single_top = Topology(1, 1, 1,
-        #                            attrs=[self.attrclass(self.single_values.copy())],
-        #                            atom_resindex=self.single_idx,
-        #                            residue_segindex=self.single_idx)
-        # self.single_attr = getattr(self.top, self.attrclass.attrname)
-
     def tearDown(self):
         del self.top
-        # del self.single_top
 
     def test_len(self):
         assert len(self.attr) == len(self.attr.values)
