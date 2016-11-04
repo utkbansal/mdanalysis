@@ -1,0 +1,1279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5.19. Reading trajectories from memory — MDAnalysis.coordinates.memory &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.16.0-dev0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within MDAnalysis 0.16.0-dev0 documentation"
+          href="../../_static/opensearch.xml"/>
+    <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
+    <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../index.html" />
+    <link rel="up" title="5. Coordinates modules" href="../coordinates_modules.html" />
+    <link rel="next" title="5.20. Base classes — MDAnalysis.coordinates.base" href="base.html" />
+    <link rel="prev" title="5.18. TRZ trajectory I/O — MDAnalysis.coordinates.TRZ" href="TRZ.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="base.html" title="5.20. Base classes — MDAnalysis.coordinates.base"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="TRZ.html" title="5.18. TRZ trajectory I/O — MDAnalysis.coordinates.TRZ"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../coordinates_modules.html" accesskey="U">5. Coordinates modules</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/mdanalysis-logo-200x150.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5.19. Reading trajectories from memory &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.memory</span></code></a><ul>
+<li><a class="reference internal" href="#how-to-use-the-memoryreader">5.19.1. How to use the <code class="docutils literal"><span class="pre">MemoryReader</span></code></a><ul>
+<li><a class="reference internal" href="#in-memory-representation-of-arbitrary-trajectories">5.19.1.1. In-memory representation of arbitrary trajectories</a></li>
+<li><a class="reference internal" href="#switching-a-trajectory-to-an-in-memory-representation">5.19.1.2. Switching a trajectory to an in-memory representation</a></li>
+<li><a class="reference internal" href="#constructing-a-reader-from-a-numpy-array">5.19.1.3. Constructing a Reader from a numpy array</a></li>
+<li><a class="reference internal" href="#creating-an-in-memory-trajectory-of-a-sub-system">5.19.1.4. Creating an in-memory trajectory of a sub-system</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#classes">5.19.2. Classes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="TRZ.html"
+                        title="previous chapter">5.18. TRZ trajectory I/O  &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.TRZ</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="base.html"
+                        title="next chapter">5.20. Base classes &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.base</span></code></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/documentation_pages/coordinates/memory.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-MDAnalysis.coordinates.memory"></span><div class="section" id="reading-trajectories-from-memory-mdanalysis-coordinates-memory">
+<h1>5.19. Reading trajectories from memory &#8212; <a class="reference internal" href="#module-MDAnalysis.coordinates.memory" title="MDAnalysis.coordinates.memory"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates.memory</span></code></a><a class="headerlink" href="#reading-trajectories-from-memory-mdanalysis-coordinates-memory" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Wouter Boomsma</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Year:</th><td class="field-body">2016</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Copyright:</th><td class="field-body">GNU Public License v2</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Maintainer:</th><td class="field-body">Wouter Boomsma &lt;<a class="reference external" href="mailto:wb&#37;&#52;&#48;di&#46;ku&#46;dk">wb<span>&#64;</span>di<span>&#46;</span>ku<span>&#46;</span>dk</a>&gt;, wouterboomsma on github</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0.</span></p>
+</div>
+<p>The module contains a trajectory reader that operates on an array in
+memory, rather than reading from file. This makes it possible to use
+operate on raw coordinate using existing MDAnalysis tools. In
+addition, it allows the user to make changes to the coordinates in a
+trajectory (e.g. through
+<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup.positions" title="MDAnalysis.core.AtomGroup.AtomGroup.positions"><code class="xref py py-attr docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup.positions</span></code></a>) without having
+to write the entire state to file.</p>
+<div class="section" id="how-to-use-the-memoryreader">
+<h2>5.19.1. How to use the <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader" title="MDAnalysis.coordinates.memory.MemoryReader"><code class="xref py py-class docutils literal"><span class="pre">MemoryReader</span></code></a><a class="headerlink" href="#how-to-use-the-memoryreader" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader" title="MDAnalysis.coordinates.memory.MemoryReader"><code class="xref py py-class docutils literal"><span class="pre">MemoryReader</span></code></a> can be used to either directly generate a
+trajectory as a numpy array or by transferring an existing trajectory
+to memory.</p>
+<div class="section" id="in-memory-representation-of-arbitrary-trajectories">
+<h3>5.19.1.1. In-memory representation of arbitrary trajectories<a class="headerlink" href="#in-memory-representation-of-arbitrary-trajectories" title="Permalink to this headline">¶</a></h3>
+<p>If sufficient memory is available to hold a whole trajectory in memory
+then analysis can be sped up substantially by transferring the
+trajectory to memory.</p>
+<p>The most straightforward use of the <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader" title="MDAnalysis.coordinates.memory.MemoryReader"><code class="xref py py-class docutils literal"><span class="pre">MemoryReader</span></code></a> is to simply
+use the <code class="docutils literal"><span class="pre">in_memory=True</span></code> flag for the
+<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> class, which
+automatically transfers a trajectory to memory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="kn">as</span> <span class="nn">mda</span>
+<span class="kn">from</span> <span class="nn">MDAnalysisTests.datafiles</span> <span class="kn">import</span> <span class="n">TPR</span><span class="p">,</span> <span class="n">XTC</span>
+
+<span class="n">universe</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">TPR</span><span class="p">,</span> <span class="n">XTC</span><span class="p">,</span> <span class="n">in_memory</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Of course, sufficient memory has to be available to hold the whole
+trajectory.</p>
+</div>
+<div class="section" id="switching-a-trajectory-to-an-in-memory-representation">
+<h3>5.19.1.2. Switching a trajectory to an in-memory representation<a class="headerlink" href="#switching-a-trajectory-to-an-in-memory-representation" title="Permalink to this headline">¶</a></h3>
+<p>The decision to transfer the trajectory to memory can be made at any
+time with the
+<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe.transfer_to_memory" title="MDAnalysis.core.AtomGroup.Universe.transfer_to_memory"><code class="xref py py-meth docutils literal"><span class="pre">transfer_to_memory()</span></code></a> method
+of a <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">universe</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">TPR</span><span class="p">,</span> <span class="n">XTC</span><span class="p">)</span>
+<span class="n">universe</span><span class="o">.</span><span class="n">transfer_to_memory</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This operation may take a while (with <cite>quiet=False</cite> a progress bar is
+displayed) but then subsequent operations on the trajectory directly
+operate on the in-memory array and will be very fast.</p>
+</div>
+<div class="section" id="constructing-a-reader-from-a-numpy-array">
+<h3>5.19.1.3. Constructing a Reader from a numpy array<a class="headerlink" href="#constructing-a-reader-from-a-numpy-array" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader" title="MDAnalysis.coordinates.memory.MemoryReader"><code class="xref py py-class docutils literal"><span class="pre">MemoryReader</span></code></a> provides great flexibility because it
+becomes possible to create a <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> directly
+from a numpy array.</p>
+<p>A simple example consists of a new universe created from the array
+extracted from a DCD
+<a class="reference internal" href="DCD.html#MDAnalysis.coordinates.DCD.DCDReader.timeseries" title="MDAnalysis.coordinates.DCD.DCDReader.timeseries"><code class="xref py py-meth docutils literal"><span class="pre">timeseries()</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="kn">as</span> <span class="nn">mda</span>
+<span class="kn">from</span> <span class="nn">MDAnalysisTests.datafiles</span> <span class="kn">import</span> <span class="n">DCD</span><span class="p">,</span> <span class="n">PSF</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.coordinates.memory</span> <span class="kn">import</span> <span class="n">MemoryReader</span>
+
+<span class="n">universe</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">PSF</span><span class="p">,</span> <span class="n">DCD</span><span class="p">)</span>
+
+<span class="n">coordinates</span> <span class="o">=</span> <span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">timeseries</span><span class="p">(</span><span class="n">universe</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+<span class="n">universe2</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">PSF</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="n">MemoryReader</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Creating an in-memory trajectory with
+<a class="reference internal" href="../analysis/base.html#MDAnalysis.analysis.base.AnalysisFromFunction" title="MDAnalysis.analysis.base.AnalysisFromFunction"><code class="xref py py-func docutils literal"><span class="pre">AnalysisFromFunction()</span></code></a></p>
+<p>The <a class="reference internal" href="DCD.html#MDAnalysis.coordinates.DCD.DCDReader.timeseries" title="MDAnalysis.coordinates.DCD.DCDReader.timeseries"><code class="xref py py-meth docutils literal"><span class="pre">timeseries()</span></code></a> is
+currently only implemented for the
+<a class="reference internal" href="DCD.html#MDAnalysis.coordinates.DCD.DCDReader" title="MDAnalysis.coordinates.DCD.DCDReader"><code class="xref py py-class docutils literal"><span class="pre">DCDReader</span></code></a>. However, the
+<a class="reference internal" href="../analysis/base.html#MDAnalysis.analysis.base.AnalysisFromFunction" title="MDAnalysis.analysis.base.AnalysisFromFunction"><code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.analysis.base.AnalysisFromFunction()</span></code></a> can provide the
+same functionality for any supported trajectory format:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="kn">as</span> <span class="nn">mda</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.tests.datafiles</span> <span class="kn">import</span> <span class="n">PDB</span><span class="p">,</span> <span class="n">XTC</span>
+
+<span class="kn">from</span> <span class="nn">MDAnalysis.coordinates.memory</span> <span class="kn">import</span> <span class="n">MemoryReader</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.analysis.base</span> <span class="kn">import</span> <span class="n">AnalysisFromFunction</span>
+
+<span class="n">u</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">PDB</span><span class="p">,</span> <span class="n">XTC</span><span class="p">)</span>
+
+<span class="n">coordinates</span> <span class="o">=</span> <span class="n">AnalysisFromFunction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">ag</span><span class="p">:</span> <span class="n">ag</span><span class="o">.</span><span class="n">positions</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+                                   <span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">u2</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">PDB</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="n">MemoryReader</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default the <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader" title="MDAnalysis.coordinates.memory.MemoryReader"><code class="xref py py-class docutils literal"><span class="pre">MemoryReader</span></code></a> reads an array in <em>afc</em>
+(atom, frame, coordinates) order and therefore the first two axes
+of <code class="docutils literal"><span class="pre">results</span></code> (in <em>fac</em> order) have to be swapped with
+<code class="docutils literal"><span class="pre">results.swapaxes(0,</span> <span class="pre">1)</span></code>. This might be changed in the
+future.</p>
+</div>
+</div>
+<div class="section" id="creating-an-in-memory-trajectory-of-a-sub-system">
+<h3>5.19.1.4. Creating an in-memory trajectory of a sub-system<a class="headerlink" href="#creating-an-in-memory-trajectory-of-a-sub-system" title="Permalink to this headline">¶</a></h3>
+<p>Creating a trajectory for just a selection of an existing trajectory
+requires the transfer of the appropriate coordinates as well as
+creation of a topology of the sub-system. For the latter one can use
+the <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Merge" title="MDAnalysis.core.AtomGroup.Merge"><code class="xref py py-func docutils literal"><span class="pre">Merge()</span></code></a> function, for the former
+the <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe.load_new" title="MDAnalysis.core.AtomGroup.Universe.load_new"><code class="xref py py-meth docutils literal"><span class="pre">load_new()</span></code></a> method of a
+<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> together with the
+<a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader" title="MDAnalysis.coordinates.memory.MemoryReader"><code class="xref py py-class docutils literal"><span class="pre">MemoryReader</span></code></a>. In the following, an in-memory trajectory of
+only the protein is created:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="kn">as</span> <span class="nn">mda</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.tests.datafiles</span> <span class="kn">import</span> <span class="n">PDB</span><span class="p">,</span> <span class="n">XTC</span>
+
+<span class="kn">from</span> <span class="nn">MDAnalysis.coordinates.memory</span> <span class="kn">import</span> <span class="n">MemoryReader</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.analysis.base</span> <span class="kn">import</span> <span class="n">AnalysisFromFunction</span>
+
+<span class="n">u</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">PDB</span><span class="p">,</span> <span class="n">XTC</span><span class="p">)</span>
+<span class="n">protein</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s2">&quot;protein&quot;</span><span class="p">)</span>
+
+<span class="n">coordinates</span> <span class="o">=</span> <span class="n">AnalysisFromFunction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">ag</span><span class="p">:</span> <span class="n">ag</span><span class="o">.</span><span class="n">positions</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+                                   <span class="n">protein</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">u2</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Merge</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>            <span class="c1"># create the protein-only Universe</span>
+<span class="n">u2</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="n">MemoryReader</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The new <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> can be used to, for instance,
+write out a new trajectory or perform fast analysis on the sub-system.</p>
+</div>
+</div>
+<div class="section" id="classes">
+<h2>5.19.2. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="MDAnalysis.coordinates.memory.Timestep">
+<em class="property">class </em><code class="descclassname">MDAnalysis.coordinates.memory.</code><code class="descname">Timestep</code><span class="sig-paren">(</span><em>n_atoms</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/memory.html#Timestep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timestep for the <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader" title="MDAnalysis.coordinates.memory.MemoryReader"><code class="xref py py-class docutils literal"><span class="pre">MemoryReader</span></code></a></p>
+<p>Overrides the positions property in
+<a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Timestep" title="MDAnalysis.coordinates.base.Timestep"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.coordinates.base.Timestep</span></code></a> to use avoid
+duplication of the array.</p>
+<p>Create a Timestep, representing a frame of a trajectory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>n_atoms</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The total number of atoms this Timestep describes</li>
+<li><strong>positions</strong> (<em>bool, optional</em>) &#8211; Whether this Timestep has position information [<code class="docutils literal"><span class="pre">True</span></code>]</li>
+<li><strong>velocities</strong> (<em>bool, optional</em>) &#8211; Whether this Timestep has velocity information [<code class="docutils literal"><span class="pre">False</span></code>]</li>
+<li><strong>forces</strong> (<em>bool, optional</em>) &#8211; Whether this Timestep has force information [<code class="docutils literal"><span class="pre">False</span></code>]</li>
+<li><strong>reader</strong> (<em>Reader, optional</em>) &#8211; A weak reference to the owning Reader.  Used for
+when attributes require trajectory manipulation (e.g. dt)</li>
+<li><strong>dt</strong> (<em>float, optional</em>) &#8211; The time difference between frames (ps).  If <a class="reference internal" href="#MDAnalysis.coordinates.memory.Timestep.time" title="MDAnalysis.coordinates.memory.Timestep.time"><code class="xref py py-attr docutils literal"><span class="pre">time</span></code></a>
+is set, then <cite>dt</cite> will be ignored.</li>
+<li><strong>time_offset</strong> (<em>float, optional</em>) &#8211; The starting time from which to calculate time (ps)</li>
+<li><strong>versionchanged</strong> (<em>.</em>) &#8211; Added keywords for positions, velocities and forces
+Can add and remove position/velocity/force information by using
+the has_* attribute</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.__delattr__">
+<code class="descname">__delattr__</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.__delattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__delattr__(&#8216;name&#8217;) &lt;==&gt; del x.name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.Timestep.__format__">
+<code class="descname">__format__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.__format__" title="Permalink to this definition">¶</a></dt>
+<dd><p>default object formatter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.__getattribute__">
+<code class="descname">__getattribute__</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.__getattribute__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__getattribute__(&#8216;name&#8217;) &lt;==&gt; x.name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.__hash__">
+<code class="descname">__hash__</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.Timestep.__reduce__">
+<code class="descname">__reduce__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.__reduce__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.Timestep.__reduce_ex__">
+<code class="descname">__reduce_ex__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.__reduce_ex__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.__setattr__">
+<code class="descname">__setattr__</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.__setattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__setattr__(&#8216;name&#8217;, value) &lt;==&gt; x.name = value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.Timestep.__sizeof__">
+<code class="descname">__sizeof__</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &rarr; int<a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.__sizeof__" title="Permalink to this definition">¶</a></dt>
+<dd><p>size of object in memory, in bytes</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.__str__">
+<code class="descname">__str__</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.Timestep.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/base.html#Timestep.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an independent (&#8220;deep&#8221;) copy of the whole <a class="reference internal" href="#MDAnalysis.coordinates.memory.Timestep" title="MDAnalysis.coordinates.memory.Timestep"><code class="xref py py-class docutils literal"><span class="pre">Timestep</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.Timestep.copy_slice">
+<code class="descname">copy_slice</code><span class="sig-paren">(</span><em>sel</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/base.html#Timestep.copy_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.copy_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a new Timestep containing a subset of the original Timestep.</p>
+<p><code class="docutils literal"><span class="pre">ts.copy_slice(slice(start,</span> <span class="pre">stop,</span> <span class="pre">skip))</span></code>
+<code class="docutils literal"><span class="pre">ts.copy_slice([list</span> <span class="pre">of</span> <span class="pre">indices])</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>A Timestep object of the same type containing all header</em></li>
+<li><em>information and all atom information relevant to the selection.</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The selection must be a 0 based slice or array of the atom indices
+in this Timestep</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.8.</span></p>
+</div>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.11.0: </span>Reworked to follow new Timestep API.  Now will strictly only
+copy official attributes of the Timestep.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.dimensions">
+<code class="descname">dimensions</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>unitcell dimensions (<em>A</em>, <em>B</em>, <em>C</em>, <em>alpha</em>, <em>beta</em>, <em>gamma</em>)</p>
+<p>lengths <em>a</em>, <em>b</em>, <em>c</em> are in the MDAnalysis length unit (Å), and
+angles are in degrees.</p>
+<p>Setting dimensions will populate the underlying native format
+description of box dimensions</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.dt">
+<code class="descname">dt</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time difference in ps between timesteps</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This defaults to 1.0 ps in the absence of time data</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.forces">
+<code class="descname">forces</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.forces" title="Permalink to this definition">¶</a></dt>
+<dd><p>A record of the forces of all atoms in this Timestep</p>
+<p>Setting this attribute will add forces to the Timestep if they
+weren&#8217;t originally present.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><ul class="simple">
+<li><em>A numpy.ndarray of shape (n_atoms, 3) of force data for each</em></li>
+<li><em>atom</em></li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.NoDataError</span></code></p>
+</li>
+<li><p class="first">When the Timestep does not contain force information</p>
+</li>
+<li><div class="first versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.Timestep.from_coordinates">
+<code class="descname">from_coordinates</code><span class="sig-paren">(</span><em>positions=None</em>, <em>velocities=None</em>, <em>forces=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/base.html#Timestep.from_coordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.from_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of this Timestep, from coordinate data</p>
+<p>Can pass position, velocity and force data to form a Timestep.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.Timestep.from_timestep">
+<code class="descname">from_timestep</code><span class="sig-paren">(</span><em>other</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/base.html#Timestep.from_timestep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.from_timestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a copy of another Timestep, in the format of this Timestep</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.has_forces">
+<code class="descname">has_forces</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.has_forces" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean of whether this Timestep has force data</p>
+<p>This can be changed to <code class="docutils literal"><span class="pre">True</span></code> or <code class="docutils literal"><span class="pre">False</span></code> to allocate space for
+or remove the data.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.has_positions">
+<code class="descname">has_positions</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.has_positions" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean of whether this Timestep has position data</p>
+<p>This can be changed to <code class="docutils literal"><span class="pre">True</span></code> or <code class="docutils literal"><span class="pre">False</span></code> to allocate space for
+or remove the data.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.has_velocities">
+<code class="descname">has_velocities</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.has_velocities" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean of whether this Timestep has velocity data</p>
+<p>This can be changed to <code class="docutils literal"><span class="pre">True</span></code> or <code class="docutils literal"><span class="pre">False</span></code> to allocate space for
+or remove the data.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.n_atoms">
+<code class="descname">n_atoms</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.n_atoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>A read only view of the number of atoms this Timestep has</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.11.0: </span>Changed to read only property</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.time">
+<code class="descname">time</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time in ps of this timestep</p>
+<p>This is calculated as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;time_offset&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">ts</span><span class="o">.</span><span class="n">time</span>
+</pre></div>
+</div>
+<p>Or, if the trajectory doesn&#8217;t provide time information:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;time_offset&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">ts</span><span class="o">.</span><span class="n">frame</span> <span class="o">*</span> <span class="n">ts</span><span class="o">.</span><span class="n">dt</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.triclinic_dimensions">
+<code class="descname">triclinic_dimensions</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.triclinic_dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unitcell dimensions represented as triclinic vectors</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A (3, 3) numpy.ndarray of unit cell vectors</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The unitcell for a given system can be queried as either three
+vectors lengths followed by their respective angle, or as three
+triclinic vectors.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">dimensions</span>
+<span class="go">array([ 13.,  14.,  15.,  90.,  90.,  90.], dtype=float32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">triclinic_dimensions</span>
+<span class="go">array([[ 13.,   0.,   0.],</span>
+<span class="go">       [  0.,  14.,   0.],</span>
+<span class="go">       [  0.,   0.,  15.]], dtype=float32)</span>
+</pre></div>
+</div>
+<p>Setting the attribute also works:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">triclinic_dimensions</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">dimensions</span>
+<span class="go">array([ 15.        ,  15.81138802,  16.58312416,  67.58049774,</span>
+<span class="go">        72.45159912,  71.56504822], dtype=float32)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../lib/mdamath.html#MDAnalysis.lib.mdamath.triclinic_vectors" title="MDAnalysis.lib.mdamath.triclinic_vectors"><code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.lib.mdamath.triclinic_vectors()</span></code></a></p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.velocities">
+<code class="descname">velocities</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.velocities" title="Permalink to this definition">¶</a></dt>
+<dd><p>A record of the velocities of all atoms in this Timestep</p>
+<p>Setting this attribute will add velocities to the Timestep if they
+weren&#8217;t originally present.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><ul class="simple">
+<li><em>A numpy.ndarray of shape (n_atoms, 3) of velocity data for each</em></li>
+<li><em>atom</em></li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="../exceptions.html#MDAnalysis.exceptions.NoDataError" title="MDAnalysis.exceptions.NoDataError"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.exceptions.NoDataError</span></code></a></li>
+<li>When the Timestep does not contain velocity information</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.11.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.Timestep.volume">
+<code class="descname">volume</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.Timestep.volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>volume of the unitcell</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader">
+<em class="property">class </em><code class="descclassname">MDAnalysis.coordinates.memory.</code><code class="descname">MemoryReader</code><span class="sig-paren">(</span><em>coordinate_array</em>, <em>format='afc'</em>, <em>dimensions=None</em>, <em>dt=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/memory.html#MemoryReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>MemoryReader works with trajectories represented as numpy arrays.</p>
+<p>A trajectory reader interface to a numpy array of the coordinates.
+For compatibility with the timeseries interface, support is provided for
+specifying the order of columns through the format option.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>coordinate_array</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.11)"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> object) &#8211; The underlying array of coordinates</li>
+<li><strong>format</strong> (<em>str, optional</em>) &#8211; the order/shape of the return data array, corresponding
+to (a)tom, (f)rame, (c)oordinates all six combinations
+of &#8216;a&#8217;, &#8216;f&#8217;, &#8216;c&#8217; are allowed ie &#8220;fac&#8221; - return array
+where the shape is (frame, number of atoms,
+coordinates)</li>
+<li><strong>dimensions</strong> ((<em>A</em>, <em>B</em>, <em>C</em>, <em>alpha</em>, <em>beta</em>, <em>gamma</em>), optional) &#8211; unitcell dimensions (<em>A</em>, <em>B</em>, <em>C</em>, <em>alpha</em>, <em>beta</em>, <em>gamma</em>)
+lengths <em>A</em>, <em>B</em>, <em>C</em> are in the MDAnalysis length unit (Å), and
+angles are in degrees.</li>
+<li><strong>dt</strong> (<em>float, optional</em>) &#8211; The time difference between frames (ps).  If <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.time" title="MDAnalysis.coordinates.memory.MemoryReader.time"><code class="xref py py-attr docutils literal"><span class="pre">time</span></code></a>
+is set, then <cite>dt</cite> will be ignored.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.OtherWriter">
+<code class="descname">OtherWriter</code><span class="sig-paren">(</span><em>filename</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.OtherWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a writer appropriate for <em>filename</em>.</p>
+<p>Sets the default keywords <em>start</em>, <em>step</em> and <em>dt</em> (if
+available). <em>n_atoms</em> is always set from <code class="xref py py-attr docutils literal"><span class="pre">Reader.n_atoms</span></code>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-meth docutils literal"><span class="pre">Reader.Writer()</span></code> and <code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.Writer()</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.Writer">
+<code class="descname">Writer</code><span class="sig-paren">(</span><em>filename</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.Writer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A trajectory writer with the same properties as this trajectory.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.__delattr__">
+<code class="descname">__delattr__</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.__delattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__delattr__(&#8216;name&#8217;) &lt;==&gt; del x.name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.__format__">
+<code class="descname">__format__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.__format__" title="Permalink to this definition">¶</a></dt>
+<dd><p>default object formatter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.__getattribute__">
+<code class="descname">__getattribute__</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.__getattribute__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__getattribute__(&#8216;name&#8217;) &lt;==&gt; x.name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.__hash__">
+<code class="descname">__hash__</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.__reduce__">
+<code class="descname">__reduce__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.__reduce__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.__reduce_ex__">
+<code class="descname">__reduce_ex__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.__reduce_ex__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.__repr__">
+<code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/memory.html#MemoryReader.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>String representation</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.__setattr__">
+<code class="descname">__setattr__</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.__setattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__setattr__(&#8216;name&#8217;, value) &lt;==&gt; x.name = value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.__sizeof__">
+<code class="descname">__sizeof__</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &rarr; int<a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.__sizeof__" title="Permalink to this definition">¶</a></dt>
+<dd><p>size of object in memory, in bytes</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.__str__">
+<code class="descname">__str__</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.add_auxiliary">
+<code class="descname">add_auxiliary</code><span class="sig-paren">(</span><em>auxname</em>, <em>auxdata</em>, <em>format=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.add_auxiliary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add auxiliary data to be read alongside trajectory.</p>
+<p>Auxiliary data may be any data timeseries from the trajectory additional
+to that read in by the trajectory reader. <em>auxdata</em> can be an
+<a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxReader" title="MDAnalysis.auxiliary.base.AuxReader"><code class="xref py py-class docutils literal"><span class="pre">AuxReader</span></code></a> instance, or the data
+itself as e.g. a filename; in the latter case an appropriate
+<a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxReader" title="MDAnalysis.auxiliary.base.AuxReader"><code class="xref py py-class docutils literal"><span class="pre">AuxReader</span></code></a> is guessed from the
+data/file format. An appropriate <em>format</em> may also be directly provided
+as a key word argument.</p>
+<p>On adding, the AuxReader is initially matched to the current timestep
+of the trajectory, and will be updated when the trajectory timestep
+changes (through a call to <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.next" title="MDAnalysis.coordinates.memory.MemoryReader.next"><code class="xref py py-meth docutils literal"><span class="pre">next()</span></code></a> or jumping timesteps with
+<code class="docutils literal"><span class="pre">trajectory[i]</span></code>).</p>
+<p>The representative value(s) of the auxiliary data for each timestep (as
+calculated by the <a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxReader" title="MDAnalysis.auxiliary.base.AuxReader"><code class="xref py py-class docutils literal"><span class="pre">AuxReader</span></code></a>) are
+stored in the current timestep in the <code class="docutils literal"><span class="pre">ts.aux</span></code> namespace under <em>auxname</em>;
+e.g. to add additional pull force data stored in pull-force.xvg:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">MDAnalysis</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">PDB</span><span class="p">,</span> <span class="n">XTC</span><span class="p">)</span>
+<span class="n">u</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">add_auxiliary</span><span class="p">(</span><span class="s1">&#39;pull&#39;</span><span class="p">,</span> <span class="s1">&#39;pull-force.xvg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The representative value for the current timestep may then be accessed
+as <code class="docutils literal"><span class="pre">u.trajectory.ts.aux.pull</span></code> or <code class="docutils literal"><span class="pre">u.trajectory.ts.aux['pull']</span></code>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.remove_auxiliary" title="MDAnalysis.coordinates.memory.MemoryReader.remove_auxiliary"><code class="xref py py-meth docutils literal"><span class="pre">remove_auxiliary()</span></code></a></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Auxiliary data is assumed to be time-ordered, with no duplicates. See
+the <a class="reference internal" href="../auxiliary/init.html#auxiliary-api"><span>Auxiliary API</span></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.aux_list">
+<code class="descname">aux_list</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.aux_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists the names of added auxiliary data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.check_slice_indices">
+<code class="descname">check_slice_indices</code><span class="sig-paren">(</span><em>start</em>, <em>stop</em>, <em>step</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.check_slice_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check frame indices are valid and clip to fit trajectory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>stop, step</strong> (<em>start,</em>) &#8211; Values representing the slice indices.
+Can use <cite>None</cite> to use defaults of (0, n_frames, and 1)
+respectively.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>start, stop, step</strong> &#8211;
+Integers representing the slice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the trajectory file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.convert_forces_from_native">
+<code class="descname">convert_forces_from_native</code><span class="sig-paren">(</span><em>force</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.convert_forces_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of forces array <em>force</em> from native to base units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>force</strong> (<em>array_like</em>) &#8211; Forces to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>force</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.7.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.convert_forces_to_native">
+<code class="descname">convert_forces_to_native</code><span class="sig-paren">(</span><em>force</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.convert_forces_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of force array <em>force</em> from base to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>force</strong> (<em>array_like</em>) &#8211; Forces to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>force</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.7.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.convert_pos_from_native">
+<code class="descname">convert_pos_from_native</code><span class="sig-paren">(</span><em>x</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.convert_pos_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array x from native units to base units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>array_like</em>) &#8211; Positions to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>x</em> is modified in place and also returned.</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.convert_pos_to_native">
+<code class="descname">convert_pos_to_native</code><span class="sig-paren">(</span><em>x</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.convert_pos_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array x from base units to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>array_like</em>) &#8211; Positions to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>x</em> is modified in place and also returned.</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.convert_time_from_native">
+<code class="descname">convert_time_from_native</code><span class="sig-paren">(</span><em>t</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.convert_time_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert time <em>t</em> from native units to base units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>t</strong> (<em>array_like</em>) &#8211; Time values to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>t</em> is modified in place and also
+returned (although note that scalar values <em>t</em> are passed by
+value in Python and hence an in-place modification has no
+effect on the caller.)</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.convert_time_to_native">
+<code class="descname">convert_time_to_native</code><span class="sig-paren">(</span><em>t</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.convert_time_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert time <em>t</em> from base units to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>t</strong> (<em>array_like</em>) &#8211; Time values to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>t</em> is modified in place and also
+returned. (Also note that scalar values <em>t</em> are passed by
+value in Python and hence an in-place modification has no
+effect on the caller.)</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.convert_velocities_from_native">
+<code class="descname">convert_velocities_from_native</code><span class="sig-paren">(</span><em>v</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.convert_velocities_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of velocities array <em>v</em> from native to base units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> (<em>array_like</em>) &#8211; Velocities to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>v</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.5.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.convert_velocities_to_native">
+<code class="descname">convert_velocities_to_native</code><span class="sig-paren">(</span><em>v</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.convert_velocities_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array <em>v</em> from base to native units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> (<em>array_like</em>) &#8211; Velocities to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>v</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.5.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.dt">
+<code class="descname">dt</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time between two trajectory frames in picoseconds.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.frame">
+<code class="descname">frame</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frame number of the current time step.</p>
+<p>This is a simple short cut to <code class="xref py py-attr docutils literal"><span class="pre">Timestep.frame</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.get_array">
+<code class="descname">get_array</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/memory.html#MemoryReader.get_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.get_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return underlying array.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.get_aux_attribute">
+<code class="descname">get_aux_attribute</code><span class="sig-paren">(</span><em>auxname</em>, <em>attrname</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.get_aux_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of <em>attrname</em> from the auxiliary <em>auxname</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>auxname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the auxiliary to get value for</li>
+<li><strong>attrname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of gettable attribute in the auxiliary reader</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.set_aux_attribute" title="MDAnalysis.coordinates.memory.MemoryReader.set_aux_attribute"><code class="xref py py-meth docutils literal"><span class="pre">set_aux_attribute()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.get_aux_descriptions">
+<code class="descname">get_aux_descriptions</code><span class="sig-paren">(</span><em>auxnames=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.get_aux_descriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get descriptions to allow reloading the specified auxiliaries.</p>
+<p>If no auxnames are provided, defaults to the full list of added
+auxiliaries.</p>
+<p>Passing the resultant description to <code class="docutils literal"><span class="pre">add_auxiliary()</span></code> will allow
+recreation of the auxiliary. e.g., to duplicate all auxiliaries into a
+second trajectory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">descriptions</span> <span class="o">=</span> <span class="n">trajectory_1</span><span class="o">.</span><span class="n">get_aux_descriptions</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">aux</span> <span class="ow">in</span> <span class="n">descriptions</span><span class="p">:</span>
+    <span class="n">trajectory_2</span><span class="o">.</span><span class="n">add_auxiliary</span><span class="p">(</span><span class="o">**</span><span class="n">aux</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of dictionaries of the args/kwargs describing each auxiliary.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)">list</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxReader.get_description" title="MDAnalysis.auxiliary.base.AuxReader.get_description"><code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.auxiliary.base.AuxReader.get_description()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.iter_as_aux">
+<code class="descname">iter_as_aux</code><span class="sig-paren">(</span><em>auxname</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.iter_as_aux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate through timesteps for which there is at least one assigned
+step from the auxiliary <em>auxname</em> within the cutoff specified in <em>auxname</em>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.next_as_aux" title="MDAnalysis.coordinates.memory.MemoryReader.next_as_aux"><code class="xref py py-meth docutils literal"><span class="pre">next_as_aux()</span></code></a>, <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.iter_auxiliary" title="MDAnalysis.coordinates.memory.MemoryReader.iter_auxiliary"><code class="xref py py-meth docutils literal"><span class="pre">iter_auxiliary()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.iter_auxiliary">
+<code class="descname">iter_auxiliary</code><span class="sig-paren">(</span><em>auxname</em>, <em>start=None</em>, <em>stop=None</em>, <em>step=None</em>, <em>selected=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.iter_auxiliary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate through the auxiliary <em>auxname</em> independently of the trajectory.</p>
+<p>Will iterate over the specified steps of the auxiliary (defaults to all
+steps). Allows to access all values in an auxiliary, including those out
+of the time range of the trajectory, without having to also iterate
+through the trajectory.</p>
+<p>After interation, the auxiliary will be repositioned at the current step.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>auxname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the auxiliary to iterate over.</li>
+<li><strong>stop, step)</strong> (<em>(start,</em>) &#8211; Options for iterating over a slice of the auxiliary.</li>
+<li><strong>selected</strong> (<em>lst | ndarray, optional</em>) &#8211; List of steps to iterate over.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Yields:</th><td class="field-body"><p class="first last"><a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxStep" title="MDAnalysis.auxiliary.base.AuxStep"><code class="xref py py-class docutils literal"><span class="pre">AuxStep</span></code></a> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.iter_as_aux" title="MDAnalysis.coordinates.memory.MemoryReader.iter_as_aux"><code class="xref py py-meth docutils literal"><span class="pre">iter_as_aux()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.next">
+<code class="descname">next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forward one step to next frame.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.next_as_aux">
+<code class="descname">next_as_aux</code><span class="sig-paren">(</span><em>auxname</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.next_as_aux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to the next timestep for which there is at least one step from
+the auxiliary <em>auxname</em> within the cutoff specified in <em>auxname</em>.</p>
+<p>This allows progression through the trajectory without encountering
+<code class="docutils literal"><span class="pre">NaN</span></code> representative values (unless these are specifically part of the
+auxiliary data).</p>
+<p>If the auxiliary cutoff is not set, where auxiliary steps are less frequent
+(<code class="docutils literal"><span class="pre">auxiliary.dt</span> <span class="pre">&gt;</span> <span class="pre">trajectory.dt</span></code>), this allows progression at the
+auxiliary pace (rounded to nearest timestep); while if the auxiliary
+steps are more frequent, this will work the same as calling
+<a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.next" title="MDAnalysis.coordinates.memory.MemoryReader.next"><code class="xref py py-meth docutils literal"><span class="pre">next()</span></code></a>.</p>
+<p>See the <a class="reference internal" href="../auxiliary/init.html#auxiliary-api"><span>Auxiliary API</span></a>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.iter_as_aux" title="MDAnalysis.coordinates.memory.MemoryReader.iter_as_aux"><code class="xref py py-meth docutils literal"><span class="pre">iter_as_aux()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.remove_auxiliary">
+<code class="descname">remove_auxiliary</code><span class="sig-paren">(</span><em>auxname</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.remove_auxiliary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear data and close the <a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxReader" title="MDAnalysis.auxiliary.base.AuxReader"><code class="xref py py-class docutils literal"><span class="pre">AuxReader</span></code></a>
+for the auxiliary <em>auxname</em>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.add_auxiliary" title="MDAnalysis.coordinates.memory.MemoryReader.add_auxiliary"><code class="xref py py-meth docutils literal"><span class="pre">add_auxiliary()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.rename_aux">
+<code class="descname">rename_aux</code><span class="sig-paren">(</span><em>auxname</em>, <em>new</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.rename_aux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the name of the auxiliary <em>auxname</em> to <em>new</em>.</p>
+<p>Provided there is not already an auxiliary named <em>new</em>, the auxiliary
+name will be changed in ts.aux namespace, the trajectory&#8217;s
+list of added auxiliaries, and in the auxiliary reader itself.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>auxname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the auxiliary to rename</li>
+<li><strong>new</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; New name to try set</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211;
+If the name <em>new</em> is already in use by an existing auxiliary.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.rewind">
+<code class="descname">rewind</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.rewind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Position at beginning of trajectory</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.set_array">
+<code class="descname">set_array</code><span class="sig-paren">(</span><em>coordinate_array</em>, <em>format='afc'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/memory.html#MemoryReader.set_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.set_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set underlying array in desired column format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>coordinate_array</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.11)"><code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code></a> object) &#8211; The underlying array of coordinates</li>
+<li><strong>format</strong> &#8211; The order/shape of the return data array, corresponding
+to (a)tom, (f)rame, (c)oordinates all six combinations
+of &#8216;a&#8217;, &#8216;f&#8217;, &#8216;c&#8217; are allowed ie &#8220;fac&#8221; - return array
+where the shape is (frame, number of atoms,
+coordinates)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.set_aux_attribute">
+<code class="descname">set_aux_attribute</code><span class="sig-paren">(</span><em>auxname</em>, <em>attrname</em>, <em>new</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.set_aux_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of <em>attrname</em> in the auxiliary <em>auxname</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>auxname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the auxiliary to alter</li>
+<li><strong>attrname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of settable attribute in the auxiliary reader</li>
+<li><strong>new</strong> &#8211; New value to try set <em>attrname</em> to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.get_aux_attribute" title="MDAnalysis.coordinates.memory.MemoryReader.get_aux_attribute"><code class="xref py py-meth docutils literal"><span class="pre">get_aux_attribute()</span></code></a>, <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader.rename_aux" title="MDAnalysis.coordinates.memory.MemoryReader.rename_aux"><code class="xref py py-meth docutils literal"><span class="pre">rename_aux()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.time">
+<code class="descname">time</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time of the current frame in MDAnalysis time units (typically ps).</p>
+<p>This is either read straight from the Timestep, or calculated as
+time = <code class="xref py py-attr docutils literal"><span class="pre">Timestep.frame</span></code> * <a class="reference internal" href="#MDAnalysis.coordinates.memory.Timestep.dt" title="MDAnalysis.coordinates.memory.Timestep.dt"><code class="xref py py-attr docutils literal"><span class="pre">Timestep.dt</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.timeseries">
+<code class="descname">timeseries</code><span class="sig-paren">(</span><em>asel=None</em>, <em>start=0</em>, <em>stop=-1</em>, <em>step=1</em>, <em>format='afc'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/memory.html#MemoryReader.timeseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.timeseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a subset of coordinate data for an AtomGroup in desired
+column format. If no selection is given, it will return a view of
+the underlying array, while a copy is returned otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>asel</strong> (<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> object) &#8211; Atom selection. Defaults to None, in which case the full set of
+coordinate data is returned. Note that in this case, a view
+of the underlying numpy array is returned, while a copy of the
+data is returned whenever asel is different from None.</li>
+<li><strong>stop, skip</strong> (<em>start,</em>) &#8211; range of trajectory to access, start and stop are inclusive</li>
+<li><strong>format</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the order/shape of the return data array, corresponding
+to (a)tom, (f)rame, (c)oordinates all six combinations
+of &#8216;a&#8217;, &#8216;f&#8217;, &#8216;c&#8217; are allowed ie &#8220;fac&#8221; - return array
+where the shape is (frame, number of atoms,
+coordinates)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.memory.MemoryReader.totaltime">
+<code class="descname">totaltime</code><a class="headerlink" href="#MDAnalysis.coordinates.memory.MemoryReader.totaltime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total length of the trajectory n_frames * dt.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="base.html" title="5.20. Base classes — MDAnalysis.coordinates.base"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="TRZ.html" title="5.18. TRZ trajectory I/O — MDAnalysis.coordinates.TRZ"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../coordinates_modules.html" >5. Coordinates modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

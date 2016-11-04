@@ -1,0 +1,472 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3.2.6.1.7. Utility functions for ENCORE &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.16.0-dev0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within MDAnalysis 0.16.0-dev0 documentation"
+          href="../../../_static/opensearch.xml"/>
+    <link rel="shortcut icon" href="../../../_static/mdanalysis-logo.ico"/>
+    <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../../index.html" />
+    <link rel="up" title="3.2.6. ENCORE Ensemble Similarity Calculations — MDAnalysis.analysis.encore" href="../encore.html" />
+    <link rel="next" title="3.3.1. Hydrogen Bond analysis — MDAnalysis.analysis.hbonds.hbond_analysis" href="../hbond_analysis.html" />
+    <link rel="prev" title="3.2.6.1.6. bootstrap procedures — MDAnalysis.analysis.ensemble.bootstrap" href="bootstrap.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../hbond_analysis.html" title="3.3.1. Hydrogen Bond analysis — MDAnalysis.analysis.hbonds.hbond_analysis"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bootstrap.html" title="3.2.6.1.6. bootstrap procedures — MDAnalysis.analysis.ensemble.bootstrap"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../analysis_modules.html" >3. Analysis modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../encore.html" accesskey="U">3.2.6. ENCORE Ensemble Similarity Calculations &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.encore</span></code></a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/mdanalysis-logo-200x150.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bootstrap.html"
+                        title="previous chapter">3.2.6.1.6. bootstrap procedures &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.ensemble.bootstrap</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../hbond_analysis.html"
+                        title="next chapter">3.3.1. Hydrogen Bond analysis &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.hbonds.hbond_analysis</span></code></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/documentation_pages/analysis/encore/utils.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-MDAnalysis.analysis.encore.utils">
+<span id="utility-functions-for-encore"></span><h1>3.2.6.1.7. Utility functions for ENCORE<a class="headerlink" href="#module-MDAnalysis.analysis.encore.utils" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="MDAnalysis.analysis.encore.utils.AnimatedProgressBar">
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">AnimatedProgressBar</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#AnimatedProgressBar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.AnimatedProgressBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends ProgressBar to allow you to use it straighforward on a script.
+Accepts an extra keyword argument named <cite>stdout</cite>
+(by default use sys.stdout).
+The progress status may be send to any file-object.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="MDAnalysis.analysis.encore.utils.ParallelCalculation">
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">ParallelCalculation</code><span class="sig-paren">(</span><em>ncores</em>, <em>function</em>, <em>args=None</em>, <em>kwargs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#ParallelCalculation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic parallel calculation class. Can use arbitrary functions,
+arguments to functions and kwargs to functions.</p>
+<dl class="attribute">
+<dt id="MDAnalysis.analysis.encore.utils.ParallelCalculation.ncores">
+<code class="descname">ncores</code><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation.ncores" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+<p>Number of cores to be used for parallel calculation</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.analysis.encore.utils.ParallelCalculation.function">
+<code class="descname">function</code><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation.function" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>callable object</em></p>
+<p>Function to be run in parallel.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.analysis.encore.utils.ParallelCalculation.args">
+<code class="descname">args</code><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation.args" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list of tuples</em></p>
+<p>Each tuple contains the arguments that will be passed to
+function(). This means that a call to function() is performed for
+each tuple. function is called as function(*args, **kwargs). Runs
+are distributed on the requested numbers of cores.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.analysis.encore.utils.ParallelCalculation.kwargs">
+<code class="descname">kwargs</code><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation.kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list of dicts</em></p>
+<p>Each tuple contains the named arguments that will be passed to
+function, similarly as described for the args attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.analysis.encore.utils.ParallelCalculation.nruns">
+<code class="descname">nruns</code><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation.nruns" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+<p>Number of runs to be performed. Must be equal to len(args) and
+len(kwargs).</p>
+</dd></dl>
+
+<p>Class constructor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ncores</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Number of cores to be used for parallel calculation</li>
+<li><strong>function</strong> (<em>object that supports __call__, as functions</em>) &#8211; function to be run in parallel.</li>
+<li><strong>args</strong> (<em>list of tuples</em>) &#8211; Arguments for function; see the ParallelCalculation class
+description.</li>
+<li><strong>kwargs</strong> (<em>list of dicts or None</em>) &#8211; kwargs for function; see the ParallelCalculation
+class description.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.ParallelCalculation.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#ParallelCalculation.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run parallel calculation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>results</strong> &#8211;
+int is the number of the calculation corresponding to a
+certain argument in the args list, and object is the result of
+corresponding calculation. For instance, in (3, output), output
+is the return of function(*args[3], **kwargs[3]).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple of ordered tuples (int, object)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.ParallelCalculation.worker">
+<code class="descname">worker</code><span class="sig-paren">(</span><em>q</em>, <em>results</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#ParallelCalculation.worker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation.worker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic worker. Will run function with the prescribed args and kwargs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>q</strong> (<em>multiprocessing.Manager.Queue object</em>) &#8211; work queue, from which the worker fetches arguments and
+messages</li>
+<li><strong>results</strong> (<em>multiprocessing.Manager.Queue object</em>) &#8211; results queue, where results are put after each calculation is
+finished</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="MDAnalysis.analysis.encore.utils.ProgressBar">
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">ProgressBar</code><span class="sig-paren">(</span><em>start=0</em>, <em>end=10</em>, <em>width=12</em>, <em>fill='='</em>, <em>blank='.'</em>, <em>format='[%(fill)s&gt;%(blank)s] %(progress)s%%'</em>, <em>incremental=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#ProgressBar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ProgressBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle and draw a progress barr.
+From <a class="reference external" href="https://github.com/ikame/progressbar">https://github.com/ikame/progressbar</a></p>
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.ProgressBar.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#ProgressBar.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ProgressBar.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the current progress to the start point</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.ProgressBar.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>progress</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#ProgressBar.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ProgressBar.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the progress value instead of incrementing it</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="MDAnalysis.analysis.encore.utils.TriangularMatrix">
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">TriangularMatrix</code><span class="sig-paren">(</span><em>size</em>, <em>metadata=None</em>, <em>loadfile=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#TriangularMatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.TriangularMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triangular matrix class. This class is designed to provide a
+memory-efficient representation of a triangular matrix that still behaves
+as a square symmetric one. The class wraps a numpy.array object,
+in which data are memorized in row-major order. It also has few additional
+facilities to conveniently load/write a matrix from/to file. It can be
+accessed using the [] and () operators, similarly to a normal numpy array.</p>
+<p>Class constructor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<em>int or multiprocessing.SyncrhonizeArray</em>) &#8211; Size of the matrix (number of rows or columns). If an
+array is provided instead, the size of the triangular matrix
+will be calculated and the array copied as the matrix
+elements. Otherwise, the matrix is just initialized to zero.</li>
+<li><strong>metadata</strong> (<em>dict or None</em>) &#8211; Metadata dictionary. Used to generate the metadata attribute.</li>
+<li><strong>loadfile</strong> (<em>str or None</em>) &#8211; Load the matrix from this file. All the attributes and data will
+be determined by the matrix file itself (i.e. metadata will be
+ignored); size has to be provided though.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.TriangularMatrix.__add__">
+<code class="descname">__add__</code><span class="sig-paren">(</span><em>scalar</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#TriangularMatrix.__add__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.TriangularMatrix.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add scalar to matrix elements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scalar</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Scalar to be added.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.TriangularMatrix.__iadd__">
+<code class="descname">__iadd__</code><span class="sig-paren">(</span><em>scalar</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#TriangularMatrix.__iadd__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.TriangularMatrix.__iadd__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add scalar to matrix elements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scalar</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Scalar to be added.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.TriangularMatrix.__imul__">
+<code class="descname">__imul__</code><span class="sig-paren">(</span><em>scalar</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#TriangularMatrix.__imul__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.TriangularMatrix.__imul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply with scalar.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scalar</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Scalar to multiply with.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.TriangularMatrix.__mul__">
+<code class="descname">__mul__</code><span class="sig-paren">(</span><em>scalar</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#TriangularMatrix.__mul__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.TriangularMatrix.__mul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply with scalar.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scalar</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Scalar to multiply with.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.TriangularMatrix.__rmul__">
+<code class="descname">__rmul__</code><span class="sig-paren">(</span><em>scalar</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.TriangularMatrix.__rmul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply with scalar.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scalar</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Scalar to multiply with.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.TriangularMatrix.as_array">
+<code class="descname">as_array</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#TriangularMatrix.as_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.TriangularMatrix.as_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return standard numpy array equivalent</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.TriangularMatrix.loadz">
+<code class="descname">loadz</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#TriangularMatrix.loadz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.TriangularMatrix.loadz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load matrix from the npz compressed numpy format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the file to be loaded.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.utils.TriangularMatrix.savez">
+<code class="descname">savez</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#TriangularMatrix.savez"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.TriangularMatrix.savez" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save matrix in the npz compressed numpy format. Save metadata and
+data as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the file to be saved.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="MDAnalysis.analysis.encore.utils.merge_universes">
+<code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">merge_universes</code><span class="sig-paren">(</span><em>universes</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#merge_universes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.merge_universes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge list of universes into one</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>universes</strong> (<em>list of Universe objects</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Universe object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="MDAnalysis.analysis.encore.utils.trm_indeces">
+<code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">trm_indeces</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#trm_indeces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.trm_indeces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate (i,j) indeces of a triangular matrix, between elements a and b.
+The matrix size is automatically determined from the number of elements.
+For instance: trm_indeces((0,0),(2,1)) yields (0,0) (1,0) (1,1) (2,0)
+(2,1).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>a</strong> (<em>(int i, int j) tuple</em>) &#8211; starting matrix element.</li>
+<li><strong>b</strong> (<em>(int i, int j) tuple</em>) &#8211; final matrix element.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="MDAnalysis.analysis.encore.utils.trm_indices_diag">
+<code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">trm_indices_diag</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#trm_indices_diag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.trm_indices_diag" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate (i,j) indeces of a triangular matrix of n rows (or columns),
+with diagonal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Matrix size</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="MDAnalysis.analysis.encore.utils.trm_indices_nodiag">
+<code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">trm_indices_nodiag</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#trm_indices_nodiag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.trm_indices_nodiag" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate (i,j) indeces of a triangular matrix of n rows (or columns),
+without diagonal (e.g. no elements (0,0),(1,1),...,(n,n))</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Matrix size</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="MDAnalysis.analysis.encore.cutils.PureRMSD">
+<code class="descclassname">MDAnalysis.analysis.encore.cutils.</code><code class="descname">PureRMSD</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.analysis.encore.cutils.PureRMSD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../hbond_analysis.html" title="3.3.1. Hydrogen Bond analysis — MDAnalysis.analysis.hbonds.hbond_analysis"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bootstrap.html" title="3.2.6.1.6. bootstrap procedures — MDAnalysis.analysis.ensemble.bootstrap"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../analysis_modules.html" >3. Analysis modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../encore.html" >3.2.6. ENCORE Ensemble Similarity Calculations &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.encore</span></code></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

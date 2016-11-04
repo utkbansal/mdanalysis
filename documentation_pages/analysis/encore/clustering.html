@@ -1,0 +1,603 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3.2.6.1.2. Clustering &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.16.0-dev0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within MDAnalysis 0.16.0-dev0 documentation"
+          href="../../../_static/opensearch.xml"/>
+    <link rel="shortcut icon" href="../../../_static/mdanalysis-logo.ico"/>
+    <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../../index.html" />
+    <link rel="up" title="3.2.6. ENCORE Ensemble Similarity Calculations — MDAnalysis.analysis.encore" href="../encore.html" />
+    <link rel="next" title="3.2.6.1.3. Dimensionality reduction" href="dimensionality_reduction.html" />
+    <link rel="prev" title="3.2.6.1.1. Ensemble Similarity Calculations — MDAnalysis.analysis.encore.similarity" href="similarity.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dimensionality_reduction.html" title="3.2.6.1.3. Dimensionality reduction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="similarity.html" title="3.2.6.1.1. Ensemble Similarity Calculations — MDAnalysis.analysis.encore.similarity"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../analysis_modules.html" >3. Analysis modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../encore.html" accesskey="U">3.2.6. ENCORE Ensemble Similarity Calculations &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.encore</span></code></a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/mdanalysis-logo-200x150.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3.2.6.1.2. Clustering</a><ul>
+<li><a class="reference internal" href="#clustering-frontend-mdanalysis-analysis-encore-clustering-cluster">3.2.6.1.2.1. clustering frontend &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.encore.clustering.cluster</span></code></a></li>
+<li><a class="reference internal" href="#cluster-representation-mdanalysis-analysis-encore-clustering-clustercollection">3.2.6.1.2.2. Cluster representation &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.encore.clustering.ClusterCollection</span></code></a></li>
+<li><a class="reference internal" href="#clustering-frontend-mdanalysis-analysis-encore-clustering-clusteringmethod">3.2.6.1.2.3. clustering frontend &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.encore.clustering.ClusteringMethod</span></code></a></li>
+<li><a class="reference internal" href="#clustering-algorithms">3.2.6.1.2.4. Clustering algorithms</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="similarity.html"
+                        title="previous chapter">3.2.6.1.1. Ensemble Similarity Calculations &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.encore.similarity</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dimensionality_reduction.html"
+                        title="next chapter">3.2.6.1.3. Dimensionality reduction</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/documentation_pages/analysis/encore/clustering.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-MDAnalysis.analysis.encore.clustering.cluster">
+<span id="clustering"></span><h1>3.2.6.1.2. Clustering<a class="headerlink" href="#module-MDAnalysis.analysis.encore.clustering.cluster" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="clustering-frontend-mdanalysis-analysis-encore-clustering-cluster">
+<h2>3.2.6.1.2.1. clustering frontend &#8212; <a class="reference internal" href="#module-MDAnalysis.analysis.encore.clustering.cluster" title="MDAnalysis.analysis.encore.clustering.cluster"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.analysis.encore.clustering.cluster</span></code></a><a class="headerlink" href="#clustering-frontend-mdanalysis-analysis-encore-clustering-cluster" title="Permalink to this headline">¶</a></h2>
+<p>The module defines a function serving as front-end for various clustering
+algorithms, wrapping them to allow them to be used interchangably.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Matteo Tiberti, Wouter Boomsma, Tone Bengtsen</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Year:</th><td class="field-body">2015&#8211;2016</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Copyright:</th><td class="field-body">GNU Public License v3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Mantainer:</th><td class="field-body">Matteo Tiberti &lt;<a class="reference external" href="mailto:matteo&#46;tiberti&#37;&#52;&#48;gmail&#46;com">matteo<span>&#46;</span>tiberti<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;, mtiberti on github</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0.</span></p>
+</div>
+<dl class="function">
+<dt id="MDAnalysis.analysis.encore.clustering.cluster.cluster">
+<code class="descclassname">MDAnalysis.analysis.encore.clustering.cluster.</code><code class="descname">cluster</code><span class="sig-paren">(</span><em>ensembles</em>, <em>method=&lt;MDAnalysis.analysis.encore.clustering.ClusteringMethod.AffinityPropagationNative object&gt;</em>, <em>selection='name CA'</em>, <em>distance_matrix=None</em>, <em>allow_collapsed_result=True</em>, <em>ncores=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/cluster.html#cluster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.cluster.cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster frames from one or more ensembles, using one or more
+clustering methods. The function optionally takes pre-calculated distances
+matrices as an argument. Note that not all clustering procedure can work
+directly on distance matrices, so the distance matrices might be ignored
+for particular choices of method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ensembles</strong> (<em>MDAnalysis.Universe, or list, or list of list thereof</em>) &#8211; The function takes either a single Universe object, a list of Universe
+objects or a list of lists of Universe objects. If given a single
+universe, it simply clusters the conformations in the trajectory. If
+given a list of ensembles, it will merge them and cluster them together,
+keeping track of the ensemble to which each of the conformations belong.
+Finally, if passed a list of list of ensembles, the function will just
+repeat the functionality just described - merging ensembles for each
+ensemble in the outer loop.</li>
+<li><strong>method</strong> (<em>encore.ClusteringMethod or list thereof, optional</em>) &#8211; A single or a list of instances of the Clustering classes from
+the clustering module. A separate analysis will be run for each
+method. Note that different parameters for the same clustering method
+can be explored by adding different instances of the same clustering
+class.</li>
+<li><strong>selection</strong> (<em>str, optional</em>) &#8211; Atom selection string in the MDAnalysis format. Default is &#8220;name CA&#8221;</li>
+<li><strong>distance_matrix</strong> (<em>encore.utils.TriangularMatrix or list thereof, optional</em>) &#8211; Distance matrix used for clustering. If this parameter
+is not supplied the matrix will be calculated on the fly.
+If several distance matrices are supplied, an analysis will be done
+for each of them. The number of provided distance matrices should
+match the number of provided ensembles.</li>
+<li><strong>allow_collapsed_result</strong> (<em>bool, optional</em>) &#8211; Whether a return value of a list of one value should be collapsed
+into just the value.</li>
+<li><strong>ncores</strong> (<em>int, optional</em>) &#8211; Maximum number of cores to be used (default is 1).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><em>list of ClustersCollection objects (or potentially a single</em></li>
+<li><em>ClusteringCollection object if allow_collapsed_result is set to True)</em></li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>Two ensembles are created as Universe object using a topology file and
+two trajectories. The topology- and trajectory files used are obtained
+from the MDAnalysis test suite for two different simulations of the protein
+AdK.
+Here, we cluster two ensembles</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">MDAnalysis</span> <span class="kn">import</span> <span class="n">Universe</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">MDAnalysis.analysis.encore</span> <span class="kn">as</span> <span class="nn">encore</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">MDAnalysis.tests.datafiles</span> <span class="kn">import</span> <span class="n">PSF</span><span class="p">,</span> <span class="n">DCD</span><span class="p">,</span> <span class="n">DCD2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ens1</span> <span class="o">=</span> <span class="n">Universe</span><span class="p">(</span><span class="n">PSF</span><span class="p">,</span> <span class="n">DCD</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ens2</span> <span class="o">=</span> <span class="n">Universe</span><span class="p">(</span><span class="n">PSF</span><span class="p">,</span> <span class="n">DCD2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_collection</span> <span class="o">=</span> <span class="n">encore</span><span class="o">.</span><span class="n">cluster</span><span class="p">([</span><span class="n">ens1</span><span class="p">,</span><span class="n">ens2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cluster_collection</span>
+</pre></div>
+</div>
+<p>You can change the parameters of the clustering method by explicitly
+specifying the method</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_collection</span> <span class="o">=</span>
+<span class="go">        encore.cluster(</span>
+<span class="go">             [ens1,ens2],</span>
+<span class="go">             method=encore.AffinityPropagationNative(preference=-2.))</span>
+</pre></div>
+</div>
+<p>Here is an illustration using DBSCAN algorithm, instead
+of the default clustering method</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_collection</span> <span class="o">=</span>
+<span class="go">        encore.cluster(</span>
+<span class="go">             [ens1,ens2],</span>
+<span class="go">             method=encore.DBSCAN())</span>
+</pre></div>
+</div>
+<p>You can also combine multiple methods in one call</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_collection</span> <span class="o">=</span>
+<span class="go">        encore.cluster(</span>
+<span class="go">             [ens1,ens2],</span>
+<span class="go">             method=[encore.AffinityPropagationNative(preference=-1.),</span>
+<span class="go">                     encore.AffinityPropagationNative(preference=-2.)])</span>
+</pre></div>
+</div>
+<p>In addition to standard cluster membership information, the
+<cite>cluster_collection</cite> output keep track of the origin of each
+conformation, so you check how the different trajectories are
+represented in each cluster. Here, for brevity, we print just the
+members of the two first clusters</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="p">[</span><span class="n">cluster</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;ensemble_membership&quot;</span><span class="p">]</span>
+<span class="go">             for cluster in cluster_collection][:2]</span>
+<span class="go">[array([1, 1, 1, 1, 2]), array([1, 1, 1, 1, 1])]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<span class="target" id="module-MDAnalysis.analysis.encore.clustering.ClusterCollection"></span><div class="section" id="cluster-representation-mdanalysis-analysis-encore-clustering-clustercollection">
+<h2>3.2.6.1.2.2. Cluster representation &#8212; <a class="reference internal" href="#module-MDAnalysis.analysis.encore.clustering.ClusterCollection" title="MDAnalysis.analysis.encore.clustering.ClusterCollection"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.analysis.encore.clustering.ClusterCollection</span></code></a><a class="headerlink" href="#cluster-representation-mdanalysis-analysis-encore-clustering-clustercollection" title="Permalink to this headline">¶</a></h2>
+<p>The module contains the Cluster and ClusterCollection classes which are
+designed to store results from clustering algorithms.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Matteo Tiberti, Wouter Boomsma, Tone Bengtsen</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Year:</th><td class="field-body">2015&#8211;2016</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Copyright:</th><td class="field-body">GNU Public License v3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Mantainer:</th><td class="field-body">Matteo Tiberti &lt;<a class="reference external" href="mailto:matteo&#46;tiberti&#37;&#52;&#48;gmail&#46;com">matteo<span>&#46;</span>tiberti<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;, mtiberti on github</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0.</span></p>
+</div>
+<dl class="class">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster">
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.clustering.ClusterCollection.</code><code class="descname">Cluster</code><span class="sig-paren">(</span><em>elem_list=None</em>, <em>centroid=None</em>, <em>idn=None</em>, <em>metadata=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusterCollection.html#Cluster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic Cluster class for clusters with centroids.</p>
+<dl class="attribute">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.id">
+<code class="descname">id</code><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+<p>Cluster ID number. Useful for the ClustersCollection class</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.metadata">
+<code class="descname">metadata</code><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>iterable</em></p>
+<p>dict of lists or numpy.array, containing metadata for the cluster
+elements. The iterable must return the same number of elements as
+those that belong to the cluster.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.size">
+<code class="descname">size</code><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.size" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+<p>number of elements.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.centroid">
+<code class="descname">centroid</code><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.centroid" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>element object</em></p>
+<p>cluster centroid.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.elements">
+<code class="descname">elements</code><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.elements" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>numpy.array</em></p>
+<p>array containing the cluster elements.</p>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Class constructor. If elem_list is None, an empty cluster is created</dt>
+<dd>and the remaining arguments ignored.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>elem_list</strong> (<em>numpy.array or None</em>) &#8211; numpy array of cluster elements</li>
+<li><strong>centroid</strong> (<em>None or element object</em>) &#8211; centroid</li>
+<li><strong>idn</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; cluster ID</li>
+<li><strong>metadata</strong> (<a class="reference internal" href="../../lib/util.html#MDAnalysis.lib.util.iterable" title="MDAnalysis.lib.util.iterable"><em>iterable</em></a>) &#8211; metadata, one value for each cluster element. The iterable
+must have the same length as the elements array.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.__iter__">
+<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusterCollection.html#Cluster.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over elements in cluster</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.__len__">
+<code class="descname">__len__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusterCollection.html#Cluster.__len__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.__len__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Size of cluster</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.__repr__">
+<code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusterCollection.html#Cluster.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.Cluster.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Textual representation</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection">
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.clustering.ClusterCollection.</code><code class="descname">ClusterCollection</code><span class="sig-paren">(</span><em>elements=None</em>, <em>metadata=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusterCollection.html#ClusterCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clusters collection class; this class represents the results of a full
+clustering run. It stores a group of clusters defined as
+encore.clustering.Cluster objects.</p>
+<dl class="attribute">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.clusters">
+<code class="descname">clusters</code><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em></p>
+<p>list of of Cluster objects which are part of the Cluster collection</p>
+</dd></dl>
+
+<p>Class constructor. If elements is None, an empty cluster collection
+will be created. Otherwise, the constructor takes as input an
+iterable of ints, for instance:</p>
+<p>[ a, a, a, a, b, b, b, c, c, ... , z, z ]</p>
+<p>the variables a,b,c,...,z are cluster centroids, here as cluster
+element numbers (i.e. 3 means the 4th element of the ordered input
+for clustering). The array maps a correspondence between
+cluster elements (which are implicitly associated with the
+position in the array) with centroids, i. e. defines clusters.
+For instance:</p>
+<p>[ 1, 1, 1, 4, 4, 5 ]</p>
+<p>means that elements 0, 1, 2 form a cluster which has 1 as centroid,
+elements 3 and 4 form a cluster which has 4 as centroid, and
+element 5 has its own cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>elements</strong> (<em>iterable of ints or None</em>) &#8211; clustering results. See the previous description for details</li>
+<li><strong>metadata</strong> (<em>{str:list, str:list,...} or None</em>) &#8211; metadata for the data elements. The list must be of the same
+size as the elements array, with one value per element.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.__iter__">
+<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusterCollection.html#ClusterCollection.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over clusters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.__len__">
+<code class="descname">__len__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusterCollection.html#ClusterCollection.__len__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.__len__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of clustering collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.__repr__">
+<code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusterCollection.html#ClusterCollection.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Textual representation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.get_centroids">
+<code class="descname">get_centroids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusterCollection.html#ClusterCollection.get_centroids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.get_centroids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the centroids of the clusters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>centroids</strong> (<em>list of cluster element objects</em>)</li>
+<li><em>list of cluster centroids</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.get_ids">
+<code class="descname">get_ids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusterCollection.html#ClusterCollection.get_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusterCollection.ClusterCollection.get_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ID numbers of the clusters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>ids</strong> (<em>list of int</em>)</li>
+<li><em>list of cluster ids</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-MDAnalysis.analysis.encore.clustering.ClusteringMethod"></span><div class="section" id="clustering-frontend-mdanalysis-analysis-encore-clustering-clusteringmethod">
+<h2>3.2.6.1.2.3. clustering frontend &#8212; <a class="reference internal" href="#module-MDAnalysis.analysis.encore.clustering.ClusteringMethod" title="MDAnalysis.analysis.encore.clustering.ClusteringMethod"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.analysis.encore.clustering.ClusteringMethod</span></code></a><a class="headerlink" href="#clustering-frontend-mdanalysis-analysis-encore-clustering-clusteringmethod" title="Permalink to this headline">¶</a></h2>
+<p>The module defines classes for interfacing to various clustering algorithms.
+One has been implemented natively, and will always be available, while
+others are available only if scikit-learn is installed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Matteo Tiberti, Wouter Boomsma, Tone Bengtsen</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Year:</th><td class="field-body">2015&#8211;2016</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Copyright:</th><td class="field-body">GNU Public License v3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Mantainer:</th><td class="field-body">Matteo Tiberti &lt;<a class="reference external" href="mailto:matteo&#46;tiberti&#37;&#52;&#48;gmail&#46;com">matteo<span>&#46;</span>tiberti<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;, mtiberti on github</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0.</span></p>
+</div>
+<dl class="class">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusteringMethod.AffinityPropagationNative">
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.clustering.ClusteringMethod.</code><code class="descname">AffinityPropagationNative</code><span class="sig-paren">(</span><em>damping=0.9</em>, <em>preference=-1.0</em>, <em>max_iter=500</em>, <em>convergence_iter=50</em>, <em>add_noise=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusteringMethod.html#AffinityPropagationNative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusteringMethod.AffinityPropagationNative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface to the natively implemented Affinity propagation procedure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>damping</strong> (<em>float, optional</em>) &#8211; Damping factor (default is 0.9). Parameter for the Affinity
+Propagation for clustering.</li>
+<li><strong>preference</strong> (<em>float, optional</em>) &#8211; Preference parameter used in the Affinity Propagation algorithm for
+clustering  (default -1.0). A high preference value results in
+many clusters, a low preference will result in fewer numbers of
+clusters.</li>
+<li><strong>max_iter</strong> (<em>int, optional</em>) &#8211; Maximum number of iterations for affinity propagation (default is
+500).</li>
+<li><strong>convergence_iter</strong> (<em>int, optional</em>) &#8211; Minimum number of unchanging iterations to achieve convergence
+(default is 50). Parameter in the Affinity Propagation for
+clustering.</li>
+<li><strong>add_noise</strong> (<em>bool, optional</em>) &#8211; Apply noise to similarity matrix before running clustering
+(default is True)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusteringMethod.AffinityPropagationNative.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>distance_matrix</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusteringMethod.html#AffinityPropagationNative.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusteringMethod.AffinityPropagationNative.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>distance_matrix</strong> (<a class="reference internal" href="utils.html#MDAnalysis.analysis.encore.utils.TriangularMatrix" title="MDAnalysis.analysis.encore.utils.TriangularMatrix"><em>encore.utils.TriangularMatrix</em></a>) &#8211; conformational distance matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of cluster indices</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.11)">numpy.array</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusteringMethod.ClusteringMethod">
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.clustering.ClusteringMethod.</code><code class="descname">ClusteringMethod</code><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusteringMethod.html#ClusteringMethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusteringMethod.ClusteringMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for any Clustering Method</p>
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusteringMethod.ClusteringMethod.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusteringMethod.html#ClusteringMethod.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusteringMethod.ClusteringMethod.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> &#8211; either trajectory coordinate data (np.array) or an
+encore.utils.TriangularMatrix, encoding the conformational
+distance matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of cluster indices</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.11)">numpy.array</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusteringMethod.encode_centroid_info">
+<code class="descclassname">MDAnalysis.analysis.encore.clustering.ClusteringMethod.</code><code class="descname">encode_centroid_info</code><span class="sig-paren">(</span><em>clusters</em>, <em>cluster_centers_indices</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusteringMethod.html#encode_centroid_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusteringMethod.encode_centroid_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjust cluster indices to include centroid information
+as described in documentation for ClusterCollection</p>
+</dd></dl>
+
+</div>
+<div class="section" id="clustering-algorithms">
+<h2>3.2.6.1.2.4. Clustering algorithms<a class="headerlink" href="#clustering-algorithms" title="Permalink to this headline">¶</a></h2>
+<p>The following clustering algorithms are always available:</p>
+<dl class="class">
+<dt id="MDAnalysis.analysis.encore.clustering.affinityprop.AffinityPropagation">
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.clustering.affinityprop.</code><code class="descname">AffinityPropagation</code><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.affinityprop.AffinityPropagation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Affinity propagation clustering algorithm. This class is a Cython wrapper around the Affinity propagation algorithm, which is implement as a C library (see ap.c). The implemented algorithm is described in the paper:</p>
+<p>Clustering by Passing Messages Between Data Points.
+Brendan J. Frey and Delbert Dueck, University of Toronto
+Science 315, 972–976, February 2007</p>
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.affinityprop.AffinityPropagation.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.affinityprop.AffinityPropagation.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the clustering algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>s</strong> (<em>encore.utils.TriangularMatrix object</em>) &#8211; Triangular matrix containing the similarity values for each pair of clustering elements. Notice that the current implementation does not allow for asymmetric values (i.e. similarity(a,b) is assumed to be equal to similarity(b,a))</li>
+<li><strong>preference</strong> (<em>numpy.array of floats or float</em>) &#8211; Preference values, which the determine the number of clusters. If a single value is given, all the preference values are set to that. Otherwise, the list is used to set the preference values (one value per element, so the list must be of the same size as the number of elements)</li>
+<li><strong>lam</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Floating point value that defines how much damping is applied to the solution at each iteration. Must be ]0,1]</li>
+<li><strong>max_iterations</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Maximum number of iterations</li>
+<li><strong>convergence</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Number of iterations in which the cluster centers must remain the same in order to reach convergence</li>
+<li><strong>noise</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Whether to apply noise to the input s matrix, such there are no equal values. 1 is for yes, 0 is for no.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>elements</strong> &#8211;
+List of cluster-assigned elements, which can be used by encore.utils.ClustersCollection to generate Cluster objects. See these classes for more details.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of int or None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dimensionality_reduction.html" title="3.2.6.1.3. Dimensionality reduction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="similarity.html" title="3.2.6.1.1. Ensemble Similarity Calculations — MDAnalysis.analysis.encore.similarity"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../analysis_modules.html" >3. Analysis modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../encore.html" >3.2.6. ENCORE Ensemble Similarity Calculations &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.encore</span></code></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

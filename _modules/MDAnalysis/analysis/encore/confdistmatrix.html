@@ -1,0 +1,560 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MDAnalysis.analysis.encore.confdistmatrix &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.16.0-dev0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within MDAnalysis 0.16.0-dev0 documentation"
+          href="../../../../_static/opensearch.xml"/>
+    <link rel="shortcut icon" href="../../../../_static/mdanalysis-logo.ico"/>
+    <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/mdanalysis-logo-200x150.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for MDAnalysis.analysis.encore.confdistmatrix</h1><div class="highlight"><pre>
+<span></span><span class="c1"># confdistmatrix.py --- Conformational distance matrix calculator</span>
+<span class="c1"># Copyright (C) 2014 Wouter Boomsma, Matteo Tiberti</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Distance Matrix calculation --- :mod:`MDAnalysis.analysis.ensemble.confdistmatrix`</span>
+<span class="sd">==================================================================================</span>
+
+
+<span class="sd">The module contains a base class to easily compute, using</span>
+<span class="sd">parallelization and shared memory, matrices of conformational</span>
+<span class="sd">distance between the structures stored as frames in a Universe. A</span>
+<span class="sd">class to compute an RMSD matrix in such a way is also available.</span>
+
+<span class="sd">:Author: Matteo Tiberti, Wouter Boomsma, Tone Bengtsen</span>
+<span class="sd">:Year: 2015--2016</span>
+<span class="sd">:Copyright: GNU Public License v3</span>
+<span class="sd">:Mantainer: Matteo Tiberti &lt;matteo.tiberti@gmail.com&gt;, mtiberti on github</span>
+
+<span class="sd">.. versionadded:: 0.16.0</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Array</span><span class="p">,</span> <span class="n">RawValue</span>
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">c_float</span>
+<span class="kn">from</span> <span class="nn">getpass</span> <span class="kn">import</span> <span class="n">getuser</span>
+<span class="kn">from</span> <span class="nn">socket</span> <span class="kn">import</span> <span class="n">gethostname</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">...core.AtomGroup</span> <span class="kn">import</span> <span class="n">Universe</span>
+
+<span class="kn">from</span> <span class="nn">..align</span> <span class="kn">import</span> <span class="n">rotation_matrix</span>
+
+<span class="kn">from</span> <span class="nn">.cutils</span> <span class="kn">import</span> <span class="n">PureRMSD</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">TriangularMatrix</span><span class="p">,</span> <span class="n">trm_indeces</span><span class="p">,</span> \
+    <span class="n">AnimatedProgressBar</span>
+
+
+
+<div class="viewcode-block" id="conformational_distance_matrix"><a class="viewcode-back" href="../../../../documentation_pages/analysis/encore/confdistmatrix.html#MDAnalysis.analysis.encore.confdistmatrix.conformational_distance_matrix">[docs]</a><span class="k">def</span> <span class="nf">conformational_distance_matrix</span><span class="p">(</span><span class="n">ensemble</span><span class="p">,</span>
+    <span class="n">conf_dist_function</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">superimposition_selection</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pairwise_align</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">mass_weighted</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run the conformational distance matrix calculation.</span>
+<span class="sd">    args and kwargs are passed to conf_dist_function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ensemble : Universe object</span>
+<span class="sd">        Universe object for which the conformational distance matrix will</span>
+<span class="sd">        be computed.</span>
+
+<span class="sd">    conf_dist_function : function object</span>
+<span class="sd">        Function that fills the matrix with conformational distance</span>
+<span class="sd">        values. See set_rmsd_matrix_elements for an example.</span>
+
+<span class="sd">    pairwise_align : bool</span>
+<span class="sd">        Whether to perform pairwise alignment between conformations. </span>
+<span class="sd">        Default is True (do the superimposition)</span>
+
+<span class="sd">    mass_weighted : bool</span>
+<span class="sd">        Whether to perform mass-weighted superimposition and metric</span>
+<span class="sd">        calculation. Default is True.</span>
+
+<span class="sd">    metadata : bool</span>
+<span class="sd">        Whether to build a metadata dataset for the calculated matrix.</span>
+<span class="sd">        Default is True.</span>
+
+<span class="sd">    ncores : int</span>
+<span class="sd">        Number of cores to be used for parallel calculation </span>
+<span class="sd">        Default is 1.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    conf_dist_matrix : encore.utils.TriangularMatrix object</span>
+<span class="sd">        Conformational distance matrix in triangular representation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Decide how many cores have to be used. Since the main process is</span>
+    <span class="c1"># stopped while the workers do their job, ncores workers will be</span>
+    <span class="c1"># spawned.</span>
+
+    <span class="k">if</span> <span class="n">ncores</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">ncores</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># framesn: number of frames</span>
+    <span class="n">framesn</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ensemble</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">timeseries</span><span class="p">(</span>
+        <span class="n">ensemble</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">selection</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s1">&#39;fac&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Prepare metadata recarray</span>
+    <span class="k">if</span> <span class="n">metadata</span><span class="p">:</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">gethostname</span><span class="p">(),</span>
+                           <span class="n">getuser</span><span class="p">(),</span>
+                           <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()),</span>
+                           <span class="n">ensemble</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+                           <span class="n">framesn</span><span class="p">,</span>
+                           <span class="n">pairwise_align</span><span class="p">,</span>
+                           <span class="n">selection</span><span class="p">,</span>
+                           <span class="n">mass_weighted</span><span class="p">)],</span>
+                         <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;host&#39;</span><span class="p">,</span> <span class="nb">object</span><span class="p">),</span>
+                                <span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="nb">object</span><span class="p">),</span>
+                                <span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="nb">object</span><span class="p">),</span>
+                                <span class="p">(</span><span class="s1">&#39;topology file&#39;</span><span class="p">,</span> <span class="nb">object</span><span class="p">),</span>
+                                <span class="p">(</span><span class="s1">&#39;number of frames&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span>
+                                <span class="p">(</span><span class="s1">&#39;pairwise superimposition&#39;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span>
+                                <span class="p">(</span><span class="s1">&#39;superimposition subset&#39;</span><span class="p">,</span> <span class="nb">object</span><span class="p">),</span>
+                                <span class="p">(</span><span class="s1">&#39;mass-weighted&#39;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)])</span>
+
+    <span class="c1"># Prepare alignment subset coordinates as necessary</span>
+
+    <span class="n">rmsd_coordinates</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">timeseries</span><span class="p">(</span>
+            <span class="n">ensemble</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">selection</span><span class="p">),</span>
+            <span class="n">format</span><span class="o">=</span><span class="s1">&#39;fac&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pairwise_align</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">superimposition_selection</span><span class="p">:</span>
+            <span class="n">subset_selection</span> <span class="o">=</span> <span class="n">superimposition_selection</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">subset_selection</span> <span class="o">=</span> <span class="n">selection</span>
+
+        <span class="n">fitting_coordinates</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">timeseries</span><span class="p">(</span>
+            <span class="n">ensemble</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">subset_selection</span><span class="p">),</span>
+            <span class="n">format</span><span class="o">=</span><span class="s1">&#39;fac&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fitting_coordinates</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="c1"># Prepare masses as necessary</span>
+    <span class="k">if</span> <span class="n">mass_weighted</span><span class="p">:</span>
+        <span class="n">masses</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span><span class="o">.</span><span class="n">masses</span>
+        <span class="k">if</span> <span class="n">pairwise_align</span><span class="p">:</span>
+            <span class="n">subset_masses</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">subset_selection</span><span class="p">)</span><span class="o">.</span><span class="n">masses</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">subset_masses</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">masses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">ensemble</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">timeseries</span><span class="p">(</span>
+            <span class="n">ensemble</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">selection</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">pairwise_align</span><span class="p">:</span>
+            <span class="n">subset_masses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">fit_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">subset_masses</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="c1"># matsize: number of elements of the triangular matrix, diagonal</span>
+    <span class="c1"># elements included.</span>
+    <span class="n">matsize</span> <span class="o">=</span> <span class="n">framesn</span> <span class="o">*</span> <span class="p">(</span><span class="n">framesn</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+    <span class="c1"># Calculate the number of matrix elements that each core has to</span>
+    <span class="c1"># calculate as equally as possible.</span>
+    <span class="k">if</span> <span class="n">ncores</span> <span class="o">&gt;</span> <span class="n">matsize</span><span class="p">:</span>
+        <span class="n">ncores</span> <span class="o">=</span> <span class="n">matsize</span>
+    <span class="n">runs_per_worker</span> <span class="o">=</span> <span class="p">[</span><span class="n">matsize</span> <span class="o">/</span> <span class="nb">int</span><span class="p">(</span><span class="n">ncores</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncores</span><span class="p">)]</span>
+    <span class="n">unfair_work</span> <span class="o">=</span> <span class="n">matsize</span> <span class="o">%</span> <span class="n">ncores</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">unfair_work</span><span class="p">):</span>
+        <span class="n">runs_per_worker</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># Splice the matrix in ncores segments. Calculate the first and the</span>
+    <span class="c1"># last (i,j) matrix elements of the slices that will be assigned to</span>
+    <span class="c1"># each worker. Each of them will proceed in a column-then-row order</span>
+    <span class="c1"># (e.g. 0,0 1,0 1,1 2,0 2,1 2,2 ... )</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">tasks_per_worker</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span><span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">runs_per_worker</span><span class="p">):</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">runs_per_worker</span><span class="p">[:</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]):</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">runs_per_worker</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">tasks_per_worker</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">tuple</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">b</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># Allocate for output matrix</span>
+    <span class="n">distmat</span> <span class="o">=</span> <span class="n">Array</span><span class="p">(</span><span class="n">c_float</span><span class="p">,</span> <span class="n">matsize</span><span class="p">)</span>
+
+    <span class="c1"># Prepare progress bar stuff and run it</span>
+    <span class="n">pbar</span> <span class="o">=</span> <span class="n">AnimatedProgressBar</span><span class="p">(</span><span class="n">end</span><span class="o">=</span><span class="n">matsize</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+    <span class="n">partial_counters</span> <span class="o">=</span> <span class="p">[</span><span class="n">RawValue</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncores</span><span class="p">)]</span>
+
+    <span class="c1"># Initialize workers. Simple worker doesn&#39;t perform fitting,</span>
+    <span class="c1"># fitter worker does.</span>
+    
+    <span class="n">workers</span> <span class="o">=</span> <span class="p">[</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">conf_dist_function</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">tasks_per_worker</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">rmsd_coordinates</span><span class="p">,</span>
+        <span class="n">distmat</span><span class="p">,</span>
+        <span class="n">masses</span><span class="p">,</span>
+        <span class="n">fitting_coordinates</span><span class="p">,</span>
+        <span class="n">subset_masses</span><span class="p">,</span>
+        <span class="n">partial_counters</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">args</span><span class="p">,</span>
+        <span class="n">kwargs</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncores</span><span class="p">)]</span>
+
+    <span class="c1"># Start &amp; join the workers</span>
+    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">workers</span><span class="p">:</span>
+        <span class="n">w</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">workers</span><span class="p">:</span>
+        <span class="n">w</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+    
+    <span class="c1"># When the workers have finished, return a TriangularMatrix object</span>
+    <span class="k">return</span> <span class="n">TriangularMatrix</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="set_rmsd_matrix_elements"><a class="viewcode-back" href="../../../../documentation_pages/analysis/encore/confdistmatrix.html#MDAnalysis.analysis.encore.confdistmatrix.set_rmsd_matrix_elements">[docs]</a><span class="k">def</span> <span class="nf">set_rmsd_matrix_elements</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">rmsdmat</span><span class="p">,</span> <span class="n">masses</span><span class="p">,</span> <span class="n">fit_coords</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                       <span class="n">fit_masses</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">pbar_counter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    RMSD Matrix calculator</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    tasks : iterator of int of length 2</span>
+<span class="sd">        Given a triangular matrix, this function will calculate RMSD</span>
+<span class="sd">        values from element tasks[0] to tasks[1]. Since the matrix</span>
+<span class="sd">        is triangular, the trm_indeces matrix automatically</span>
+<span class="sd">        calculates the corrisponding i,j matrix indices.</span>
+<span class="sd">        The matrix is written as an array in a row-major</span>
+<span class="sd">        order (see the TriangularMatrix class for details).</span>
+
+<span class="sd">        If fit_coords and fit_masses are specified, the structures</span>
+<span class="sd">        will be superimposed before calculating RMSD, and fit_coords and fit_masses</span>
+<span class="sd">        will be used to place both structures at their center of mass and </span>
+<span class="sd">        compute the rotation matrix. In this case, both fit_coords and fit_masses</span>
+<span class="sd">        must be specified.</span>
+
+<span class="sd">    coords : numpy.array</span>
+<span class="sd">        Array of the ensemble coordinates</span>
+
+<span class="sd">    masses : numpy.array</span>
+<span class="sd">        Array of atomic masses, having the same order as the</span>
+<span class="sd">        coordinates array</span>
+
+<span class="sd">    rmsdmat : encore.utils.TriangularMatrix</span>
+<span class="sd">        Memory-shared triangular matrix object</span>
+
+<span class="sd">    fit_coords : numpy.array or None</span>
+<span class="sd">        Array of the coordinates used for fitting</span>
+
+<span class="sd">    fit_masses : numpy.array</span>
+<span class="sd">        Array of atomic masses, having the same order as the</span>
+<span class="sd">        fit_coords array</span>
+
+<span class="sd">    pbar_counter : multiprocessing.RawValue</span>
+<span class="sd">        Thread-safe shared value. This counter is updated at</span>
+<span class="sd">        every cycle and used to evaluate the progress of</span>
+<span class="sd">        each worker in a parallel calculation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+
+    <span class="k">if</span> <span class="n">fit_coords</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">fit_masses</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">trm_indeces</span><span class="p">(</span><span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tasks</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">summasses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span>
+            <span class="n">rmsdmat</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">PureRMSD</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+                                                    <span class="n">coords</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+                                                    <span class="n">coords</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+                                                    <span class="n">masses</span><span class="p">,</span>
+                                                    <span class="n">summasses</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">fit_coords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">fit_coords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">trm_indeces</span><span class="p">(</span><span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tasks</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">summasses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span>
+            <span class="n">subset_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fit_masses</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fit_masses</span><span class="p">)</span>
+            <span class="n">com_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">fit_coords</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="n">weights</span><span class="o">=</span><span class="n">fit_masses</span><span class="p">)</span>
+            <span class="n">translated_i</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">com_i</span>
+            <span class="n">subset1_coords</span> <span class="o">=</span> <span class="n">fit_coords</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">com_i</span>
+            <span class="n">com_j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">fit_coords</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="n">weights</span><span class="o">=</span><span class="n">fit_masses</span><span class="p">)</span>
+            <span class="n">translated_j</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">com_j</span>
+            <span class="n">subset2_coords</span> <span class="o">=</span> <span class="n">fit_coords</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">com_j</span>
+            <span class="n">rotamat</span> <span class="o">=</span> <span class="n">rotation_matrix</span><span class="p">(</span><span class="n">subset1_coords</span><span class="p">,</span> <span class="n">subset2_coords</span><span class="p">,</span>
+                                      <span class="n">subset_weights</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">rotated_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rotamat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">translated_i</span><span class="p">)))</span>
+            <span class="n">rmsdmat</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">PureRMSD</span><span class="p">(</span>
+                <span class="n">rotated_i</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">translated_j</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+                <span class="n">coords</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">masses</span><span class="p">,</span> <span class="n">summasses</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Both fit_coords and fit_masses must be specified </span><span class="se">\</span>
+<span class="s2">                        if one of them is given&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pbar_counter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">pbar_counter</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="pbar_updater"><a class="viewcode-back" href="../../../../documentation_pages/analysis/encore/confdistmatrix.html#MDAnalysis.analysis.encore.confdistmatrix.pbar_updater">[docs]</a><span class="k">def</span> <span class="nf">pbar_updater</span><span class="p">(</span><span class="n">pbar</span><span class="p">,</span> <span class="n">pbar_counters</span><span class="p">,</span> <span class="n">max_val</span><span class="p">,</span> <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Method that updates and prints the progress bar, upon polling</span>
+<span class="sd">    progress status from workers.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    pbar : encore.utils.AnimatedProgressBar object</span>
+<span class="sd">        Progress bar object</span>
+
+<span class="sd">    pbar_counters : list of multiprocessing.RawValue</span>
+<span class="sd">        List of counters. Each worker is given a counter, which is updated</span>
+<span class="sd">        at every cycle. In this way the _pbar_updater process can</span>
+<span class="sd">        asynchronously fetch progress reports.</span>
+
+<span class="sd">    max_val : int</span>
+<span class="sd">        Total number of matrix elements to be calculated</span>
+
+<span class="sd">    update_interval : float</span>
+<span class="sd">        Number of seconds between progress bar updates</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="n">max_val</span><span class="p">:</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pbar_counters</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">+=</span> <span class="n">c</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">pbar</span><span class="o">.</span><span class="n">show_progress</span><span class="p">()</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="n">update_interval</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_distance_matrix"><a class="viewcode-back" href="../../../../documentation_pages/analysis/encore/confdistmatrix.html#MDAnalysis.analysis.encore.confdistmatrix.get_distance_matrix">[docs]</a><span class="k">def</span> <span class="nf">get_distance_matrix</span><span class="p">(</span><span class="n">ensemble</span><span class="p">,</span>
+                        <span class="n">selection</span><span class="o">=</span><span class="s2">&quot;name CA&quot;</span><span class="p">,</span>
+                        <span class="n">load_matrix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                        <span class="n">save_matrix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                        <span class="n">superimpose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                        <span class="n">superimposition_subset</span><span class="o">=</span><span class="s2">&quot;name CA&quot;</span><span class="p">,</span>
+                        <span class="n">mass_weighted</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                        <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="o">*</span><span class="n">conf_dist_args</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">conf_dist_kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves or calculates the conformational distance (RMSD)</span>
+<span class="sd">    matrix. The distance matrix is calculated between all the frames of all</span>
+<span class="sd">    the :class:`~MDAnalysis.core.AtomGroup.Universe` objects given as input.</span>
+<span class="sd">    The order of the matrix elements depends on the order of the coordinates</span>
+<span class="sd">    of the ensembles and on the order of the input ensembles themselves,</span>
+<span class="sd">    therefore the order of the input list is significant.</span>
+
+<span class="sd">    The distance matrix can either be calculated from input ensembles or</span>
+<span class="sd">    loaded from an input numpy binary file.</span>
+
+<span class="sd">    Please notice that the .npz file does not contain a bidimensional array,</span>
+<span class="sd">    but a flattened representation that is meant to represent the elements of</span>
+<span class="sd">    an encore.utils.TriangularMatrix object.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ensemble : Universe</span>
+
+<span class="sd">    selection : str</span>
+<span class="sd">        Atom selection string in the MDAnalysis format. Default is &quot;name CA&quot;</span>
+
+<span class="sd">    load_matrix : str, optional</span>
+<span class="sd">        Load similarity/dissimilarity matrix from numpy binary file instead</span>
+<span class="sd">        of calculating it (default is None). A filename is required.</span>
+
+<span class="sd">    save_matrix : bool, optional</span>
+<span class="sd">        Save calculated matrix as numpy binary file (default is None). A</span>
+<span class="sd">        filename is required.</span>
+
+<span class="sd">    superimpose : bool, optional</span>
+<span class="sd">        Whether to superimpose structures before calculating distance</span>
+<span class="sd">        (default is True).</span>
+
+<span class="sd">    superimposition_subset : str, optional</span>
+<span class="sd">        Group for superimposition using MDAnalysis selection syntax</span>
+<span class="sd">        (default is CA atoms: &quot;name CA&quot;)</span>
+
+<span class="sd">    mass_weighted : bool, optional</span>
+<span class="sd">        calculate a mass-weighted RMSD (default is True). If set to False</span>
+<span class="sd">        the superimposition will also not be mass-weighted.</span>
+
+<span class="sd">    ncores : int, optional</span>
+<span class="sd">        Maximum number of cores to be used (default is 1)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    confdistmatrix : encore.utils.TriangularMatrix</span>
+<span class="sd">        Conformational distance matrix. .</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Load the matrix if required</span>
+    <span class="k">if</span> <span class="n">load_matrix</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;        Loading similarity matrix from: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">load_matrix</span><span class="p">))</span>
+        <span class="n">confdistmatrix</span> <span class="o">=</span> \
+            <span class="n">TriangularMatrix</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="n">ensemble</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">timeseries</span><span class="p">(</span>
+                    <span class="n">ensemble</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">selection</span><span class="p">),</span>
+                    <span class="n">format</span><span class="o">=</span><span class="s1">&#39;fac&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">loadfile</span><span class="o">=</span><span class="n">load_matrix</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;        Done!&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">confdistmatrix</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;        {0} : {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">confdistmatrix</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+
+        <span class="c1"># Check matrix size for consistency</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">confdistmatrix</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> \
+                <span class="n">ensemble</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">timeseries</span><span class="p">(</span>
+                    <span class="n">ensemble</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">selection</span><span class="p">),</span>
+                    <span class="n">format</span><span class="o">=</span><span class="s1">&#39;fac&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s2">&quot;ERROR: The size of the loaded matrix and of the ensemble&quot;</span>
+                <span class="s2">&quot; do not match&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+
+    <span class="c1"># Calculate the matrix</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;        Perform pairwise alignment: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">superimpose</span><span class="p">)))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;        Mass-weighted alignment and RMSD: {0}&quot;</span>
+            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mass_weighted</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">superimpose</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;        Atoms subset for alignment: {0}&quot;</span>
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">superimposition_subset</span><span class="p">))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    Calculating similarity matrix . . .&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Use superimposition subset, if necessary. If the pairwise alignment</span>
+        <span class="c1"># is not required, it will not be performed anyway.</span>
+        <span class="n">confdistmatrix</span> <span class="o">=</span> <span class="n">conformational_distance_matrix</span><span class="p">(</span><span class="n">ensemble</span><span class="p">,</span>
+                                                <span class="n">conf_dist_function</span><span class="o">=</span><span class="n">set_rmsd_matrix_elements</span><span class="p">,</span>
+                                                <span class="n">selection</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span>
+                                                <span class="n">pairwise_align</span><span class="o">=</span><span class="n">superimpose</span><span class="p">,</span>
+                                                <span class="n">mass_weighted</span><span class="o">=</span><span class="n">mass_weighted</span><span class="p">,</span>
+                                                <span class="n">ncores</span><span class="o">=</span><span class="n">ncores</span><span class="p">,</span>
+                                                <span class="o">*</span><span class="n">conf_dist_args</span><span class="p">,</span>
+                                                <span class="n">kwargs</span><span class="o">=</span><span class="n">conf_dist_kwargs</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    Done!&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">save_matrix</span><span class="p">:</span>
+            <span class="n">confdistmatrix</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span><span class="n">save_matrix</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">confdistmatrix</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

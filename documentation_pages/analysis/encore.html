@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3.2.6. ENCORE Ensemble Similarity Calculations — MDAnalysis.analysis.encore &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.16.0-dev0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within MDAnalysis 0.16.0-dev0 documentation"
+          href="../../_static/opensearch.xml"/>
+    <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
+    <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../index.html" />
+    <link rel="up" title="3. Analysis modules" href="../analysis_modules.html" />
+    <link rel="next" title="3.2.6.1.1. Ensemble Similarity Calculations — MDAnalysis.analysis.encore.similarity" href="encore/similarity.html" />
+    <link rel="prev" title="3.2.5. Calculating path similarity — MDAnalysis.analysis.psa" href="psa.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="encore/similarity.html" title="3.2.6.1.1. Ensemble Similarity Calculations — MDAnalysis.analysis.encore.similarity"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="psa.html" title="3.2.5. Calculating path similarity — MDAnalysis.analysis.psa"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../analysis_modules.html" accesskey="U">3. Analysis modules</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/mdanalysis-logo-200x150.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3.2.6. ENCORE Ensemble Similarity Calculations &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.encore</span></code></a><ul>
+<li><a class="reference internal" href="#modules">3.2.6.1. Modules</a></li>
+<li><a class="reference internal" href="#references">3.2.6.2. References</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="psa.html"
+                        title="previous chapter">3.2.5. Calculating path similarity &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.psa</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="encore/similarity.html"
+                        title="next chapter">3.2.6.1.1. Ensemble Similarity Calculations &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.encore.similarity</span></code></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/documentation_pages/analysis/encore.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="encore-ensemble-similarity-calculations-mdanalysis-analysis-encore">
+<h1>3.2.6. ENCORE Ensemble Similarity Calculations &#8212; <code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.analysis.encore</span></code><a class="headerlink" href="#encore-ensemble-similarity-calculations-mdanalysis-analysis-encore" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Matteo Tiberti, Wouter Boomsma, Tone Bengtsen</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Year:</th><td class="field-body">2015-2016</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Copyright:</th><td class="field-body">GNU Public License v3</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Maintainer:</th><td class="field-body">Matteo Tiberti &lt;<a class="reference external" href="mailto:matteo&#46;tiberti&#37;&#52;&#48;gmail&#46;com">matteo<span>&#46;</span>tiberti<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;, mtiberti on github</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0.</span></p>
+</div>
+<p>The module contains implementations of similarity measures between protein
+ensembles described in <a class="reference internal" href="encore/similarity.html#lindorff-larsen2009" id="id1">[Lindorff-Larsen2009]</a>. The implementation and examples
+are described in <a class="reference internal" href="../references.html#tiberti2015" id="id2">[Tiberti2015]</a>.</p>
+<p>The module includes facilities for handling ensembles and trajectories through
+the <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> class, performing clustering or dimensionality reduction
+of the ensemble space, estimating multivariate probability distributions from
+the input data, and more. ENCORE can be used to compare experimental and
+simulation-derived ensembles, as well as estimate the convergence of
+trajectories from time-dependent simulations.</p>
+<p>ENCORE includes three different methods for calculations of similarity measures
+between ensembles implemented in individual functions:</p>
+<ul class="simple">
+<li><strong>Harmonic Ensemble Similarity</strong> : <a class="reference internal" href="encore/similarity.html#MDAnalysis.analysis.encore.similarity.hes" title="MDAnalysis.analysis.encore.similarity.hes"><code class="xref py py-func docutils literal"><span class="pre">hes()</span></code></a></li>
+<li><strong>Clustering Ensemble Similarity</strong> : <a class="reference internal" href="encore/similarity.html#MDAnalysis.analysis.encore.similarity.ces" title="MDAnalysis.analysis.encore.similarity.ces"><code class="xref py py-func docutils literal"><span class="pre">ces()</span></code></a></li>
+<li><strong>Dimensional Reduction Ensemble Similarity</strong> : <a class="reference internal" href="encore/similarity.html#MDAnalysis.analysis.encore.similarity.dres" title="MDAnalysis.analysis.encore.similarity.dres"><code class="xref py py-func docutils literal"><span class="pre">dres()</span></code></a></li>
+</ul>
+<p>as well as two methods to evaluate the convergence of trajectories:</p>
+<ul class="simple">
+<li><strong>Clustering based convergence evaluation</strong> : <a class="reference internal" href="encore/similarity.html#MDAnalysis.analysis.encore.similarity.ces_convergence" title="MDAnalysis.analysis.encore.similarity.ces_convergence"><code class="xref py py-func docutils literal"><span class="pre">ces_convergence()</span></code></a></li>
+<li><strong>Dimensionality-reduction based convergence evaluation</strong> : <a class="reference internal" href="encore/similarity.html#MDAnalysis.analysis.encore.similarity.dres_convergence" title="MDAnalysis.analysis.encore.similarity.dres_convergence"><code class="xref py py-func docutils literal"><span class="pre">dres_convergence()</span></code></a></li>
+</ul>
+<p>When using this module in published work please cite <a class="reference internal" href="../references.html#tiberti2015" id="id3">[Tiberti2015]</a>.</p>
+<div class="section" id="modules">
+<h2>3.2.6.1. Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="encore/similarity.html">3.2.6.1.1. Ensemble Similarity Calculations &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.encore.similarity</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="encore/clustering.html">3.2.6.1.2. Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="encore/dimensionality_reduction.html">3.2.6.1.3. Dimensionality reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="encore/confdistmatrix.html">3.2.6.1.4. Distance Matrix calculation &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.ensemble.confdistmatrix</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="encore/covariance.html">3.2.6.1.5. Covariance calculation &#8212; <code class="docutils literal"><span class="pre">encore.covariance</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="encore/bootstrap.html">3.2.6.1.6. bootstrap procedures &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.ensemble.bootstrap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="encore/utils.html">3.2.6.1.7. Utility functions for ENCORE</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="references">
+<h2>3.2.6.2. References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<table class="docutils citation" frame="void" id="lindorff-larsen2009" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[Lindorff-Larsen2009]</a></td><td>Similarity Measures for Protein Ensembles. Lindorff-Larsen, K. Ferkinghoff-Borg, J. PLoS ONE 2008, 4, e4203.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="tiberti2015" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Tiberti2015]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> ENCORE: Software for Quantitative Ensemble.. Comparison. Matteo Tiberti, Elena Papaleo, Tone Bengtsen, Wouter Boomsma, Kresten Lindorff- Larsen. PLoS Comput Biol. 2015, 11, e1004415</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="encore/similarity.html" title="3.2.6.1.1. Ensemble Similarity Calculations — MDAnalysis.analysis.encore.similarity"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="psa.html" title="3.2.5. Calculating path similarity — MDAnalysis.analysis.psa"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../analysis_modules.html" >3. Analysis modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>
