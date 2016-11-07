@@ -91,8 +91,7 @@
 <span class="sd">LAMMPSParser</span>
 <span class="sd">============</span>
 
-<span class="sd">The :func:`parse` function reads a LAMMPS_ data file to build a system</span>
-<span class="sd">topology.</span>
+<span class="sd">Parses data files for LAMMPS_.</span>
 
 <span class="sd">.. _LAMMPS: http://lammps.sandia.gov/</span>
 
@@ -119,11 +118,24 @@
 <span class="kn">import</span> <span class="nn">string</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 
-<span class="kn">from</span> <span class="nn">..core.AtomGroup</span> <span class="kn">import</span> <span class="n">Atom</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">guessers</span>
 <span class="kn">from</span> <span class="nn">..lib.util</span> <span class="kn">import</span> <span class="n">openany</span><span class="p">,</span> <span class="n">anyopen</span><span class="p">,</span> <span class="n">conv_float</span>
 <span class="kn">from</span> <span class="nn">..lib.mdamath</span> <span class="kn">import</span> <span class="n">triclinic_box</span>
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">TopologyReader</span>
-<span class="kn">from</span> <span class="nn">.core</span> <span class="kn">import</span> <span class="n">guess_atom_mass</span><span class="p">,</span> <span class="n">guess_atom_charge</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">TopologyReader</span><span class="p">,</span> <span class="n">squash_by</span>
+<span class="kn">from</span> <span class="nn">..core.topology</span> <span class="kn">import</span> <span class="n">Topology</span>
+<span class="kn">from</span> <span class="nn">..core.topologyattrs</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Atomtypes</span><span class="p">,</span>
+    <span class="n">Atomids</span><span class="p">,</span>
+    <span class="n">Angles</span><span class="p">,</span>
+    <span class="n">Bonds</span><span class="p">,</span>
+    <span class="n">Charges</span><span class="p">,</span>
+    <span class="n">Dihedrals</span><span class="p">,</span>
+    <span class="n">Impropers</span><span class="p">,</span>
+    <span class="n">Masses</span><span class="p">,</span>
+    <span class="n">Resids</span><span class="p">,</span>
+    <span class="n">Resnums</span><span class="p">,</span>
+    <span class="n">Segids</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;MDAnalysis.topology.LAMMPS&quot;</span><span class="p">)</span>
 
@@ -250,39 +262,37 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        MDAnalysis internal *structure* dict.</span>
+<span class="sd">        MDAnalysis Topology object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Can pass atom_style to help parsing</span>
         <span class="n">atom_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;atom_style&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 
         <span class="n">head</span><span class="p">,</span> <span class="n">sects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grab_datafile</span><span class="p">()</span>
 
-        <span class="n">structure</span> <span class="o">=</span> <span class="p">{}</span>
-
         <span class="k">try</span><span class="p">:</span>
             <span class="n">masses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_masses</span><span class="p">(</span><span class="n">sects</span><span class="p">[</span><span class="s1">&#39;Masses&#39;</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="n">masses</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">masses</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">structure</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_atoms</span><span class="p">(</span>
-                <span class="n">sects</span><span class="p">[</span><span class="s1">&#39;Atoms&#39;</span><span class="p">],</span>
-                <span class="n">masses</span><span class="p">,</span>
-                <span class="n">atom_style</span><span class="p">)</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_atoms</span><span class="p">(</span><span class="n">sects</span><span class="p">[</span><span class="s1">&#39;Atoms&#39;</span><span class="p">],</span> <span class="n">masses</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Data file was missing Atoms section&quot;</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">L</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">nentries</span> <span class="ow">in</span> <span class="p">[(</span><span class="s1">&#39;Bonds&#39;</span><span class="p">,</span> <span class="s1">&#39;bonds&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-                               <span class="p">(</span><span class="s1">&#39;Angles&#39;</span><span class="p">,</span> <span class="s1">&#39;angles&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-                               <span class="p">(</span><span class="s1">&#39;Dihedrals&#39;</span><span class="p">,</span> <span class="s1">&#39;dihedrals&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
-                               <span class="p">(</span><span class="s1">&#39;Impropers&#39;</span><span class="p">,</span> <span class="s1">&#39;impropers&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]:</span>
+        <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">nentries</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="p">(</span><span class="n">Bonds</span><span class="p">,</span> <span class="s1">&#39;Bonds&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">Angles</span><span class="p">,</span> <span class="s1">&#39;Angles&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">Dihedrals</span><span class="p">,</span> <span class="s1">&#39;Dihedrals&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">Impropers</span><span class="p">,</span> <span class="s1">&#39;Impropers&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="p">]:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">structure</span><span class="p">[</span><span class="n">M</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_section</span><span class="p">(</span>
-                    <span class="n">sects</span><span class="p">[</span><span class="n">L</span><span class="p">],</span> <span class="n">nentries</span><span class="p">)</span>
+                <span class="nb">type</span><span class="p">,</span> <span class="n">sect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_bond_section</span><span class="p">(</span><span class="n">sects</span><span class="p">[</span><span class="n">L</span><span class="p">],</span> <span class="n">nentries</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">top</span><span class="o">.</span><span class="n">add_TopologyAttr</span><span class="p">(</span><span class="n">attr</span><span class="p">(</span><span class="n">sect</span><span class="p">,</span> <span class="nb">type</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">structure</span></div>
+        <span class="k">return</span> <span class="n">top</span></div>
 
 <div class="viewcode-block" id="DATAParser.read_DATA_timestep"><a class="viewcode-back" href="../../../documentation_pages/topology/LAMMPSParser.html#MDAnalysis.topology.LAMMPSParser.DATAParser.read_DATA_timestep">[docs]</a>    <span class="k">def</span> <span class="nf">read_DATA_timestep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_atoms</span><span class="p">,</span> <span class="n">TS_class</span><span class="p">,</span> <span class="n">TS_kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Read a DATA file and try and extract x, v, box.</span>
@@ -323,38 +333,13 @@
     <span class="k">def</span> <span class="nf">_parse_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datalines</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Strip coordinate info into np array&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">datalines</span><span class="p">:</span>
-            <span class="n">idx</span><span class="p">,</span> <span class="n">resid</span><span class="p">,</span> <span class="n">atype</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_atom_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-            <span class="c1"># assumes atom ids are well behaved?</span>
-            <span class="c1"># LAMMPS sometimes dumps atoms in random order</span>
-            <span class="n">pos</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
-
-    <span class="k">def</span> <span class="nf">_parse_atom_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Parse a atom line into MDA stuff</span>
-
-<span class="sd">        Atom styles are customisable in LAMMPS.  To add different atom types</span>
-<span class="sd">        you&#39;d put them here.</span>
-
-<span class="sd">        You could try and allow any type of atom type by making this method</span>
-<span class="sd">        look in the kwargs for a custom atom definition... Users could then</span>
-<span class="sd">        pass a function which decodes their atom style to the topology reader</span>
-
-<span class="sd">        This ultimately needs to return:</span>
-<span class="sd">          id, resid, atom type, charge, x, y, z</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="c1"># logger.debug(&#39;Line length: {}&#39;.format(n))</span>
-        <span class="c1"># logger.debug(&#39;Line is {}&#39;.format(line))</span>
-        <span class="n">q</span> <span class="o">=</span> <span class="n">guess_atom_charge</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>  <span class="c1"># charge is zero by default</span>
-
-        <span class="n">idx</span><span class="p">,</span> <span class="n">resid</span><span class="p">,</span> <span class="n">atype</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">line</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
-        <span class="n">idx</span> <span class="o">-=</span> <span class="mi">1</span>  <span class="c1"># 0 based atom ids in mda, 1 based in lammps</span>
-        <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">]:</span>  <span class="c1"># atom_style full</span>
-            <span class="n">q</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">7</span><span class="p">])</span>
-        <span class="k">elif</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">]:</span>  <span class="c1"># atom_style molecular</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
-
-        <span class="k">return</span> <span class="n">idx</span><span class="p">,</span> <span class="n">resid</span><span class="p">,</span> <span class="n">atype</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+                <span class="n">pos</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                <span class="n">pos</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_parse_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datalines</span><span class="p">,</span> <span class="n">vel</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Strip velocity info into np array in place&quot;&quot;&quot;</span>
@@ -364,43 +349,102 @@
             <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
             <span class="n">vel</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span>
 
-    <span class="k">def</span> <span class="nf">_parse_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datalines</span><span class="p">,</span> <span class="n">nentries</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Read lines and strip information&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_parse_bond_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datalines</span><span class="p">,</span> <span class="n">nentries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read lines and strip information</span>
+
+<span class="sd">        Arguments</span>
+<span class="sd">        ---------</span>
+<span class="sd">        datalines - the raw lines from the data file</span>
+<span class="sd">        nentries - number of integers per line</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">section</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="nb">type</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">datalines</span><span class="p">:</span>
             <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
             <span class="c1"># map to 0 based int</span>
             <span class="n">section</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
                                      <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">2</span> <span class="o">+</span> <span class="n">nentries</span><span class="p">])))</span>
-        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+            <span class="nb">type</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">type</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_parse_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datalines</span><span class="p">,</span> <span class="n">mass</span><span class="p">,</span> <span class="n">atom_style</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Special parsing for atoms</span>
+    <span class="k">def</span> <span class="nf">_parse_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datalines</span><span class="p">,</span> <span class="n">massdict</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a Topology object</span>
 
-<span class="sd">        Lammps atoms can have lots of different formats, and even custom formats</span>
+<span class="sd">        Adds the following attributes</span>
+<span class="sd">         - resid</span>
+<span class="sd">         - type</span>
+<span class="sd">         - masses (optional)</span>
+<span class="sd">         - charge (optional)</span>
+
+<span class="sd">        Lammps atoms can have lots of different formats,</span>
+<span class="sd">        and even custom formats</span>
 
 <span class="sd">        http://lammps.sandia.gov/doc/atom_style.html</span>
 
 <span class="sd">        Treated here are</span>
 <span class="sd">        - atoms with 7 fields (with charge) &quot;full&quot;</span>
 <span class="sd">        - atoms with 6 fields (no charge) &quot;molecular&quot;</span>
+
+<span class="sd">        Arguments</span>
+<span class="sd">        ---------</span>
+<span class="sd">        datalines - the relevent lines from the data file</span>
+<span class="sd">        massdict - dictionary relating type to mass</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        top - Topology object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Doing Atoms section&quot;</span><span class="p">)</span>
-        <span class="n">atoms</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">datalines</span><span class="p">:</span>
-            <span class="n">idx</span><span class="p">,</span> <span class="n">resid</span><span class="p">,</span> <span class="n">atype</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_atom_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">atype</span><span class="p">)</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">m</span> <span class="o">=</span> <span class="n">mass</span><span class="p">[</span><span class="n">atype</span><span class="p">]</span>
-            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                <span class="n">m</span> <span class="o">=</span> <span class="mf">0.0</span>
-            <span class="c1"># Atom() format:</span>
-            <span class="c1"># Number, name, type, resname, resid, segid, mass, charge</span>
-            <span class="n">atoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Atom</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">atype</span><span class="p">,</span>
-                              <span class="nb">str</span><span class="p">(</span><span class="n">resid</span><span class="p">),</span> <span class="n">resid</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">resid</span><span class="p">),</span>
-                              <span class="n">m</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">universe</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">atoms</span>
+        <span class="n">n_atoms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">datalines</span><span class="p">)</span>
+
+        <span class="c1"># Fields per line</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">datalines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="n">has_charge</span> <span class="o">=</span> <span class="bp">True</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span> <span class="k">else</span> <span class="bp">False</span>
+
+        <span class="n">types</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;|S5&#39;</span><span class="p">)</span>
+        <span class="n">resids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">has_charge</span><span class="p">:</span>
+            <span class="n">charges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">datalines</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">idx</span><span class="p">,</span> <span class="n">resid</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">line</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">atype</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">idx</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">resids</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">resid</span>
+            <span class="n">types</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">atype</span>
+            <span class="k">if</span> <span class="n">has_charge</span><span class="p">:</span>
+                <span class="n">charge</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                <span class="n">charges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">charge</span>
+
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Atomtypes</span><span class="p">(</span><span class="n">types</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">has_charge</span><span class="p">:</span>
+            <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Charges</span><span class="p">(</span><span class="n">charges</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">massdict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">masses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">at</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">types</span><span class="p">):</span>
+                <span class="n">masses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">massdict</span><span class="p">[</span><span class="n">at</span><span class="p">]</span>
+            <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Masses</span><span class="p">(</span><span class="n">masses</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Guess them</span>
+            <span class="n">masses</span> <span class="o">=</span> <span class="n">guessers</span><span class="o">.</span><span class="n">guess_masses</span><span class="p">(</span><span class="n">types</span><span class="p">)</span>
+            <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Masses</span><span class="p">(</span><span class="n">masses</span><span class="p">,</span> <span class="n">guessed</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+
+        <span class="n">residx</span><span class="p">,</span> <span class="n">resids</span> <span class="o">=</span> <span class="n">squash_by</span><span class="p">(</span><span class="n">resids</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">n_residues</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">resids</span><span class="p">)</span>
+
+        <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Atomids</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Resids</span><span class="p">(</span><span class="n">resids</span><span class="p">))</span>
+        <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Resnums</span><span class="p">(</span><span class="n">resids</span><span class="o">.</span><span class="n">copy</span><span class="p">()))</span>
+        <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Segids</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;SYSTEM&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)))</span>
+
+        <span class="n">top</span> <span class="o">=</span> <span class="n">Topology</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">,</span> <span class="n">n_residues</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                       <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">,</span>
+                       <span class="n">atom_resindex</span><span class="o">=</span><span class="n">residx</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">top</span>
 
     <span class="k">def</span> <span class="nf">_parse_masses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datalines</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Lammps defines mass on a per atom type basis.</span>
@@ -412,7 +456,7 @@
         <span class="n">masses</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">datalines</span><span class="p">:</span>
             <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-            <span class="n">masses</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">masses</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">masses</span>
 
@@ -681,7 +725,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

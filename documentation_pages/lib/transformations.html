@@ -505,6 +505,23 @@ point, normal, direction, perspective, and pseudo.</p>
 <dt id="MDAnalysis.lib.transformations.rotaxis">
 <code class="descclassname">MDAnalysis.lib.transformations.</code><code class="descname">rotaxis</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/lib/transformations.html#rotaxis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.lib.transformations.rotaxis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the rotation axis to rotate vector a into b.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>b</strong> (<em>a,</em>) &#8211; two vectors</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>c</strong> &#8211;
+vector to rotate a into b</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If a == b this will always return [1, 0, 0]</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -586,7 +603,7 @@ point, normal, direction, perspective, and pseudo.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

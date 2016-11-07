@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4.15. XYZ Topology Parser &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    <title>4.18. XYZ Topology Parser &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
     <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../index.html" />
     <link rel="up" title="4. Topology modules" href="../topology_modules.html" />
-    <link rel="next" title="4.16. LAMMPSParser" href="LAMMPSParser.html" />
-    <link rel="prev" title="4.14. MOL2 file format — MDAnalysis.coordinates.MOL2" href="MOL2Parser.html" /> 
+    <link rel="next" title="4.19. Base topology reader classes — MDAnalysis.topology.base" href="base.html" />
+    <link rel="prev" title="4.17. Gromacs portable run input TPR format parser" href="TPRParser.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -44,10 +44,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="LAMMPSParser.html" title="4.16. LAMMPSParser"
+          <a href="base.html" title="4.19. Base topology reader classes — MDAnalysis.topology.base"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="MOL2Parser.html" title="4.14. MOL2 file format — MDAnalysis.coordinates.MOL2"
+          <a href="TPRParser.html" title="4.17. Gromacs portable run input TPR format parser"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../topology_modules.html" accesskey="U">4. Topology modules</a> &raquo;</li> 
@@ -60,18 +60,18 @@
             </a></p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">4.15. XYZ Topology Parser</a><ul>
-<li><a class="reference internal" href="#classes">4.15.1. Classes</a></li>
+<li><a class="reference internal" href="#">4.18. XYZ Topology Parser</a><ul>
+<li><a class="reference internal" href="#classes">4.18.1. Classes</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="MOL2Parser.html"
-                        title="previous chapter">4.14. MOL2 file format &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.MOL2</span></code></a></p>
+  <p class="topless"><a href="TPRParser.html"
+                        title="previous chapter">4.17. Gromacs portable run input TPR format parser</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="LAMMPSParser.html"
-                        title="next chapter">4.16. LAMMPSParser</a></p>
+  <p class="topless"><a href="base.html"
+                        title="next chapter">4.19. Base topology reader classes &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.topology.base</span></code></a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -101,7 +101,7 @@
           <div class="body" role="main">
             
   <span class="target" id="module-MDAnalysis.topology.XYZParser"></span><div class="section" id="xyz-topology-parser">
-<h1>4.15. XYZ Topology Parser<a class="headerlink" href="#xyz-topology-parser" title="Permalink to this headline">¶</a></h1>
+<h1>4.18. XYZ Topology Parser<a class="headerlink" href="#xyz-topology-parser" title="Permalink to this headline">¶</a></h1>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.9.1.</span></p>
 </div>
@@ -109,11 +109,24 @@
 xyz only has atom name information, all information about residues
 and segments won&#8217;t be populated.</p>
 <div class="section" id="classes">
-<h2>4.15.1. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<h2>4.18.1. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="MDAnalysis.topology.XYZParser.XYZParser">
-<em class="property">class </em><code class="descclassname">MDAnalysis.topology.XYZParser.</code><code class="descname">XYZParser</code><span class="sig-paren">(</span><em>filename</em>, <em>universe=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/topology/XYZParser.html#XYZParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">MDAnalysis.topology.XYZParser.</code><code class="descname">XYZParser</code><span class="sig-paren">(</span><em>filename</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/topology/XYZParser.html#XYZParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a list of atoms from an XYZ file.</p>
+<dl class="docutils">
+<dt>Creates the following attributes:</dt>
+<dd><ul class="first last simple">
+<li>Atomnames</li>
+</ul>
+</dd>
+<dt>Guesses the following attributes:</dt>
+<dd><ul class="first last simple">
+<li>Atomtypes</li>
+<li>Masses</li>
+</ul>
+</dd>
+</dl>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.9.1.</span></p>
 </div>
@@ -406,7 +419,9 @@ returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">MDAnalysis internal <em>structure</em> dict.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">MDAnalysis Topology object</td>
 </tr>
 </tbody>
 </table>
@@ -433,17 +448,17 @@ returned.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="LAMMPSParser.html" title="4.16. LAMMPSParser"
+          <a href="base.html" title="4.19. Base topology reader classes — MDAnalysis.topology.base"
              >next</a> |</li>
         <li class="right" >
-          <a href="MOL2Parser.html" title="4.14. MOL2 file format — MDAnalysis.coordinates.MOL2"
+          <a href="TPRParser.html" title="4.17. Gromacs portable run input TPR format parser"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../topology_modules.html" >4. Topology modules</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

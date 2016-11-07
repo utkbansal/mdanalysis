@@ -104,11 +104,6 @@
 <span class="sd">least 100,000 residues then you need to use a different file format that can</span>
 <span class="sd">handle such residue numbers.</span>
 
-<span class="sd">.. Note::</span>
-
-<span class="sd">   The parser processes atoms and their names. Masses are guessed and set to 0</span>
-<span class="sd">   if unknown. Partial charges are not set.</span>
-
 <span class="sd">.. SeeAlso::</span>
 
 <span class="sd">   * :mod:`MDAnalysis.topology.PDBParser`</span>
@@ -129,11 +124,22 @@
 
 
 <div class="viewcode-block" id="ExtendedPDBParser"><a class="viewcode-back" href="../../../documentation_pages/topology/ExtendedPDBParser.html#MDAnalysis.topology.ExtendedPDBParser.ExtendedPDBParser">[docs]</a><span class="k">class</span> <span class="nc">ExtendedPDBParser</span><span class="p">(</span><span class="n">PDBParser</span><span class="o">.</span><span class="n">PDBParser</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Parser that obtains a list of atoms from an non-standard &quot;extended&quot; PDB file.</span>
+    <span class="sd">&quot;&quot;&quot;Parser that handles non-standard &quot;extended&quot; PDB file.</span>
 
 <span class="sd">    Extended PDB files (MDAnalysis format specifier *XPDB*) may contain residue</span>
 <span class="sd">    sequence numbers up to 99,999 by utilizing the insertion character field of</span>
 <span class="sd">    the PDB standard.</span>
+
+<span class="sd">    Creates a Topology with the following Attributes (if present):</span>
+<span class="sd">     - serials</span>
+<span class="sd">     - names</span>
+<span class="sd">     - altLocs</span>
+<span class="sd">     - chainids</span>
+<span class="sd">     - tempfactors</span>
+<span class="sd">     - occupancies</span>
+<span class="sd">     - resids</span>
+<span class="sd">     - resnames</span>
+<span class="sd">     - segids</span>
 
 <span class="sd">    .. SeeAlso:: :class:`MDAnalysis.coordinates.PDB.ExtendedPDBReader`</span>
 
@@ -161,7 +167,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

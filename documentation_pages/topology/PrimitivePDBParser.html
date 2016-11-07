@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4.7. Primitive PDB topology parser &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    <title>4.12. Primitive PDB topology parser &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
     <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../index.html" />
     <link rel="up" title="4. Topology modules" href="../topology_modules.html" />
-    <link rel="next" title="4.8. Extended PDB topology parser" href="ExtendedPDBParser.html" />
-    <link rel="prev" title="4.6. PDB Topology Parser" href="PDBParser.html" /> 
+    <link rel="next" title="4.13. PDBQT topology parser" href="PDBQTParser.html" />
+    <link rel="prev" title="4.11. Extended PDB topology parser" href="ExtendedPDBParser.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -44,10 +44,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="ExtendedPDBParser.html" title="4.8. Extended PDB topology parser"
+          <a href="PDBQTParser.html" title="4.13. PDBQT topology parser"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="PDBParser.html" title="4.6. PDB Topology Parser"
+          <a href="ExtendedPDBParser.html" title="4.11. Extended PDB topology parser"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../topology_modules.html" accesskey="U">4. Topology modules</a> &raquo;</li> 
@@ -60,18 +60,18 @@
             </a></p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">4.7. Primitive PDB topology parser</a><ul>
-<li><a class="reference internal" href="#classes">4.7.1. Classes</a></li>
+<li><a class="reference internal" href="#">4.12. Primitive PDB topology parser</a><ul>
+<li><a class="reference internal" href="#classes">4.12.1. Classes</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="PDBParser.html"
-                        title="previous chapter">4.6. PDB Topology Parser</a></p>
-  <h4>Next topic</h4>
   <p class="topless"><a href="ExtendedPDBParser.html"
-                        title="next chapter">4.8. Extended PDB topology parser</a></p>
+                        title="previous chapter">4.11. Extended PDB topology parser</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="PDBQTParser.html"
+                        title="next chapter">4.13. PDBQT topology parser</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -101,7 +101,7 @@
           <div class="body" role="main">
             
   <span class="target" id="module-MDAnalysis.topology.PrimitivePDBParser"></span><div class="section" id="primitive-pdb-topology-parser">
-<h1>4.7. Primitive PDB topology parser<a class="headerlink" href="#primitive-pdb-topology-parser" title="Permalink to this headline">¶</a></h1>
+<h1>4.12. Primitive PDB topology parser<a class="headerlink" href="#primitive-pdb-topology-parser" title="Permalink to this headline">¶</a></h1>
 <p>This topology parser uses a standard PDB file to build a minimum
 internal structure representation (list of atoms).</p>
 <p>The topology reader reads a PDB file line by line and ignores atom
@@ -110,21 +110,16 @@ have systems containing at least 10,000 residues then you need to use
 a different file format (e.g. the &#8220;extended&#8221; PDB, <em>XPDB</em> format, see
 <a class="reference internal" href="ExtendedPDBParser.html#module-MDAnalysis.topology.ExtendedPDBParser" title="MDAnalysis.topology.ExtendedPDBParser"><code class="xref py py-mod docutils literal"><span class="pre">ExtendedPDBParser</span></code></a>) that can handle residue
 numbers up to 99,999.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The parser processes atoms and their names. Masses are guessed and set to 0
-if unknown. Partial charges are not set.</p>
-</div>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <ul class="last simple">
 <li><a class="reference internal" href="ExtendedPDBParser.html#module-MDAnalysis.topology.ExtendedPDBParser" title="MDAnalysis.topology.ExtendedPDBParser"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.topology.ExtendedPDBParser</span></code></a></li>
 <li><a class="reference internal" href="../coordinates/PDB.html#MDAnalysis.coordinates.PDB.PDBReader" title="MDAnalysis.coordinates.PDB.PDBReader"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.coordinates.PDB.PDBReader</span></code></a></li>
-<li><a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.Universe</span></code></a></li>
+<li><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.Universe</span></code></li>
 </ul>
 </div>
 <div class="section" id="classes">
-<h2>4.7.1. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<h2>4.12.1. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="MDAnalysis.topology.PrimitivePDBParser.PrimitivePDBParser">
 <em class="property">class </em><code class="descclassname">MDAnalysis.topology.PrimitivePDBParser.</code><code class="descname">PrimitivePDBParser</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/topology/PrimitivePDBParser.html#PrimitivePDBParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.topology.PrimitivePDBParser.PrimitivePDBParser" title="Permalink to this definition">¶</a></dt>
@@ -412,21 +407,17 @@ returned.</p>
 <dl class="method">
 <dt id="MDAnalysis.topology.PrimitivePDBParser.PrimitivePDBParser.parse">
 <code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.PrimitivePDBParser.PrimitivePDBParser.parse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse atom information from PDB file <em>filename</em>.</p>
+<dd><p>Parse atom information from PDB file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">MDAnalysis internal <em>structure</em> dict</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">MDAnalysis Topology object</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><code class="xref py py-meth docutils literal"><span class="pre">The()</span></code>, <code class="xref py py-meth docutils literal"><span class="pre">is()</span></code></p>
-</div>
 </dd></dl>
 
 </dd></dl>
@@ -454,17 +445,17 @@ returned.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="ExtendedPDBParser.html" title="4.8. Extended PDB topology parser"
+          <a href="PDBQTParser.html" title="4.13. PDBQT topology parser"
              >next</a> |</li>
         <li class="right" >
-          <a href="PDBParser.html" title="4.6. PDB Topology Parser"
+          <a href="ExtendedPDBParser.html" title="4.11. Extended PDB topology parser"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../topology_modules.html" >4. Topology modules</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

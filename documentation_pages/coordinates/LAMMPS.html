@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5.9. LAMMPS DCD trajectory I/O — MDAnalysis.coordinates.LAMMPS &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    <title>5.9. LAMMPS DCD trajectory and DATA I/O — MDAnalysis.coordinates.LAMMPS &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -60,7 +60,7 @@
             </a></p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">5.9. LAMMPS DCD trajectory I/O  &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.LAMMPS</span></code></a><ul>
+<li><a class="reference internal" href="#">5.9. LAMMPS DCD trajectory and DATA I/O  &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.LAMMPS</span></code></a><ul>
 <li><a class="reference internal" href="#classes">5.9.1. Classes</a></li>
 </ul>
 </li>
@@ -100,10 +100,10 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <span class="target" id="module-MDAnalysis.coordinates.LAMMPS"></span><div class="section" id="lammps-dcd-trajectory-i-o-mdanalysis-coordinates-lammps">
-<h1>5.9. LAMMPS DCD trajectory I/O  &#8212; <a class="reference internal" href="#module-MDAnalysis.coordinates.LAMMPS" title="MDAnalysis.coordinates.LAMMPS"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates.LAMMPS</span></code></a><a class="headerlink" href="#lammps-dcd-trajectory-i-o-mdanalysis-coordinates-lammps" title="Permalink to this headline">¶</a></h1>
-<p>Classes to read and write <a class="reference external" href="http://lammps.sandia.gov/">LAMMPS</a> DCD binary
-trajectories. Trajectories can be read regardless of system-endianness
+  <span class="target" id="module-MDAnalysis.coordinates.LAMMPS"></span><div class="section" id="lammps-dcd-trajectory-and-data-i-o-mdanalysis-coordinates-lammps">
+<h1>5.9. LAMMPS DCD trajectory and DATA I/O  &#8212; <a class="reference internal" href="#module-MDAnalysis.coordinates.LAMMPS" title="MDAnalysis.coordinates.LAMMPS"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates.LAMMPS</span></code></a><a class="headerlink" href="#lammps-dcd-trajectory-and-data-i-o-mdanalysis-coordinates-lammps" title="Permalink to this headline">¶</a></h1>
+<p>Classes to read and write <a class="reference external" href="http://lammps.sandia.gov/">LAMMPS</a> DCD binary trajectories and LAMMPS DATA
+files. Trajectories can be read regardless of system-endianness
 as this is auto-detected.</p>
 <p>LAMMPS can <a class="reference external" href="http://lammps.sandia.gov/doc/dump.html">write DCD</a> trajectories but unlike a <a class="reference external" href="http://www.charmm.org/documentation/c36b1/dynamc.html#%20Trajectory">CHARMM trajectory</a>
 (which is often called a DCD even though CHARMM itself calls them
@@ -118,18 +118,28 @@ the unit from the file. By default we are assuming that the unit for
 length is the ångström and for the time is the femtosecond. If this is
 not true then the user <em>should supply the appropriate units</em> in the
 keywords <em>timeunit</em> and/or <em>lengthunit</em> to <a class="reference internal" href="#MDAnalysis.coordinates.LAMMPS.DCDWriter" title="MDAnalysis.coordinates.LAMMPS.DCDWriter"><code class="xref py py-class docutils literal"><span class="pre">DCDWriter</span></code></a> and
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> (which then calls
+<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> (which then calls
 <a class="reference internal" href="#MDAnalysis.coordinates.LAMMPS.DCDReader" title="MDAnalysis.coordinates.LAMMPS.DCDReader"><code class="xref py py-class docutils literal"><span class="pre">DCDReader</span></code></a>).</p>
 <p class="rubric">Example: Loading a LAMMPS simulation</p>
 <p>To load a LAMMPS simulation from a LAMMPS data file (using the
 <a class="reference internal" href="../topology/LAMMPSParser.html#MDAnalysis.topology.LAMMPSParser.DATAParser" title="MDAnalysis.topology.LAMMPSParser.DATAParser"><code class="xref py py-class docutils literal"><span class="pre">DATAParser</span></code></a>) together with a
 LAMMPS DCD with &#8220;<em>real</em>&#8221; provide the keyword <em>format=&#8221;LAMMPS</em>&#8221;:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">MDAnalysis</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="s2">&quot;lammps.data&quot;</span><span class="p">,</span> <span class="s2">&quot;lammps_real.dcd&quot;</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s2">&quot;LAMMPS&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">MDAnalysis</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="s2">&quot;lammps.data&quot;</span><span class="p">,</span> <span class="s2">&quot;lammps_real.dcd&quot;</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s2">&quot;LAMMPS&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If the trajectory uses <em>units nano</em> then use</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">MDAnalysis</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="s2">&quot;lammps.data&quot;</span><span class="p">,</span> <span class="s2">&quot;lammps_nano.dcd&quot;</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s2">&quot;LAMMPS&quot;</span><span class="p">,</span>
-                        <span class="n">lengthunit</span><span class="o">=</span><span class="s2">&quot;nm&quot;</span><span class="p">,</span> <span class="n">timeunit</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">MDAnalysis</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="s2">&quot;lammps.data&quot;</span><span class="p">,</span> <span class="s2">&quot;lammps_nano.dcd&quot;</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s2">&quot;LAMMPS&quot;</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>...                          lengthunit=&#8221;nm&#8221;, timeunit=&#8221;ns&#8221;)</p>
+<p>To scan through a trajectory to find a desirable frame and write to a LAMMPS
+data file,</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="n">u</span><span class="o">.</span><span class="n">trajectory</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="c1"># analyze frame</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">take_this_frame</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">with</span> <span class="n">mda</span><span class="o">.</span><span class="n">Writer</span><span class="p">(</span><span class="s1">&#39;frame.data&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">W</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="n">W</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">break</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -137,10 +147,6 @@ LAMMPS DCD with &#8220;<em>real</em>&#8221; provide the keyword <em>format=&#822
 <p class="last">Lennard-Jones units are not implemented. See <a class="reference internal" href="../units.html#module-MDAnalysis.units" title="MDAnalysis.units"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.units</span></code></a> for
 other recognized values and the documentation for the LAMMPS <a class="reference external" href="http://lammps.sandia.gov/doc/units.html">units
 command</a>.</p>
-</div>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last">For further discussion follow the reports for <a class="reference external" href="https://github.com/MDAnalysis/mdanalysis/issues/84">Issue 84</a> and <a class="reference external" href="https://github.com/MDAnalysis/mdanalysis/issues/64">Issue 64</a>.</p>
 </div>
 <div class="section" id="classes">
 <h2>5.9.1. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
@@ -800,11 +806,11 @@ time = <code class="xref py py-attr docutils literal"><span class="pre">Timestep
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><dl class="first docutils">
 <dt><em>asel</em></dt>
-<dd><p class="first last"><a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> object
+<dd><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> object
 Defaults to None, in which case the full set of coordinate data
 is returned.</p>
 </dd>
-<dt><em>start, stop, step</em></dt>
+<dt><em>start</em>, <em>stop</em>, <em>step</em></dt>
 <dd><p class="first last">A range of the trajectory to access, with start being inclusive
 and stop being exclusive.</p>
 </dd>
@@ -1163,7 +1169,7 @@ returned.</p>
 <dt id="MDAnalysis.coordinates.LAMMPS.DCDWriter.write">
 <code class="descname">write</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DCDWriter.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write current timestep, using the supplied <em>obj</em>.</p>
-<p>The argument should be a <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> or
+<p>The argument should be a <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> or
 a <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> or a <code class="xref py py-class docutils literal"><span class="pre">Timestep</span></code> instance.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -1749,6 +1755,383 @@ time = <code class="xref py py-attr docutils literal"><span class="pre">Timestep
 
 </dd></dl>
 
+<dl class="class">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter">
+<em class="property">class </em><code class="descclassname">MDAnalysis.coordinates.LAMMPS.</code><code class="descname">DATAWriter</code><span class="sig-paren">(</span><em>filename</em>, <em>convert_units=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/LAMMPS.html#DATAWriter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out the current time step as a LAMMPS DATA file.</p>
+<p>This writer supports the sections Atoms, Masses, Velocities, Bonds,
+Angles, Dihedrals, and Impropers. This writer will write the header
+and these sections (if applicable). Atoms section is written in the
+&#8220;full&#8221; sub-style if charges are available or &#8220;molecular&#8221; sub-style
+if they are not. Molecule id is set to 0 for all atoms.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This writer assumes &#8220;conventional&#8221; or &#8220;real&#8221; LAMMPS units where length
+is measured in Angstroms and velocity is measured in Angstroms per
+femtosecond. To write in different units, specify <cite>lengthunit</cite></p>
+<p>If atom types are not already positive integers, the user must set them
+to be positive integers, because the writer will not automatically
+assign new types.</p>
+<p>To preserve numerical atom types when writing a selection, the Masses
+section will have entries for each atom type up to the maximum atom type.
+If the universe does not contain atoms of some type in
+{1, ... max(atom_types)}, then the mass for that type will be set to 1.</p>
+<p class="last">In order to write bonds, each selected bond type must be explicitly set to
+an integer &gt;= 1.</p>
+</div>
+<p>Set up a DATAWriter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; output filename</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.__delattr__">
+<code class="descname">__delattr__</code><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.__delattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__delattr__(&#8216;name&#8217;) &lt;==&gt; del x.name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.__format__">
+<code class="descname">__format__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.__format__" title="Permalink to this definition">¶</a></dt>
+<dd><p>default object formatter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.__getattribute__">
+<code class="descname">__getattribute__</code><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.__getattribute__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__getattribute__(&#8216;name&#8217;) &lt;==&gt; x.name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.__hash__">
+<code class="descname">__hash__</code><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.__reduce__">
+<code class="descname">__reduce__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.__reduce__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.__reduce_ex__">
+<code class="descname">__reduce_ex__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.__reduce_ex__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.__setattr__">
+<code class="descname">__setattr__</code><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.__setattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__setattr__(&#8216;name&#8217;, value) &lt;==&gt; x.name = value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.__sizeof__">
+<code class="descname">__sizeof__</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &rarr; int<a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.__sizeof__" title="Permalink to this definition">¶</a></dt>
+<dd><p>size of object in memory, in bytes</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.__str__">
+<code class="descname">__str__</code><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the trajectory file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_dimensions_to_unitcell">
+<code class="descname">convert_dimensions_to_unitcell</code><span class="sig-paren">(</span><em>ts</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_dimensions_to_unitcell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read dimensions from timestep <em>ts</em> and return appropriate unitcell.</p>
+<p>The default is to return <code class="docutils literal"><span class="pre">[A,B,C,alpha,beta,gamma]</span></code>; if this
+is not appropriate then this method has to be overriden.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_forces_from_native">
+<code class="descname">convert_forces_from_native</code><span class="sig-paren">(</span><em>force</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_forces_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of forces array <em>force</em> from native to base units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>force</strong> (<em>array_like</em>) &#8211; Forces to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>force</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.7.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_forces_to_native">
+<code class="descname">convert_forces_to_native</code><span class="sig-paren">(</span><em>force</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_forces_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of force array <em>force</em> from base to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>force</strong> (<em>array_like</em>) &#8211; Forces to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>force</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.7.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_pos_from_native">
+<code class="descname">convert_pos_from_native</code><span class="sig-paren">(</span><em>x</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_pos_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array x from native units to base units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>array_like</em>) &#8211; Positions to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>x</em> is modified in place and also returned.</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_pos_to_native">
+<code class="descname">convert_pos_to_native</code><span class="sig-paren">(</span><em>x</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_pos_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array x from base units to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>array_like</em>) &#8211; Positions to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>x</em> is modified in place and also returned.</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_time_from_native">
+<code class="descname">convert_time_from_native</code><span class="sig-paren">(</span><em>t</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_time_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert time <em>t</em> from native units to base units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>t</strong> (<em>array_like</em>) &#8211; Time values to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>t</em> is modified in place and also
+returned (although note that scalar values <em>t</em> are passed by
+value in Python and hence an in-place modification has no
+effect on the caller.)</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_time_to_native">
+<code class="descname">convert_time_to_native</code><span class="sig-paren">(</span><em>t</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_time_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert time <em>t</em> from base units to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>t</strong> (<em>array_like</em>) &#8211; Time values to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>t</em> is modified in place and also
+returned. (Also note that scalar values <em>t</em> are passed by
+value in Python and hence an in-place modification has no
+effect on the caller.)</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_velocities_from_native">
+<code class="descname">convert_velocities_from_native</code><span class="sig-paren">(</span><em>v</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_velocities_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of velocities array <em>v</em> from native to base units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> (<em>array_like</em>) &#8211; Velocities to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>v</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.5.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_velocities_to_native">
+<code class="descname">convert_velocities_to_native</code><span class="sig-paren">(</span><em>v</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.convert_velocities_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array <em>v</em> from base to native units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> (<em>array_like</em>) &#8211; Velocities to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>v</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.5.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.has_valid_coordinates">
+<code class="descname">has_valid_coordinates</code><span class="sig-paren">(</span><em>criteria</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.has_valid_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal"><span class="pre">True</span></code> if all values are within limit values of their formats.</p>
+<p>Due to rounding, the test is asymmetric (and <em>min</em> is supposed to be negative):</p>
+<blockquote>
+<div>min &lt; x &lt;= max</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><dl class="first docutils">
+<dt><em>criteria</em></dt>
+<dd><p class="first last">dictionary containing the <em>max</em> and <em>min</em> values in native units</p>
+</dd>
+<dt><em>x</em></dt>
+<dd><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">np.ndarray</span></code> of <code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> coordinates of atoms selected to be written out.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.LAMMPS.DATAWriter.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/LAMMPS.html#DATAWriter.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DATAWriter.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write selection at current trajectory frame to file, including
+sections Atoms, Masses, Velocities, Bonds, Angles, Dihedrals, and
+Impropers (if these are defined). Atoms section is written in the
+&#8220;full&#8221; sub-style if charges are available or &#8220;molecular&#8221; sub-style if
+they are not. Molecule id in atoms section is set to to 0.</p>
+<p>No other sections are written to the DATA file.
+As of this writing, other sections are not parsed into the topology
+by the <a class="reference internal" href="#MDAnalysis.coordinates.LAMMPS.DATAReader" title="MDAnalysis.coordinates.LAMMPS.DATAReader"><code class="xref py py-class docutils literal"><span class="pre">DATAReader</span></code></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the selection includes a partial fragment, then only the bonds, angles,
+etc. whose atoms are contained within the selection will be included.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>selection</strong> (<em>AtomGroup</em>) &#8211; MDAnalysis AtomGroup (selection or Universe.atoms) or also Universe</li>
+<li><strong>frame</strong> (<em>Optional[int]</em>) &#8211; optionally move to frame number <em>frame</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -1778,7 +2161,7 @@ time = <code class="xref py py-attr docutils literal"><span class="pre">Timestep
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

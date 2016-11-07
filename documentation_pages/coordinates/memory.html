@@ -131,7 +131,7 @@ memory, rather than reading from file. This makes it possible to use
 operate on raw coordinate using existing MDAnalysis tools. In
 addition, it allows the user to make changes to the coordinates in a
 trajectory (e.g. through
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup.positions" title="MDAnalysis.core.AtomGroup.AtomGroup.positions"><code class="xref py py-attr docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup.positions</span></code></a>) without having
+<code class="xref py py-attr docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup.positions</span></code>) without having
 to write the entire state to file.</p>
 <div class="section" id="how-to-use-the-memoryreader">
 <h2>5.19.1. How to use the <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader" title="MDAnalysis.coordinates.memory.MemoryReader"><code class="xref py py-class docutils literal"><span class="pre">MemoryReader</span></code></a><a class="headerlink" href="#how-to-use-the-memoryreader" title="Permalink to this headline">¶</a></h2>
@@ -145,7 +145,7 @@ then analysis can be sped up substantially by transferring the
 trajectory to memory.</p>
 <p>The most straightforward use of the <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader" title="MDAnalysis.coordinates.memory.MemoryReader"><code class="xref py py-class docutils literal"><span class="pre">MemoryReader</span></code></a> is to simply
 use the <code class="docutils literal"><span class="pre">in_memory=True</span></code> flag for the
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> class, which
+<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> class, which
 automatically transfers a trajectory to memory:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="kn">as</span> <span class="nn">mda</span>
 <span class="kn">from</span> <span class="nn">MDAnalysisTests.datafiles</span> <span class="kn">import</span> <span class="n">TPR</span><span class="p">,</span> <span class="n">XTC</span>
@@ -160,8 +160,8 @@ trajectory.</p>
 <h3>5.19.1.2. Switching a trajectory to an in-memory representation<a class="headerlink" href="#switching-a-trajectory-to-an-in-memory-representation" title="Permalink to this headline">¶</a></h3>
 <p>The decision to transfer the trajectory to memory can be made at any
 time with the
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe.transfer_to_memory" title="MDAnalysis.core.AtomGroup.Universe.transfer_to_memory"><code class="xref py py-meth docutils literal"><span class="pre">transfer_to_memory()</span></code></a> method
-of a <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>:</p>
+<code class="xref py py-meth docutils literal"><span class="pre">transfer_to_memory()</span></code> method
+of a <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">universe</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">TPR</span><span class="p">,</span> <span class="n">XTC</span><span class="p">)</span>
 <span class="n">universe</span><span class="o">.</span><span class="n">transfer_to_memory</span><span class="p">()</span>
 </pre></div>
@@ -222,8 +222,8 @@ future.</p>
 <p>Creating a trajectory for just a selection of an existing trajectory
 requires the transfer of the appropriate coordinates as well as
 creation of a topology of the sub-system. For the latter one can use
-the <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Merge" title="MDAnalysis.core.AtomGroup.Merge"><code class="xref py py-func docutils literal"><span class="pre">Merge()</span></code></a> function, for the former
-the <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe.load_new" title="MDAnalysis.core.AtomGroup.Universe.load_new"><code class="xref py py-meth docutils literal"><span class="pre">load_new()</span></code></a> method of a
+the <code class="xref py py-func docutils literal"><span class="pre">Merge()</span></code> function, for the former
+the <code class="xref py py-meth docutils literal"><span class="pre">load_new()</span></code> method of a
 <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> together with the
 <a class="reference internal" href="#MDAnalysis.coordinates.memory.MemoryReader" title="MDAnalysis.coordinates.memory.MemoryReader"><code class="xref py py-class docutils literal"><span class="pre">MemoryReader</span></code></a>. In the following, an in-memory trajectory of
 only the protein is created:</p>
@@ -1218,7 +1218,7 @@ the underlying array, while a copy is returned otherwise.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>asel</strong> (<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> object) &#8211; Atom selection. Defaults to None, in which case the full set of
+<li><strong>asel</strong> (<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> object) &#8211; Atom selection. Defaults to None, in which case the full set of
 coordinate data is returned. Note that in this case, a view
 of the underlying numpy array is returned, while a copy of the
 data is returned whenever asel is different from None.</li>
@@ -1272,7 +1272,7 @@ coordinates)</li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

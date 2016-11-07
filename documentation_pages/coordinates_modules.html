@@ -30,7 +30,7 @@
     <link rel="shortcut icon" href="../_static/mdanalysis-logo.ico"/>
     <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../index.html" />
     <link rel="next" title="5.1. Trajectory Readers and Writers — MDAnalysis.coordinates" href="coordinates/init.html" />
-    <link rel="prev" title="4.22. Utility functions for the TPR topology parser" href="topology/tpr_util.html" /> 
+    <link rel="prev" title="4.23. Utility functions for the TPR topology parser" href="topology/tpr_util.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -46,7 +46,7 @@
           <a href="coordinates/init.html" title="5.1. Trajectory Readers and Writers — MDAnalysis.coordinates"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="topology/tpr_util.html" title="4.22. Utility functions for the TPR topology parser"
+          <a href="topology/tpr_util.html" title="4.23. Utility functions for the TPR topology parser"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li> 
       </ul>
@@ -58,7 +58,7 @@
             </a></p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="topology/tpr_util.html"
-                        title="previous chapter">4.22. Utility functions for the TPR topology parser</a></p>
+                        title="previous chapter">4.23. Utility functions for the TPR topology parser</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="coordinates/init.html"
                         title="next chapter">5.1. Trajectory Readers and Writers  &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates</span></code></a></p>
@@ -97,7 +97,7 @@ trajectories. Typically, MDAnalysis recognizes <a class="reference internal" hre
 concern themselves with classes and functions described here. However,
 if MDAnalysis fails to recognize a coordinate file then the user can
 provide the format in the keyword argument <em>format</em> to
-<a class="reference internal" href="core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> to force the format.</p>
+<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> to force the format.</p>
 <p class="rubric">Coordinate formats</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -109,7 +109,7 @@ provide the format in the keyword argument <em>format</em> to
 <li class="toctree-l1"><a class="reference internal" href="coordinates/GMS.html">5.6. GAMESS trajectory reader &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.GMS</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="coordinates/GRO.html">5.7. GRO file format &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.GRO</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="coordinates/INPCRD.html">5.8. INPCRD structure files in MDAnalysis &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.INPCRD</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="coordinates/LAMMPS.html">5.9. LAMMPS DCD trajectory I/O  &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.LAMMPS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="coordinates/LAMMPS.html">5.9. LAMMPS DCD trajectory and DATA I/O  &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.LAMMPS</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="coordinates/MOL2.html">5.10. MOL2 file format &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.MOL2</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="coordinates/PDB.html">5.11. PDB structure files in MDAnalysis &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.PDB</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="coordinates/PDBQT.html">5.12. PDBQT structure files in MDAnalysis &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.PDBQT</span></code></a></li>
@@ -153,13 +153,13 @@ functionality should first read the <a class="reference internal" href="coordina
           <a href="coordinates/init.html" title="5.1. Trajectory Readers and Writers — MDAnalysis.coordinates"
              >next</a> |</li>
         <li class="right" >
-          <a href="topology/tpr_util.html" title="4.22. Utility functions for the TPR topology parser"
+          <a href="topology/tpr_util.html" title="4.23. Utility functions for the TPR topology parser"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

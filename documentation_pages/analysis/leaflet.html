@@ -118,11 +118,11 @@
 <p>One can use this information to identify</p>
 <ul class="simple">
 <li>the upper and lower leaflet of a <em>planar membrane</em> by comparing the
-the <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup.center_of_geometry" title="MDAnalysis.core.AtomGroup.AtomGroup.center_of_geometry"><code class="xref py py-meth docutils literal"><span class="pre">center_of_geometry()</span></code></a> of
+the <code class="xref py py-meth docutils literal"><span class="pre">center_of_geometry()</span></code> of
 the leaflet groups, or</li>
 <li>the outer and inner leaflet of a <em>vesicle</em> by comparing histograms
 of distances from the centre of geometry (or possibly simply the
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup.radius_of_gyration" title="MDAnalysis.core.AtomGroup.AtomGroup.radius_of_gyration"><code class="xref py py-meth docutils literal"><span class="pre">radius_of_gyration()</span></code></a>).</li>
+<code class="xref py py-meth docutils literal"><span class="pre">radius_of_gyration()</span></code>).</li>
 </ul>
 <p>See example scripts in the <a href="#id1"><span class="problematic" id="id2">MDAnalysisCookbook_</span></a> on how to use
 <a class="reference internal" href="#MDAnalysis.analysis.leaflet.LeafletFinder" title="MDAnalysis.analysis.leaflet.LeafletFinder"><code class="xref py py-class docutils literal"><span class="pre">LeafletFinder</span></code></a>. The function <a class="reference internal" href="#MDAnalysis.analysis.leaflet.optimize_cutoff" title="MDAnalysis.analysis.leaflet.optimize_cutoff"><code class="xref py py-func docutils literal"><span class="pre">optimize_cutoff()</span></code></a> implements a
@@ -145,7 +145,7 @@ use <a class="reference internal" href="#MDAnalysis.analysis.leaflet.LeafletFind
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">leaflet0</span><span class="o">.</span><span class="n">residues</span>
 </pre></div>
 </div>
-<p>provides a <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.ResidueGroup" title="MDAnalysis.core.AtomGroup.ResidueGroup"><code class="xref py py-class docutils literal"><span class="pre">ResidueGroup</span></code></a>
+<p>provides a <code class="xref py py-class docutils literal"><span class="pre">ResidueGroup</span></code>
 instance. Similarly, all atoms in the first leaflet are then</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">leaflet0</span><span class="o">.</span><span class="n">residues</span><span class="o">.</span><span class="n">atoms</span>
 </pre></div>
@@ -160,7 +160,7 @@ instance. Similarly, all atoms in the first leaflet are then</p>
 <dd><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.Universe</span></code> or a PDB file name.</p>
 </dd>
 <dt><em>selection</em></dt>
-<dd><p class="first last"><a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code></a> or a
+<dd><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code> or a
 <code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.Universe.select_atoms()</span></code> selection string
 for atoms that define the lipid head groups, e.g.
 universe.atoms.PO4 or &#8220;name PO4&#8221; or &#8220;name P*&#8221;</p>
@@ -191,13 +191,13 @@ implementation [<code class="docutils literal"><span class="pre">None</span></co
 <dl class="method">
 <dt id="MDAnalysis.analysis.leaflet.LeafletFinder.group">
 <code class="descname">group</code><span class="sig-paren">(</span><em>component_index</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/leaflet.html#LeafletFinder.group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.leaflet.LeafletFinder.group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code></a> for <em>component_index</em>.</p>
+<dd><p>Return a <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code> for <em>component_index</em>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="MDAnalysis.analysis.leaflet.LeafletFinder.groups">
 <code class="descname">groups</code><span class="sig-paren">(</span><em>component_index=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/leaflet.html#LeafletFinder.groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.leaflet.LeafletFinder.groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code></a> for <em>component_index</em>.</p>
+<dd><p>Return a <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code> for <em>component_index</em>.</p>
 <p>If no argument is supplied, then a list of all leaflet groups is returned.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
@@ -313,7 +313,7 @@ can be found; needs to be made more robust</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

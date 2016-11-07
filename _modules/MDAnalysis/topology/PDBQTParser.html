@@ -118,51 +118,125 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
 
-<span class="kn">from</span> <span class="nn">..core.AtomGroup</span> <span class="kn">import</span> <span class="n">Atom</span>
-<span class="kn">from</span> <span class="nn">.core</span> <span class="kn">import</span> <span class="n">guess_atom_type</span><span class="p">,</span> <span class="n">guess_atom_mass</span><span class="p">,</span> <span class="n">guess_atom_charge</span>
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">TopologyReader</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">guessers</span>
+<span class="kn">from</span> <span class="nn">..lib</span> <span class="kn">import</span> <span class="n">util</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">TopologyReader</span><span class="p">,</span> <span class="n">change_squash</span>
+<span class="kn">from</span> <span class="nn">..core.topology</span> <span class="kn">import</span> <span class="n">Topology</span>
+<span class="kn">from</span> <span class="nn">..core.topologyattrs</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Atomids</span><span class="p">,</span>
+    <span class="n">Atomnames</span><span class="p">,</span>
+    <span class="n">AltLocs</span><span class="p">,</span>
+    <span class="n">Atomtypes</span><span class="p">,</span>
+    <span class="n">Charges</span><span class="p">,</span>
+    <span class="n">Masses</span><span class="p">,</span>
+    <span class="n">Occupancies</span><span class="p">,</span>
+    <span class="n">Resids</span><span class="p">,</span>
+    <span class="n">Resnums</span><span class="p">,</span>
+    <span class="n">Resnames</span><span class="p">,</span>
+    <span class="n">Segids</span><span class="p">,</span>
+    <span class="n">Tempfactors</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="PDBQTParser"><a class="viewcode-back" href="../../../documentation_pages/topology/PDBQTParser.html#MDAnalysis.topology.PDBQTParser.PDBQTParser">[docs]</a><span class="k">class</span> <span class="nc">PDBQTParser</span><span class="p">(</span><span class="n">TopologyReader</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Read topology from a PDBQT file.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Read topology from a PDBQT file.</span>
+
+<span class="sd">    Creates the following Attributes:</span>
+<span class="sd">     - atom ids (serial)</span>
+<span class="sd">     - atom types</span>
+<span class="sd">     - atom names</span>
+<span class="sd">     - altLocs</span>
+<span class="sd">     - resnames</span>
+<span class="sd">     - chainIDs (becomes segid)</span>
+<span class="sd">     - resids</span>
+<span class="sd">     - icodes</span>
+<span class="sd">     - occupancies</span>
+<span class="sd">     - tempfactors</span>
+<span class="sd">     - charges</span>
+
+<span class="sd">    Guesses the following:</span>
+<span class="sd">     - elements</span>
+<span class="sd">     - masses</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;PDBQT&#39;</span>
 
 <div class="viewcode-block" id="PDBQTParser.parse"><a class="viewcode-back" href="../../../documentation_pages/topology/PDBQTParser.html#MDAnalysis.topology.PDBQTParser.PDBQTParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Parse atom information from PDBQT file *filename*.</span>
 
-<span class="sd">        :Returns: MDAnalysis internal *structure* dict</span>
-
-<span class="sd">        .. SeeAlso:: The *structure* dict is defined in</span>
-<span class="sd">                     :func:`MDAnalysis.topology.PSFParser.PSFParser` and the file</span>
-<span class="sd">                     is read with</span>
-<span class="sd">                     :class:`MDAnalysis.coordinates.PDBQT.PDBQTReader`.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        MDAnalysis Topology object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parseatoms</span><span class="p">()</span>
+        <span class="n">serials</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">altlocs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">resnames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">chainids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">resids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">icodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">occupancies</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tempfactors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">charges</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">atomtypes</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="n">structure</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;atoms&#39;</span><span class="p">:</span> <span class="n">atoms</span><span class="p">}</span>
+        <span class="k">with</span> <span class="n">util</span><span class="o">.</span><span class="n">openany</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s1">&#39;ATOM&#39;</span><span class="p">,</span> <span class="s1">&#39;HETATM&#39;</span><span class="p">)):</span>
+                    <span class="k">continue</span>
+                <span class="n">serials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]))</span>
+                <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">12</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">altlocs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">16</span><span class="p">:</span><span class="mi">17</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">resnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">17</span><span class="p">:</span><span class="mi">21</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">chainids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">21</span><span class="p">:</span><span class="mi">22</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">resids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">22</span><span class="p">:</span><span class="mi">26</span><span class="p">]))</span>
+                <span class="n">icodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">26</span><span class="p">:</span><span class="mi">27</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">occupancies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">54</span><span class="p">:</span><span class="mi">60</span><span class="p">]))</span>
+                <span class="n">tempfactors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">60</span><span class="p">:</span><span class="mi">66</span><span class="p">]))</span>
+                <span class="n">charges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">66</span><span class="p">:</span><span class="mi">76</span><span class="p">]))</span>
+                <span class="n">atomtypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">77</span><span class="p">:</span><span class="mi">80</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
 
-        <span class="k">return</span> <span class="n">structure</span></div>
+        <span class="n">n_atoms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">serials</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_parseatoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">..coordinates.PDBQT</span> <span class="kn">import</span> <span class="n">PDBQTReader</span>
-        <span class="n">pdb</span> <span class="o">=</span> <span class="n">PDBQTReader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">masses</span> <span class="o">=</span> <span class="n">guessers</span><span class="o">.</span><span class="n">guess_masses</span><span class="p">(</span><span class="n">atomtypes</span><span class="p">)</span>
 
-        <span class="n">atoms</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># translate list of atoms to MDAnalysis Atom.</span>
-        <span class="k">for</span> <span class="n">iatom</span><span class="p">,</span> <span class="n">atom</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pdb</span><span class="o">.</span><span class="n">_atoms</span><span class="p">):</span>
-            <span class="n">atomname</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">name</span>
-            <span class="n">atomtype</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">type</span>        <span class="c1"># always set in PDBQT</span>
-            <span class="n">resname</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">resName</span>
-            <span class="n">resid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">resSeq</span><span class="p">)</span>
-            <span class="n">chain</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">chainID</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="n">segid</span> <span class="o">=</span> <span class="n">chain</span> <span class="ow">or</span> <span class="s2">&quot;SYSTEM&quot;</span>   <span class="c1"># no empty segids (or Universe throws IndexError)</span>
-            <span class="n">mass</span> <span class="o">=</span> <span class="n">guess_atom_mass</span><span class="p">(</span><span class="n">atomname</span><span class="p">)</span>
-            <span class="n">charge</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">partialCharge</span><span class="p">)</span>  <span class="c1"># always set in PDBQT</span>
-            <span class="n">bfactor</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">tempFactor</span>
-            <span class="c1"># occupancy = atom.occupancy</span>
-            <span class="n">atoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Atom</span><span class="p">(</span><span class="n">iatom</span><span class="p">,</span> <span class="n">atomname</span><span class="p">,</span> <span class="n">atomtype</span><span class="p">,</span> <span class="n">resname</span><span class="p">,</span> <span class="n">resid</span><span class="p">,</span> <span class="n">segid</span><span class="p">,</span>
-                              <span class="n">mass</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">bfactor</span><span class="o">=</span><span class="n">bfactor</span><span class="p">,</span> <span class="n">universe</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">atoms</span></div>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">attrlist</span><span class="p">,</span> <span class="n">Attr</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">serials</span><span class="p">,</span> <span class="n">Atomids</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">Atomnames</span><span class="p">,</span> <span class="nb">object</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">altlocs</span><span class="p">,</span> <span class="n">AltLocs</span><span class="p">,</span> <span class="nb">object</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">occupancies</span><span class="p">,</span> <span class="n">Occupancies</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">tempfactors</span><span class="p">,</span> <span class="n">Tempfactors</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">charges</span><span class="p">,</span> <span class="n">Charges</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">atomtypes</span><span class="p">,</span> <span class="n">Atomtypes</span><span class="p">,</span> <span class="nb">object</span><span class="p">),</span>
+        <span class="p">):</span>
+            <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Attr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">attrlist</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)))</span>
+        <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Masses</span><span class="p">(</span><span class="n">masses</span><span class="p">,</span> <span class="n">guessed</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+
+        <span class="n">resids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">resids</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+        <span class="n">icodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">icodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="n">resnames</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">resnames</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="n">chainids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">chainids</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+
+        <span class="n">residx</span><span class="p">,</span> <span class="p">(</span><span class="n">resids</span><span class="p">,</span> <span class="n">icodes</span><span class="p">,</span> <span class="n">resnames</span><span class="p">,</span> <span class="n">chainids</span><span class="p">)</span> <span class="o">=</span> <span class="n">change_squash</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">resids</span><span class="p">,</span> <span class="n">icodes</span><span class="p">),</span> <span class="p">(</span><span class="n">resids</span><span class="p">,</span> <span class="n">icodes</span><span class="p">,</span> <span class="n">resnames</span><span class="p">,</span> <span class="n">chainids</span><span class="p">))</span>
+        <span class="n">n_residues</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">resids</span><span class="p">)</span>
+        <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Resids</span><span class="p">(</span><span class="n">resids</span><span class="p">))</span>
+        <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Resnums</span><span class="p">(</span><span class="n">resids</span><span class="o">.</span><span class="n">copy</span><span class="p">()))</span>
+        <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Resnames</span><span class="p">(</span><span class="n">resnames</span><span class="p">))</span>
+
+        <span class="n">segidx</span><span class="p">,</span> <span class="p">(</span><span class="n">segids</span><span class="p">,)</span> <span class="o">=</span> <span class="n">change_squash</span><span class="p">((</span><span class="n">chainids</span><span class="p">,),</span> <span class="p">(</span><span class="n">chainids</span><span class="p">,))</span>
+        <span class="n">n_segments</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">segids</span><span class="p">)</span>
+        <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Segids</span><span class="p">(</span><span class="n">segids</span><span class="p">))</span>
+
+        <span class="n">top</span> <span class="o">=</span> <span class="n">Topology</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">,</span> <span class="n">n_residues</span><span class="p">,</span> <span class="n">n_segments</span><span class="p">,</span>
+                       <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">,</span>
+                       <span class="n">atom_resindex</span><span class="o">=</span><span class="n">residx</span><span class="p">,</span>
+                       <span class="n">residue_segindex</span><span class="o">=</span><span class="n">segidx</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">top</span></div></div>
 </pre></div>
 
           </div>
@@ -184,7 +258,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

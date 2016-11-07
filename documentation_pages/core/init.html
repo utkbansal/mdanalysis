@@ -30,7 +30,7 @@
     <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
     <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../index.html" />
     <link rel="up" title="8. Core modules" href="../core_modules.html" />
-    <link rel="next" title="8.2. Fundamental building blocks — MDAnalysis.core.AtomGroup" href="AtomGroup.html" />
+    <link rel="next" title="&lt;no title&gt;" href="AtomGroup.html" />
     <link rel="prev" title="8. Core modules" href="../core_modules.html" /> 
   </head>
   <body role="document">
@@ -44,7 +44,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="AtomGroup.html" title="8.2. Fundamental building blocks — MDAnalysis.core.AtomGroup"
+          <a href="AtomGroup.html" title="&lt;no title&gt;"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../core_modules.html" title="8. Core modules"
@@ -75,7 +75,7 @@
                         title="previous chapter">8. Core modules</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="AtomGroup.html"
-                        title="next chapter">8.2. Fundamental building blocks &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.core.AtomGroup</span></code></a></p>
+                        title="next chapter">&lt;no title&gt;</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -106,11 +106,11 @@
             
   <span class="target" id="module-MDAnalysis.core.__init__"></span><div class="section" id="core-functions-of-mdanalysis">
 <h1>8.1. Core functions of MDAnalysis<a class="headerlink" href="#core-functions-of-mdanalysis" title="Permalink to this headline">¶</a></h1>
-<p>The basic class is an <a class="reference internal" href="AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>;
+<p>The basic class is an <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code>;
 the whole simulation is called the
-<a class="reference internal" href="AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>. Selections are computed
-on an <a class="reference internal" href="AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> and return another
-<a class="reference internal" href="AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>.</p>
+<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>. Selections are computed
+on an <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> and return another
+<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code>.</p>
 <p><code class="xref py py-mod docutils literal"><span class="pre">Timeseries</span></code> are a convenient way to analyse trajectories.</p>
 <p>To get started, load the Universe:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">Universe</span><span class="p">(</span><span class="n">psffilename</span><span class="p">,</span><span class="n">dcdfilename</span><span class="p">)</span>
@@ -198,7 +198,7 @@ periodicity; if periodicity is crucial, disable KDTree routines with</p>
 <p><strong>use_pbc</strong> = <em>False</em></p>
 <blockquote>
 <div><p>Choose whether to consider periodic boundary conditions when
-performing many <a class="reference internal" href="AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code></a> methods.
+performing many <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup</span></code> methods.
 This is set to <code class="docutils literal"><span class="pre">False</span></code> by default but can be enabled with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MDAnalysis</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">flags</span><span class="p">[</span><span class="s1">&#39;use_pbc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
@@ -211,9 +211,9 @@ This is set to <code class="docutils literal"><span class="pre">False</span></co
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Changing this to <code class="docutils literal"><span class="pre">True</span></code> changes the default behaviour of
-commonly used <a class="reference internal" href="AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code></a> methods
-such as <a class="reference internal" href="AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup.center_of_mass" title="MDAnalysis.core.AtomGroup.AtomGroup.center_of_mass"><code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup.center_of_mass()</span></code></a>
-and <a class="reference internal" href="AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup.center_of_geometry" title="MDAnalysis.core.AtomGroup.AtomGroup.center_of_geometry"><code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup.center_of_geometry()</span></code></a>!</p>
+commonly used <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup</span></code> methods
+such as <code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup.center_of_mass()</span></code>
+and <code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup.center_of_geometry()</span></code>!</p>
 </div>
 </div></blockquote>
 <p><strong>permissive_pdb_reader</strong> = <em>True</em></p>
@@ -375,7 +375,7 @@ all values are directly set.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="AtomGroup.html" title="8.2. Fundamental building blocks — MDAnalysis.core.AtomGroup"
+          <a href="AtomGroup.html" title="&lt;no title&gt;"
              >next</a> |</li>
         <li class="right" >
           <a href="../core_modules.html" title="8. Core modules"
@@ -385,7 +385,7 @@ all values are directly set.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

@@ -166,10 +166,18 @@ gromacs order is done automatically.</dd>
 <dt id="MDAnalysis.coordinates.GRO.GROWriter">
 <em class="property">class </em><code class="descclassname">MDAnalysis.coordinates.GRO.</code><code class="descname">GROWriter</code><span class="sig-paren">(</span><em>filename</em>, <em>convert_units=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/GRO.html#GROWriter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.GRO.GROWriter" title="Permalink to this definition">¶</a></dt>
 <dd><p>GRO Writer that conforms to the Trajectory API.</p>
+<dl class="docutils">
+<dt>Will attempt to write the following information from the topology:</dt>
+<dd><ul class="first last simple">
+<li>atom name (defaults to &#8216;X&#8217;)</li>
+<li>resnames (defaults to &#8216;UNK&#8217;)</li>
+<li>resids (defaults to &#8216;1&#8217;)</li>
+</ul>
+</dd>
+</dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The precision is hard coded to three decimal places and
-velocities are not written (yet).</p>
+<p class="last">The precision is hard coded to three decimal places</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 0.11.0: </span>Frames now 0-based instead of 1-based</p>
@@ -266,7 +274,7 @@ routine will chop off the leading digits.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

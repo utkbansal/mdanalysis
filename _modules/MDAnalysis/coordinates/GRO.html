@@ -131,7 +131,8 @@
 <span class="sd">.. _GRO format: http://chembytes.wikidot.com/g-grofile</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">six.moves</span> <span class="kn">import</span> <span class="nb">range</span>
+<span class="kn">from</span> <span class="nn">six.moves</span> <span class="kn">import</span> <span class="nb">range</span><span class="p">,</span> <span class="nb">zip</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
@@ -269,10 +270,14 @@
 <div class="viewcode-block" id="GROWriter"><a class="viewcode-back" href="../../../documentation_pages/coordinates/GRO.html#MDAnalysis.coordinates.GRO.GROWriter">[docs]</a><span class="k">class</span> <span class="nc">GROWriter</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">Writer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;GRO Writer that conforms to the Trajectory API.</span>
 
+<span class="sd">    Will attempt to write the following information from the topology:</span>
+<span class="sd">     - atom name (defaults to &#39;X&#39;)</span>
+<span class="sd">     - resnames (defaults to &#39;UNK&#39;)</span>
+<span class="sd">     - resids (defaults to &#39;1&#39;)</span>
+
 <span class="sd">    .. Note::</span>
 
-<span class="sd">       The precision is hard coded to three decimal places and</span>
-<span class="sd">       velocities are not written (yet).</span>
+<span class="sd">       The precision is hard coded to three decimal places</span>
 
 <span class="sd">    .. versionchanged:: 0.11.0</span>
 <span class="sd">       Frames now 0-based instead of 1-based</span>
@@ -350,6 +355,30 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">has_velocities</span> <span class="o">=</span> <span class="bp">True</span>
 
+        <span class="c1"># Check for topology information</span>
+        <span class="n">missing_topology</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">names</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="n">NoDataError</span><span class="p">):</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">((</span><span class="s1">&#39;X&#39;</span><span class="p">,))</span>
+            <span class="n">missing_topology</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;names&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">resnames</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">resnames</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="n">NoDataError</span><span class="p">):</span>
+            <span class="n">resnames</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">((</span><span class="s1">&#39;UNK&#39;</span><span class="p">,))</span>
+            <span class="n">missing_topology</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;resnames&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">resids</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">resids</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="n">NoDataError</span><span class="p">):</span>
+            <span class="n">resids</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">((</span><span class="mi">1</span><span class="p">,))</span>
+            <span class="n">missing_topology</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;resids&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">missing_topology</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Supplied AtomGroup was missing the following attributes: &quot;</span>
+                <span class="s2">&quot;{miss}. These will be written with default values. &quot;</span>
+                <span class="s2">&quot;Alternatively these can be supplied as keyword arguments.&quot;</span>
+                <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">miss</span><span class="o">=</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_topology</span><span class="p">)))</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_units</span><span class="p">:</span>
             <span class="c1"># Convert back to nm from Angstroms,</span>
             <span class="c1"># inplace because coordinates is already a copy</span>
@@ -368,25 +397,29 @@
             <span class="c1"># Header</span>
             <span class="n">output_gro</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Written by MDAnalysis</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">output_gro</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fmt</span><span class="p">[</span><span class="s1">&#39;n_atoms&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)))</span>
+
             <span class="c1"># Atom descriptions and coords</span>
-            <span class="k">for</span> <span class="n">atom_index</span><span class="p">,</span> <span class="n">atom</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
+            <span class="c1"># Dont use enumerate here,</span>
+            <span class="c1"># all attributes could be infinite cycles!</span>
+            <span class="k">for</span> <span class="n">atom_index</span><span class="p">,</span> <span class="n">resid</span><span class="p">,</span> <span class="n">resname</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)),</span> <span class="n">resids</span><span class="p">,</span> <span class="n">resnames</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
                 <span class="n">truncated_atom_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">atom_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">5</span><span class="p">:])</span>
-                <span class="n">truncated_resid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">resid</span><span class="p">)[:</span><span class="mi">5</span><span class="p">])</span>
+                <span class="n">truncated_resid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">resid</span><span class="p">)[:</span><span class="mi">5</span><span class="p">])</span>
                 <span class="k">if</span> <span class="n">has_velocities</span><span class="p">:</span>
                     <span class="n">output_gro</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fmt</span><span class="p">[</span><span class="s1">&#39;xyz_v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">resid</span><span class="o">=</span><span class="n">truncated_resid</span><span class="p">,</span>
-                        <span class="n">resname</span><span class="o">=</span><span class="n">atom</span><span class="o">.</span><span class="n">resname</span><span class="p">,</span>
+                        <span class="n">resname</span><span class="o">=</span><span class="n">resname</span><span class="p">,</span>
                         <span class="n">index</span><span class="o">=</span><span class="n">truncated_atom_index</span><span class="p">,</span>
-                        <span class="n">name</span><span class="o">=</span><span class="n">atom</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
                         <span class="n">pos</span><span class="o">=</span><span class="n">coordinates</span><span class="p">[</span><span class="n">atom_index</span><span class="p">],</span>
                         <span class="n">vel</span><span class="o">=</span><span class="n">velocities</span><span class="p">[</span><span class="n">atom_index</span><span class="p">],</span>
                     <span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">output_gro</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fmt</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">resid</span><span class="o">=</span><span class="n">truncated_resid</span><span class="p">,</span>
-                        <span class="n">resname</span><span class="o">=</span><span class="n">atom</span><span class="o">.</span><span class="n">resname</span><span class="p">,</span>
+                        <span class="n">resname</span><span class="o">=</span><span class="n">resname</span><span class="p">,</span>
                         <span class="n">index</span><span class="o">=</span><span class="n">truncated_atom_index</span><span class="p">,</span>
-                        <span class="n">name</span><span class="o">=</span><span class="n">atom</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
                         <span class="n">pos</span><span class="o">=</span><span class="n">coordinates</span><span class="p">[</span><span class="n">atom_index</span><span class="p">]</span>
                     <span class="p">))</span>
 
@@ -426,7 +459,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

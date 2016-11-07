@@ -138,6 +138,12 @@ atoms so one cannot rely on the <em>serial</em>)</dd>
 <p>Clearly, this format can deviate wildly from <a class="reference external" href="http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards">PDB</a> due to the use of whitespaces
 rather than specific column widths and alignments. This deviation can be
 particularly significant when large coordinate values are used.</p>
+<p>Output should look like this (although the only real requirement is
+<em>whitespace</em> separation between <em>all</em> entries). The chainID is optional
+and can be omitted:</p>
+<p>ATOM      1  N    MET     1     -11.921   26.307   10.410 -0.3000 1.8500
+ATOM     36  NH1  ARG     2      -6.545   25.499    3.854 -0.8000 1.8500
+ATOM     37 HH11  ARG     2      -6.042   25.480    4.723  0.4600 0.2245</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Fields <em>must be white-space separated</em> or data are read
@@ -154,12 +160,6 @@ option are guaranteed to conform to the above format:</p>
 <dt id="MDAnalysis.coordinates.PQR.PQRReader">
 <em class="property">class </em><code class="descclassname">MDAnalysis.coordinates.PQR.</code><code class="descname">PQRReader</code><span class="sig-paren">(</span><em>filename</em>, <em>convert_units=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/PQR.html#PQRReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.PQR.PQRReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a <a class="reference external" href="http://www.poissonboltzmann.org/file-formats/biomolecular-structurw/pqr">PQR</a> file into MDAnalysis.</p>
-<p>The <a class="reference internal" href="../topology/PQRParser.html#module-MDAnalysis.topology.PQRParser" title="MDAnalysis.topology.PQRParser"><code class="xref py py-mod docutils literal"><span class="pre">PQRParser</span></code></a> takes charges from the
-PQR file in order to populate the
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Atom.charge" title="MDAnalysis.core.AtomGroup.Atom.charge"><code class="xref py py-attr docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.Atom.charge</span></code></a> attribute. Radii are
-accessible through the <a class="reference internal" href="#MDAnalysis.coordinates.PQR.PQRReader.get_radii" title="MDAnalysis.coordinates.PQR.PQRReader.get_radii"><code class="xref py py-meth docutils literal"><span class="pre">get_radii()</span></code></a> method of the reader, the
-<code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup.radii()</span></code> method and the
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Atom.radius" title="MDAnalysis.core.AtomGroup.Atom.radius"><code class="xref py py-attr docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.Atom.radius</span></code></a> attribute.</p>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 0.11.0: </span>Frames now 0-based instead of 1-based</p>
 </div>
@@ -185,18 +185,6 @@ accessible through the <a class="reference internal" href="#MDAnalysis.coordinat
 </table>
 </dd></dl>
 
-<dl class="method">
-<dt id="MDAnalysis.coordinates.PQR.PQRReader.get_charges">
-<code class="descname">get_charges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/PQR.html#PQRReader.get_charges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.PQR.PQRReader.get_charges" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an array of charges in atom order.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.coordinates.PQR.PQRReader.get_radii">
-<code class="descname">get_radii</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/PQR.html#PQRReader.get_radii"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.PQR.PQRReader.get_radii" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an array of atom radii in atom order.</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -204,9 +192,9 @@ accessible through the <a class="reference internal" href="#MDAnalysis.coordinat
 <em class="property">class </em><code class="descclassname">MDAnalysis.coordinates.PQR.</code><code class="descname">PQRWriter</code><span class="sig-paren">(</span><em>filename</em>, <em>convert_units=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/PQR.html#PQRWriter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.PQR.PQRWriter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a single coordinate frame in whitespace-separated PQR format.</p>
 <p>Charges (&#8220;Q&#8221;) are taken from the
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Atom.charge" title="MDAnalysis.core.AtomGroup.Atom.charge"><code class="xref py py-attr docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.Atom.charge</span></code></a> attribute while
+<code class="xref py py-attr docutils literal"><span class="pre">MDAnalysis.core.groups.Atom.charge</span></code> attribute while
 radii are obtaine from the
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Atom.radius" title="MDAnalysis.core.AtomGroup.Atom.radius"><code class="xref py py-attr docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.Atom.radius</span></code></a> attribute.</p>
+<code class="xref py py-attr docutils literal"><span class="pre">MDAnalysis.core.groups.Atom.radius</span></code> attribute.</p>
 <ul class="simple">
 <li>If the segid is &#8216;SYSTEM&#8217; then it will be set to the empty
 string. Otherwise the first letter will be used as the chain ID.</li>
@@ -222,15 +210,11 @@ for the atoms.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><dl class="first last docutils">
-<dt><em>filename</em></dt>
-<dd><p class="first last">output filename</p>
-</dd>
-<dt><em>remarks</em></dt>
-<dd><p class="first last">remark lines (list of strings) or single string to be added to the
-top of the PQR file</p>
-</dd>
-</dl>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; output filename</li>
+<li><strong>remarks</strong> (<em>str, optionak</em>) &#8211; remark lines (list of strings) or single string to be added to the
+top of the PQR file</li>
+</ul>
 </td>
 </tr>
 </tbody>
@@ -243,34 +227,15 @@ top of the PQR file</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><blockquote class="first">
-<div><dl class="docutils">
-<dt><em>selection</em></dt>
-<dd><p class="first last">MDAnalysis AtomGroup (selection or Universe.atoms)
-or also Universe</p>
-</dd>
-</dl>
-</div></blockquote>
-<table class="last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Keywords:</th><td class="field-body"><dl class="first last docutils">
-<dt><em>frame</em></dt>
-<dd><p class="first last">optionally move to frame number <em>frame</em></p>
-</dd>
-</dl>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>selection</strong> &#8211; MDAnalysis AtomGroup or Universe</li>
+<li><strong>frame</strong> (<em>int, optional</em>) &#8211; optionally move to frame number <em>frame</em></li>
+<li><strong>versionchanged</strong> (<em>.</em>) &#8211; Frames now 0-based instead of 1-based</li>
+</ul>
 </td>
 </tr>
 </tbody>
 </table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="versionchanged">
-<p><span class="versionmodified">Changed in version 0.11.0: </span>Frames now 0-based instead of 1-based</p>
-</div>
 </dd></dl>
 
 </dd></dl>
@@ -303,7 +268,7 @@ or also Universe</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

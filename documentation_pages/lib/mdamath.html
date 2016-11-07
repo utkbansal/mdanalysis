@@ -261,7 +261,7 @@ B[1] = second vector, B[2] third box vector.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><dl class="first docutils">
 <dt><em>atomgroup</em></dt>
-<dd><p class="first last">The <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code></a> to work with.
+<dd><p class="first last">The <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code> to work with.
 The positions of this are modified in place.  All these atoms
 must belong in the same molecule or fragment.</p>
 </dd>
@@ -282,7 +282,7 @@ Defaults to atom 0 in the atomgroup.</p>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
 <dt><cite>NoDataError</cite></dt>
 <dd><p class="first last">if there are no bonds present.
-(See <a class="reference internal" href="../topology/core.html#MDAnalysis.topology.core.guess_bonds" title="MDAnalysis.topology.core.guess_bonds"><code class="xref py py-func docutils literal"><span class="pre">guess_bonds()</span></code></a>)</p>
+(See <code class="xref py py-func docutils literal"><span class="pre">guess_bonds()</span></code>)</p>
 </dd>
 <dt><cite>ValueError</cite></dt>
 <dd><p class="first last">if the algorithm fails to work.  This is usually
@@ -408,7 +408,7 @@ A----&gt;B
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><dl class="first docutils">
 <dt><em>atomgroup</em></dt>
-<dd><p class="first last">The <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code></a> to work with.
+<dd><p class="first last">The <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.AtomGroup.AtomGroup</span></code> to work with.
 The positions of this are modified in place.  All these atoms
 must belong in the same molecule or fragment.</p>
 </dd>
@@ -429,7 +429,7 @@ Defaults to atom 0 in the atomgroup.</p>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
 <dt><cite>NoDataError</cite></dt>
 <dd><p class="first last">if there are no bonds present.
-(See <a class="reference internal" href="../topology/core.html#MDAnalysis.topology.core.guess_bonds" title="MDAnalysis.topology.core.guess_bonds"><code class="xref py py-func docutils literal"><span class="pre">guess_bonds()</span></code></a>)</p>
+(See <code class="xref py py-func docutils literal"><span class="pre">guess_bonds()</span></code>)</p>
 </dd>
 <dt><cite>ValueError</cite></dt>
 <dd><p class="first last">if the algorithm fails to work.  This is usually
@@ -518,6 +518,36 @@ linalg.norm does.</p>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 0.11.0: </span>Moved into lib.mdamath</p>
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="MDAnalysis.lib.mdamath.one_to_many_pointers">
+<code class="descclassname">MDAnalysis.lib.mdamath.</code><code class="descname">one_to_many_pointers</code><span class="sig-paren">(</span><em>Ni</em>, <em>Nj</em>, <em>i2j</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/lib/mdamath.html#one_to_many_pointers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.lib.mdamath.one_to_many_pointers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Based on a many to one mapping of i to j, create the reverse mapping</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Nj - number of i and j components</strong> (<em>Ni,</em>) &#8211; </li>
+<li><strong>- the array relating i to parent js</strong> (<em>i2j</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><em>ordered - an ordered list of i indices [size (i,)]</em></li>
+<li><em>ptrs - the start and end index for each j [size (Nj, 2)]</em></li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p># Residx - the resid of each Atom
+ordered, ptrs = one_to_many_pointers(Natoms, Nres, Residx)</p>
+<p># Returns an array of the atom indices that are in resid 7
+atoms = ordered[ptrs[7,0]:ptrs[7,1]]</p>
 </dd></dl>
 
 <dl class="function">
@@ -612,7 +642,7 @@ i.e. parallel to (1,0,0).</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>

@@ -138,7 +138,7 @@ reader).</p>
 <h2>5.1.1. Readers<a class="headerlink" href="#readers" title="Permalink to this headline">¶</a></h2>
 <p>All Readers are supposed to expose a <code class="xref py py-class docutils literal"><span class="pre">ProtoReader</span></code> object
 that presents a common <a class="reference internal" href="#trajectory-api">Trajectory API</a> to other code.</p>
-<p>The <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> contains the API
+<p>The <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> contains the API
 entry point attribute</p>
 <blockquote>
 <div><code class="xref py py-attr docutils literal"><span class="pre">Universe.trajectory</span></code></div></blockquote>
@@ -163,10 +163,10 @@ This Reader can also provide this functionality over a
 sequence of files in different formats.</dd>
 </dl>
 <p>Normally, one does not explicitly need to select a reader. This is handled
-automatically when creating a <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> and
+automatically when creating a <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> and
 the appropriate reader for the file type is selected (typically by the file
 extension but this choice can be overriden with the <code class="docutils literal"><span class="pre">format</span></code> argument to
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>).</p>
+<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>).</p>
 <p>If additional simulation data is available, it may be added to and read
 alongside a trajectory using
 <a class="reference internal" href="base.html#MDAnalysis.coordinates.base.ProtoReader.add_auxiliary" title="MDAnalysis.coordinates.base.ProtoReader.add_auxiliary"><code class="xref py py-meth docutils literal"><span class="pre">add_auxiliary()</span></code></a>. See the
@@ -187,7 +187,7 @@ format of the trajectory.</p>
 also a <a class="reference internal" href="core.html#MDAnalysis.coordinates.core.reader" title="MDAnalysis.coordinates.core.reader"><code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.coordinates.core.reader()</span></code></a> function available
 to return a trajectory <a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Reader" title="MDAnalysis.coordinates.base.Reader"><code class="xref py py-class docutils literal"><span class="pre">Reader</span></code></a>
 instance although this is often not needed because the
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> class can choose an
+<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> class can choose an
 appropriate reader automatically.</p>
 <p>A typical approach is to generate a new trajectory from an old one, e.g. to
 only keep the protein:</p>
@@ -205,10 +205,10 @@ the last frame has been written.</p>
 <h2>5.1.3. Timesteps<a class="headerlink" href="#timesteps" title="Permalink to this headline">¶</a></h2>
 <p>Both Readers and Writers use Timesteps as their working object.  A Timestep
 represents all data for a given frame in a trajectory.  The data inside a
-Timestep is often accessed indirectly through a <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>
+Timestep is often accessed indirectly through a <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code>
 but it is also possible to manipulate Timesteps directly.</p>
 <p>The current Timestep can be accessed through the trajectory read attached
-to the active <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a></p>
+to the active <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></p>
 <blockquote>
 <div>ts = u.trajectory.ts
 ts.positions  # returns a numpy array of positions</div></blockquote>
@@ -224,8 +224,8 @@ emphasis is on formats that are used in popular molecular dynamics codes. By
 default, MDAnalysis figures out formats by looking at the extension. Thus, a
 DCD file always has to end with &#8221;.dcd&#8221; to be recognized as such unless the
 format is explicitly specified with the <em>format</em> keyword to
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> or
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe.load_new" title="MDAnalysis.core.AtomGroup.Universe.load_new"><code class="xref py py-meth docutils literal"><span class="pre">load_new()</span></code></a>.  A number of files are
+<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> or
+<code class="xref py py-meth docutils literal"><span class="pre">load_new()</span></code>.  A number of files are
 also recognized when they are compressed with <strong class="program">gzip</strong> or
 <strong class="program">bzip2</strong> such as &#8221;.xyz.bz2&#8221;.</p>
 <table border="1" class="docutils" id="id18">
@@ -399,7 +399,7 @@ Module <a class="reference internal" href="DMS.html#module-MDAnalysis.coordinate
 <tbody valign="top">
 <tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id3">2</a>, <a class="fn-backref" href="#id4">3</a>, <a class="fn-backref" href="#id5">4</a>, <a class="fn-backref" href="#id6">5</a>, <a class="fn-backref" href="#id7">6</a>, <a class="fn-backref" href="#id8">7</a>, <a class="fn-backref" href="#id9">8</a>, <a class="fn-backref" href="#id10">9</a>, <a class="fn-backref" href="#id11">10</a>)</em> This format can also be used to provide basic <em>topology</em>
 information (i.e. the list of atoms); it is possible to create a
-full <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-mod docutils literal"><span class="pre">Universe</span></code></a> by simply
+full <code class="xref py py-mod docutils literal"><span class="pre">Universe</span></code> by simply
 providing a file of this format: <code class="docutils literal"><span class="pre">u</span> <span class="pre">=</span> <span class="pre">Universe(filename)</span></code></td></tr>
 </tbody>
 </table>
@@ -831,8 +831,8 @@ factory function can be used for all writers.</p>
 <dd>opens <em>filename</em> for writing; <cite>kwargs</cite> are typically ignored</dd>
 <dt><code class="docutils literal"><span class="pre">write(obj)</span></code></dt>
 <dd>writes the object <em>obj</em>, containing a
-<a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.AtomGroup" title="MDAnalysis.core.AtomGroup.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> group of atoms (typically
-obtained from a selection) or <a class="reference internal" href="../core/AtomGroup.html#MDAnalysis.core.AtomGroup.Universe" title="MDAnalysis.core.AtomGroup.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>
+<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> group of atoms (typically
+obtained from a selection) or <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>
 to the file and closes the file</dd>
 </dl>
 </div></blockquote>
@@ -873,7 +873,7 @@ raw <a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Ti
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
