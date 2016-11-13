@@ -505,7 +505,7 @@ normal users.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>mobile_coordinates</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; Coordinates of atoms to be aligned</li>
 <li><strong>ref_coordinates</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; Coordinates of atoms to be fit against</li>
-<li><strong>mobile_atoms</strong> (<em>AtomGroup</em>) &#8211; Atoms to be translated</li>
+<li><strong>mobile_atoms</strong> (<a class="reference internal" href="../core/AtomGroup.html#module-MDAnalysis.core.AtomGroup" title="MDAnalysis.core.AtomGroup"><em>AtomGroup</em></a>) &#8211; Atoms to be translated</li>
 <li><strong>mobile_com</strong> (<em>ndarray</em>) &#8211; array of xyz coordinate of mobile center of mass</li>
 <li><strong>ref_com</strong> (<em>ndarray</em>) &#8211; array of xyz coordinate of reference center of mass</li>
 <li><strong>weights</strong> (<em>numpy array, optional</em>) &#8211; Array to be used for weighted rmsd</li>
@@ -622,9 +622,9 @@ information about mismatches.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ag1</strong> (<em>AtomGroup</em>) &#8211; First <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> instance that is
+<li><strong>ag1</strong> (<a class="reference internal" href="../core/AtomGroup.html#module-MDAnalysis.core.AtomGroup" title="MDAnalysis.core.AtomGroup"><em>AtomGroup</em></a>) &#8211; First <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> instance that is
 compared</li>
-<li><strong>ag2</strong> (<em>AtomGroup</em>) &#8211; Second <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> instance that is
+<li><strong>ag2</strong> (<a class="reference internal" href="../core/AtomGroup.html#module-MDAnalysis.core.AtomGroup" title="MDAnalysis.core.AtomGroup"><em>AtomGroup</em></a>) &#8211; Second <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> instance that is
 compared</li>
 <li><strong>tol_mass</strong> (<em>float, optional</em>) &#8211; Reject if the atomic masses for matched atoms differ by more than
 <em>tol_mass</em> [0.1]</li>
