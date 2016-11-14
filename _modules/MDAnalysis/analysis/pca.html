@@ -150,8 +150,8 @@
 <span class="sd">to retain. The choice is arbitrary, but I will stop when 95 percent of the</span>
 <span class="sd">variance is explained by the components. This cumulated variance by the</span>
 <span class="sd">components is conveniently stored in the one-dimensional array attribute</span>
-<span class="sd">``cumulated_variance``. The value at the ith index of `cumulated_variance` is the</span>
-<span class="sd">sum of the variances from 0 to i.</span>
+<span class="sd">``cumulated_variance``. The value at the ith index of `cumulated_variance`</span>
+<span class="sd">is the sum of the variances from 0 to i.</span>
 
 <span class="sd">    &gt;&gt;&gt; n_pcs = np.where(PSF_pca.cumulated_var &gt; 0.95)[0][0]</span>
 <span class="sd">    &gt;&gt;&gt; atomgroup = u.select_atoms(&#39;backbone&#39;)</span>
@@ -167,7 +167,6 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">six.moves</span> <span class="kn">import</span> <span class="nb">range</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -186,8 +185,8 @@
 <span class="sd">    After initializing and calling method with a universe or an atom group,</span>
 <span class="sd">    principal components ordering the atom coordinate data by decreasing</span>
 <span class="sd">    variance will be available for analysis. As an example:</span>
-<span class="sd">        &gt;&gt;&gt; pca = PCA(atomgroup, select=&#39;backbone&#39;).run()</span>
-<span class="sd">        &gt;&gt;&gt; pca_space =  pca.transform(atomgroup.select_atoms(&#39;backbone&#39;), 3)</span>
+<span class="sd">        &gt;&gt;&gt; pca = PCA(universe, select=&#39;backbone&#39;).run()</span>
+<span class="sd">        &gt;&gt;&gt; pca_space =  pca.transform(universe.select_atoms(&#39;backbone&#39;), 3)</span>
 <span class="sd">    generates the principal components of the backbone of the atomgroup and</span>
 <span class="sd">    then transforms those atomgroup coordinates by the direction of those</span>
 <span class="sd">    variances. Please refer to the :ref:`PCA-tutorial` for more detailed</span>
@@ -219,15 +218,20 @@
 <span class="sd">        Take an atomgroup or universe with the same number of atoms as was</span>
 <span class="sd">        used for the calculation in :meth:`PCA.run` and project it onto the</span>
 <span class="sd">        principal components.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Computation can be speed up by supplying a precalculated mean structure</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atomgroup</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">universe</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">n_components</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        atomgroup: MDAnalysis atomgroup</span>
-<span class="sd">            AtomGroup to be used for PCA.</span>
+<span class="sd">        universe: Universe</span>
+<span class="sd">            Universe</span>
 <span class="sd">        select: string, optional</span>
 <span class="sd">            A valid selection statement for choosing a subset of atoms from</span>
 <span class="sd">            the atomgroup.</span>
@@ -250,16 +254,14 @@
 <span class="sd">            Step between frames of trajectory to use for generation</span>
 <span class="sd">            of covariance matrix, Default: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PCA</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span><span class="p">,</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PCA</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span><span class="p">,</span>
                                   <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No covariance information can be gathered from a&#39;</span>
                              <span class="s1">&#39;single trajectory frame.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_u</span> <span class="o">=</span> <span class="n">atomgroup</span><span class="o">.</span><span class="n">universe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_u</span> <span class="o">=</span> <span class="n">universe</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quiet</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">disable</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARN</span><span class="p">)</span>
         <span class="c1"># for transform function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">align</span> <span class="o">=</span> <span class="n">align</span>
         <span class="c1"># access 0th index</span>
@@ -272,10 +274,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_calculated</span> <span class="o">=</span> <span class="bp">False</span>
 
         <span class="k">if</span> <span class="n">mean</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;In order to demean to generate the covariance &#39;</span>
-                          <span class="s1">&#39;matrix the frames have to be iterated over twice. &#39;</span>
-                          <span class="s1">&#39;To avoid this slowdown, provide an atomgroup for &#39;</span>
-                          <span class="s1">&#39;demeaning.&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_atoms</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_calc_mean</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">else</span><span class="p">:</span>
@@ -420,8 +418,8 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    .. [BerkHess1] Berk Hess. Convergence of sampling in protein simulations. Phys. Rev. E</span>
-<span class="sd">                   65, 031910 (2002).</span>
+<span class="sd">    .. [BerkHess1] Berk Hess. Convergence of sampling in protein simulations.</span>
+<span class="sd">                   Phys. Rev. E 65, 031910 (2002).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pca_space</span><span class="p">))</span>
     <span class="n">T</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pca_space</span><span class="p">)</span>

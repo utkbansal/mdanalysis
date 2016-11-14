@@ -167,8 +167,8 @@ components.</p>
 to retain. The choice is arbitrary, but I will stop when 95 percent of the
 variance is explained by the components. This cumulated variance by the
 components is conveniently stored in the one-dimensional array attribute
-<code class="docutils literal"><span class="pre">cumulated_variance</span></code>. The value at the ith index of <cite>cumulated_variance</cite> is the
-sum of the variances from 0 to i.</p>
+<code class="docutils literal"><span class="pre">cumulated_variance</span></code>. The value at the ith index of <cite>cumulated_variance</cite>
+is the sum of the variances from 0 to i.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n_pcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">PSF_pca</span><span class="o">.</span><span class="n">cumulated_var</span> <span class="o">&gt;</span> <span class="mf">0.95</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">atomgroup</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s1">&#39;backbone&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pca_space</span> <span class="o">=</span> <span class="n">PSF_pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">atomgroup</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="n">n_pcs</span><span class="p">)</span>
@@ -181,13 +181,13 @@ data are left to the user.</p>
 <h2>3.9.2.2. Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="MDAnalysis.analysis.pca.PCA">
-<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.pca.</code><code class="descname">PCA</code><span class="sig-paren">(</span><em>atomgroup</em>, <em>select='all'</em>, <em>align=False</em>, <em>mean=None</em>, <em>n_components=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/pca.html#PCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.pca.PCA" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.pca.</code><code class="descname">PCA</code><span class="sig-paren">(</span><em>universe</em>, <em>select='all'</em>, <em>align=False</em>, <em>mean=None</em>, <em>n_components=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/pca.html#PCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.pca.PCA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Principal component analysis on an MD trajectory.</p>
 <p>After initializing and calling method with a universe or an atom group,
 principal components ordering the atom coordinate data by decreasing
 variance will be available for analysis. As an example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">atomgroup</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="s1">&#39;backbone&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pca_space</span> <span class="o">=</span>  <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s1">&#39;backbone&#39;</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="s1">&#39;backbone&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pca_space</span> <span class="o">=</span>  <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">universe</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s1">&#39;backbone&#39;</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>generates the principal components of the backbone of the atomgroup and
@@ -244,12 +244,14 @@ used for the calculation in <code class="xref py py-meth docutils literal"><span
 principal components.</p>
 </dd></dl>
 
+<p class="rubric">Notes</p>
+<p>Computation can be speed up by supplying a precalculated mean structure</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>atomgroup</strong> (<em>MDAnalysis atomgroup</em>) &#8211; AtomGroup to be used for PCA.</li>
+<li><strong>universe</strong> (<em>Universe</em>) &#8211; Universe</li>
 <li><strong>select</strong> (<em>string, optional</em>) &#8211; A valid selection statement for choosing a subset of atoms from
 the atomgroup.</li>
 <li><strong>align</strong> (<em>boolean, optional</em>) &#8211; If True, the trajectory will be aligned to a reference
@@ -303,8 +305,8 @@ If you use this function please cite <a class="reference internal" href="#berkhe
 <table class="docutils citation" frame="void" id="berkhess1" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[BerkHess1]</a></td><td>Berk Hess. Convergence of sampling in protein simulations. Phys. Rev. E
-65, 031910 (2002).</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[BerkHess1]</a></td><td>Berk Hess. Convergence of sampling in protein simulations.
+Phys. Rev. E 65, 031910 (2002).</td></tr>
 </tbody>
 </table>
 </dd></dl>
