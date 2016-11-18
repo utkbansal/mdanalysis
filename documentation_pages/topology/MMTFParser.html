@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4.9. MMTF Topology Parser &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.16.0-dev0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within MDAnalysis 0.16.0-dev0 documentation"
+          href="../../_static/opensearch.xml"/>
+    <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
+    <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../index.html" />
+    <link rel="up" title="4. Topology modules" href="../topology_modules.html" />
+    <link rel="next" title="4.10. MOL2 file format — MDAnalysis.coordinates.MOL2" href="MOL2Parser.html" />
+    <link rel="prev" title="4.8. LAMMPSParser" href="LAMMPSParser.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="MOL2Parser.html" title="4.10. MOL2 file format — MDAnalysis.coordinates.MOL2"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="LAMMPSParser.html" title="4.8. LAMMPSParser"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../topology_modules.html" accesskey="U">4. Topology modules</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/mdanalysis-logo-200x150.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4.9. MMTF Topology Parser</a><ul>
+<li><a class="reference internal" href="#classes">4.9.1. Classes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="LAMMPSParser.html"
+                        title="previous chapter">4.8. LAMMPSParser</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="MOL2Parser.html"
+                        title="next chapter">4.10. MOL2 file format &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.coordinates.MOL2</span></code></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/documentation_pages/topology/MMTFParser.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-MDAnalysis.topology.MMTFParser"></span><div class="section" id="mmtf-topology-parser">
+<h1>4.9. MMTF Topology Parser<a class="headerlink" href="#mmtf-topology-parser" title="Permalink to this headline">¶</a></h1>
+<p>Reads topology data from the <a class="reference external" href="https://mmtf.rcsb.org/">Macromolecular Transmission Format
+(MMTF) format</a>.  This should generally be a quicker alternative to PDB.</p>
+<p>Makes individual models within the MMTF file available via the <cite>models</cite>
+attribute on Universe.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0.</span></p>
+</div>
+<p>Reads the following topology attributes:</p>
+<dl class="docutils">
+<dt>Atoms:</dt>
+<dd><ul class="first last simple">
+<li>altLoc</li>
+<li>atom ID</li>
+<li>bfactor</li>
+<li>bonds</li>
+<li>charge</li>
+<li>masses (guessed)</li>
+<li>name</li>
+<li>occupancy</li>
+<li>type</li>
+</ul>
+</dd>
+<dt>Residues:</dt>
+<dd><ul class="first last simple">
+<li>icode</li>
+<li>resname</li>
+<li>resid</li>
+<li>resnum</li>
+</ul>
+</dd>
+<dt>Segments:</dt>
+<dd><ul class="first last simple">
+<li>segid</li>
+<li>model</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="classes">
+<h2>4.9.1. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="MDAnalysis.topology.MMTFParser.MMTFParser">
+<em class="property">class </em><code class="descclassname">MDAnalysis.topology.MMTFParser.</code><code class="descname">MMTFParser</code><span class="sig-paren">(</span><em>filename</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/topology/MMTFParser.html#MMTFParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.topology.MMTFParser.MMTFParser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="MOL2Parser.html" title="4.10. MOL2 file format — MDAnalysis.coordinates.MOL2"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="LAMMPSParser.html" title="4.8. LAMMPSParser"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../topology_modules.html" >4. Topology modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

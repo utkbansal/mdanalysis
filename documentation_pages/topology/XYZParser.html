@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4.18. XYZ Topology Parser &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    <title>4.19. XYZ Topology Parser &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
     <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../index.html" />
     <link rel="up" title="4. Topology modules" href="../topology_modules.html" />
-    <link rel="next" title="4.19. Base topology reader classes — MDAnalysis.topology.base" href="base.html" />
-    <link rel="prev" title="4.17. Gromacs portable run input TPR format parser" href="TPRParser.html" /> 
+    <link rel="next" title="4.20. Base topology reader classes — MDAnalysis.topology.base" href="base.html" />
+    <link rel="prev" title="4.18. Gromacs portable run input TPR format parser" href="TPRParser.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -44,10 +44,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="base.html" title="4.19. Base topology reader classes — MDAnalysis.topology.base"
+          <a href="base.html" title="4.20. Base topology reader classes — MDAnalysis.topology.base"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="TPRParser.html" title="4.17. Gromacs portable run input TPR format parser"
+          <a href="TPRParser.html" title="4.18. Gromacs portable run input TPR format parser"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../topology_modules.html" accesskey="U">4. Topology modules</a> &raquo;</li> 
@@ -60,18 +60,18 @@
             </a></p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">4.18. XYZ Topology Parser</a><ul>
-<li><a class="reference internal" href="#classes">4.18.1. Classes</a></li>
+<li><a class="reference internal" href="#">4.19. XYZ Topology Parser</a><ul>
+<li><a class="reference internal" href="#classes">4.19.1. Classes</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="TPRParser.html"
-                        title="previous chapter">4.17. Gromacs portable run input TPR format parser</a></p>
+                        title="previous chapter">4.18. Gromacs portable run input TPR format parser</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="base.html"
-                        title="next chapter">4.19. Base topology reader classes &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.topology.base</span></code></a></p>
+                        title="next chapter">4.20. Base topology reader classes &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.topology.base</span></code></a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -101,7 +101,7 @@
           <div class="body" role="main">
             
   <span class="target" id="module-MDAnalysis.topology.XYZParser"></span><div class="section" id="xyz-topology-parser">
-<h1>4.18. XYZ Topology Parser<a class="headerlink" href="#xyz-topology-parser" title="Permalink to this headline">¶</a></h1>
+<h1>4.19. XYZ Topology Parser<a class="headerlink" href="#xyz-topology-parser" title="Permalink to this headline">¶</a></h1>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.9.1.</span></p>
 </div>
@@ -109,7 +109,7 @@
 xyz only has atom name information, all information about residues
 and segments won&#8217;t be populated.</p>
 <div class="section" id="classes">
-<h2>4.18.1. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<h2>4.19.1. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="MDAnalysis.topology.XYZParser.XYZParser">
 <em class="property">class </em><code class="descclassname">MDAnalysis.topology.XYZParser.</code><code class="descname">XYZParser</code><span class="sig-paren">(</span><em>filename</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/topology/XYZParser.html#XYZParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser" title="Permalink to this definition">¶</a></dt>
@@ -130,287 +130,6 @@ and segments won&#8217;t be populated.</p>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.9.1.</span></p>
 </div>
-<dl class="attribute">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.__delattr__">
-<code class="descname">__delattr__</code><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.__delattr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>x.__delattr__(&#8216;name&#8217;) &lt;==&gt; del x.name</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.__format__">
-<code class="descname">__format__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.__format__" title="Permalink to this definition">¶</a></dt>
-<dd><p>default object formatter</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.__getattribute__">
-<code class="descname">__getattribute__</code><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.__getattribute__" title="Permalink to this definition">¶</a></dt>
-<dd><p>x.__getattribute__(&#8216;name&#8217;) &lt;==&gt; x.name</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.__hash__">
-<code class="descname">__hash__</code><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.__hash__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.__reduce__">
-<code class="descname">__reduce__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.__reduce__" title="Permalink to this definition">¶</a></dt>
-<dd><p>helper for pickle</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.__reduce_ex__">
-<code class="descname">__reduce_ex__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.__reduce_ex__" title="Permalink to this definition">¶</a></dt>
-<dd><p>helper for pickle</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.__repr__">
-<code class="descname">__repr__</code><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.__setattr__">
-<code class="descname">__setattr__</code><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.__setattr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>x.__setattr__(&#8216;name&#8217;, value) &lt;==&gt; x.name = value</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.__sizeof__">
-<code class="descname">__sizeof__</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &rarr; int<a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.__sizeof__" title="Permalink to this definition">¶</a></dt>
-<dd><p>size of object in memory, in bytes</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.__str__">
-<code class="descname">__str__</code><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.close">
-<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close the trajectory file.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.convert_forces_from_native">
-<code class="descname">convert_forces_from_native</code><span class="sig-paren">(</span><em>force</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.convert_forces_from_native" title="Permalink to this definition">¶</a></dt>
-<dd><p>Conversion of forces array <em>force</em> from native to base units</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>force</strong> (<em>array_like</em>) &#8211; Forces to transform</li>
-<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>By default, the input <em>force</em> is modified in place and also returned.</p>
-<div class="last versionadded">
-<p><span class="versionmodified">New in version 0.7.7.</span></p>
-</div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.convert_forces_to_native">
-<code class="descname">convert_forces_to_native</code><span class="sig-paren">(</span><em>force</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.convert_forces_to_native" title="Permalink to this definition">¶</a></dt>
-<dd><p>Conversion of force array <em>force</em> from base to native units.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>force</strong> (<em>array_like</em>) &#8211; Forces to transform</li>
-<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>By default, the input <em>force</em> is modified in place and also returned.</p>
-<div class="last versionadded">
-<p><span class="versionmodified">New in version 0.7.7.</span></p>
-</div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.convert_pos_from_native">
-<code class="descname">convert_pos_from_native</code><span class="sig-paren">(</span><em>x</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.convert_pos_from_native" title="Permalink to this definition">¶</a></dt>
-<dd><p>Conversion of coordinate array x from native units to base units.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>x</strong> (<em>array_like</em>) &#8211; Positions to transform</li>
-<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>By default, the input <em>x</em> is modified in place and also returned.</p>
-<div class="last versionchanged">
-<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
-modified copy is returned <em>unless</em> no conversion takes
-place, in which case the reference to the unmodified <em>x</em> is
-returned.</p>
-</div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.convert_pos_to_native">
-<code class="descname">convert_pos_to_native</code><span class="sig-paren">(</span><em>x</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.convert_pos_to_native" title="Permalink to this definition">¶</a></dt>
-<dd><p>Conversion of coordinate array x from base units to native units.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>x</strong> (<em>array_like</em>) &#8211; Positions to transform</li>
-<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>By default, the input <em>x</em> is modified in place and also returned.</p>
-<div class="last versionchanged">
-<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
-modified copy is returned <em>unless</em> no conversion takes
-place, in which case the reference to the unmodified <em>x</em> is
-returned.</p>
-</div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.convert_time_from_native">
-<code class="descname">convert_time_from_native</code><span class="sig-paren">(</span><em>t</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.convert_time_from_native" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert time <em>t</em> from native units to base units.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>t</strong> (<em>array_like</em>) &#8211; Time values to transform</li>
-<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>By default, the input <em>t</em> is modified in place and also
-returned (although note that scalar values <em>t</em> are passed by
-value in Python and hence an in-place modification has no
-effect on the caller.)</p>
-<div class="last versionchanged">
-<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
-modified copy is returned <em>unless</em> no conversion takes
-place, in which case the reference to the unmodified <em>x</em> is
-returned.</p>
-</div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.convert_time_to_native">
-<code class="descname">convert_time_to_native</code><span class="sig-paren">(</span><em>t</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.convert_time_to_native" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert time <em>t</em> from base units to native units.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>t</strong> (<em>array_like</em>) &#8211; Time values to transform</li>
-<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>By default, the input <em>t</em> is modified in place and also
-returned. (Also note that scalar values <em>t</em> are passed by
-value in Python and hence an in-place modification has no
-effect on the caller.)</p>
-<div class="last versionchanged">
-<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
-modified copy is returned <em>unless</em> no conversion takes
-place, in which case the reference to the unmodified <em>x</em> is
-returned.</p>
-</div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.convert_velocities_from_native">
-<code class="descname">convert_velocities_from_native</code><span class="sig-paren">(</span><em>v</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.convert_velocities_from_native" title="Permalink to this definition">¶</a></dt>
-<dd><p>Conversion of velocities array <em>v</em> from native to base units</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>v</strong> (<em>array_like</em>) &#8211; Velocities to transform</li>
-<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>By default, the input <em>v</em> is modified in place and also returned.</p>
-<div class="last versionadded">
-<p><span class="versionmodified">New in version 0.7.5.</span></p>
-</div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.topology.XYZParser.XYZParser.convert_velocities_to_native">
-<code class="descname">convert_velocities_to_native</code><span class="sig-paren">(</span><em>v</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.convert_velocities_to_native" title="Permalink to this definition">¶</a></dt>
-<dd><p>Conversion of coordinate array <em>v</em> from base to native units</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>v</strong> (<em>array_like</em>) &#8211; Velocities to transform</li>
-<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>By default, the input <em>v</em> is modified in place and also returned.</p>
-<div class="last versionadded">
-<p><span class="versionmodified">New in version 0.7.5.</span></p>
-</div>
-</div>
-</dd></dl>
-
 <dl class="method">
 <dt id="MDAnalysis.topology.XYZParser.XYZParser.parse">
 <code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/topology/XYZParser.html#XYZParser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.topology.XYZParser.XYZParser.parse" title="Permalink to this definition">¶</a></dt>
@@ -448,10 +167,10 @@ returned.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="base.html" title="4.19. Base topology reader classes — MDAnalysis.topology.base"
+          <a href="base.html" title="4.20. Base topology reader classes — MDAnalysis.topology.base"
              >next</a> |</li>
         <li class="right" >
-          <a href="TPRParser.html" title="4.17. Gromacs portable run input TPR format parser"
+          <a href="TPRParser.html" title="4.18. Gromacs portable run input TPR format parser"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../topology_modules.html" >4. Topology modules</a> &raquo;</li> 
