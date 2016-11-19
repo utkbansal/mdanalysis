@@ -63,7 +63,7 @@
 <li><a class="reference internal" href="#">3.2.1. Coordinate fitting and alignment &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.analysis.align</span></code></a><ul>
 <li><a class="reference internal" href="#rms-fitting-tutorial">3.2.1.1. RMS-fitting tutorial</a></li>
 <li><a class="reference internal" href="#common-usage">3.2.1.2. Common usage</a></li>
-<li><a class="reference internal" href="#functions">3.2.1.3. Functions</a></li>
+<li><a class="reference internal" href="#functions-and-classes">3.2.1.3. Functions and Classes</a></li>
 <li><a class="reference internal" href="#helper-functions">3.2.1.4. Helper functions</a></li>
 </ul>
 </li>
@@ -229,8 +229,8 @@ function and then feed the resulting dictionary to <a class="reference internal"
 </div>
 <p>(See the documentation of the functions for this advanced usage.)</p>
 </div>
-<div class="section" id="functions">
-<h2>3.2.1.3. Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions-and-classes">
+<h2>3.2.1.3. Functions and Classes<a class="headerlink" href="#functions-and-classes" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="MDAnalysis.analysis.align.alignto">
 <code class="descclassname">MDAnalysis.analysis.align.</code><code class="descname">alignto</code><span class="sig-paren">(</span><em>mobile</em>, <em>reference</em>, <em>select='all'</em>, <em>mass_weighted=False</em>, <em>subselection=None</em>, <em>tol_mass=0.1</em>, <em>strict=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/align.html#alignto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.align.alignto" title="Permalink to this definition">¶</a></dt>
@@ -346,8 +346,8 @@ the old behavior was the equivalent of <em>strict</em> = <code class="docutils l
 
 <dl class="class">
 <dt id="MDAnalysis.analysis.align.AlignTraj">
-<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.align.</code><code class="descname">AlignTraj</code><span class="sig-paren">(</span><em>mobile</em>, <em>reference</em>, <em>select='all'</em>, <em>filename=None</em>, <em>prefix='rmsfit_'</em>, <em>mass_weighted=False</em>, <em>tol_mass=0.1</em>, <em>strict=False</em>, <em>force=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/align.html#AlignTraj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.align.AlignTraj" title="Permalink to this definition">¶</a></dt>
-<dd><p>rms_align trajectory to a reference structure using a selection.</p>
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.align.</code><code class="descname">AlignTraj</code><span class="sig-paren">(</span><em>mobile</em>, <em>reference</em>, <em>select='all'</em>, <em>filename=None</em>, <em>prefix='rmsfit_'</em>, <em>mass_weighted=False</em>, <em>tol_mass=0.1</em>, <em>strict=False</em>, <em>force=True</em>, <em>in_memory=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/align.html#AlignTraj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.align.AlignTraj" title="Permalink to this definition">¶</a></dt>
+<dd><p>RMS-align trajectory to a reference structure using a selection.</p>
 <p>Both reference <em>ref</em> and trajectory <em>mobile</em> must be
 <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.Universe</span></code> instances. If they contain a
 trajectory then it is used. The output file format is determined
@@ -406,15 +406,25 @@ exact methods</li>
 <li><strong>start</strong> (<em>int, optional</em>) &#8211; First frame of trajectory to analyse, Default: 0</li>
 <li><strong>stop</strong> (<em>int, optional</em>) &#8211; Last frame of trajectory to analyse, Default: -1</li>
 <li><strong>step</strong> (<em>int, optional</em>) &#8211; Step between frames to analyse, Default: 1</li>
+<li><strong>in_memory</strong> (<em>boolean, optional</em>) &#8211; <em>Permanently</em> switch <cite>mobile</cite> to an in-memory trajectory
+so that alignment can be done in-place, which can improve
+performance substantially in some cases. In this case, no file
+is written out (<cite>filename</cite> and <cite>prefix</cite> are ignored) and only
+the coordinates of <cite>mobile</cite> are changed in memory.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>If set to quiet, it is recommended to wrap the statement in a try ...
-finally to guarantee restoring of the log level in the case of an
-exception</p>
+<p>If set to <cite>quiet</cite>, it is recommended to wrap the statement in a <code class="docutils literal"><span class="pre">try</span>
+<span class="pre">...</span>&nbsp; <span class="pre">finally</span></code> to guarantee restoring of the log level in the case of
+an exception.</p>
+<p>The <cite>in_memory</cite> option changes the <cite>mobile</cite> universe to an in-memory
+representation (see <a class="reference internal" href="../coordinates/memory.html#module-MDAnalysis.coordinates.memory" title="MDAnalysis.coordinates.memory"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates.memory</span></code></a>) for the
+remainder of the Python session. If <code class="docutils literal"><span class="pre">mobile.trajectory```is</span> <span class="pre">already</span> <span class="pre">a</span>
+<span class="pre">:class:`MemoryReader`</span> <span class="pre">then</span> <span class="pre">it</span> <span class="pre">is</span> <span class="pre">*always*</span> <span class="pre">treated</span> <span class="pre">as</span> <span class="pre">if</span> <span class="pre">`in_memory`</span> <span class="pre">had</span>
+<span class="pre">been</span> <span class="pre">set</span> <span class="pre">to</span> <span class="pre">``True</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -486,7 +496,7 @@ this module and is now exclusively accessible as
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 0.16.0: </span>Function <code class="xref py py-func docutils literal"><span class="pre">rms_fit_trj()</span></code> deprecated
-in favor of AlignTraj class.</p>
+in favor of <a class="reference internal" href="#MDAnalysis.analysis.align.AlignTraj" title="MDAnalysis.analysis.align.AlignTraj"><code class="xref py py-class docutils literal"><span class="pre">AlignTraj</span></code></a> class.</p>
 </div>
 </div>
 <div class="section" id="helper-functions">
