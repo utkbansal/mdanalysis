@@ -158,7 +158,7 @@ process PDB files <a class="footnote-reference" href="#holedcd" id="id3">[1]</a>
 <h3>3.4.1.1.2. Trajectory<a class="headerlink" href="#trajectory" title="Permalink to this headline">¶</a></h3>
 <p>One can also run <strong class="program">hole</strong> on frames in a trajectory with
 <a class="reference internal" href="#MDAnalysis.analysis.hole.HOLEtraj" title="MDAnalysis.analysis.hole.HOLEtraj"><code class="xref py py-class docutils literal"><span class="pre">HOLEtraj</span></code></a>. In this case, provide a
-<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>:</p>
+<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="kn">as</span> <span class="nn">mda</span>
 <span class="kn">from</span> <span class="nn">MDAnalysis.analysis.hole</span> <span class="kn">import</span> <span class="n">HOLEtraj</span>
 <span class="kn">from</span> <span class="nn">MDAnalysis.tests.datafiles</span> <span class="kn">import</span> <span class="n">MULTIPDB_HOLE</span>
@@ -767,8 +767,8 @@ RMSD) in order to group the HOLE profiles by order parameter (see the
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>universe</strong> (<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>) &#8211; The input trajectory is taken from a
-<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>. The trajectory is
+<li><strong>universe</strong> (<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>) &#8211; The input trajectory is taken from a
+<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>. The trajectory is
 converted to a sequence of PDB files and <a class="reference internal" href="#MDAnalysis.analysis.hole.HOLE" title="MDAnalysis.analysis.hole.HOLE"><code class="xref py py-class docutils literal"><span class="pre">HOLE</span></code></a> is run on
 each individual file.</li>
 <li><strong>orderparameters</strong> (<em>array_like or string, optional</em>) &#8211; Sequence or text file containing order parameters (float
@@ -783,7 +783,7 @@ the group of atoms that is to be analysed by HOLE. The default is
 <li><strong>cpoint</strong> (<em>bool or array_like, optional</em>) &#8211; <p>Point inside the pore to start the HOLE search procedure. The
 default is <code class="docutils literal"><span class="pre">None</span></code> to select HOLE&#8217;s internal search procedure.</p>
 <p>If set to <code class="docutils literal"><span class="pre">True</span></code> then <em>cpoint</em> is guessed as the
-<code class="xref py py-meth docutils literal"><span class="pre">center_of_geometry()</span></code> of
+<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup.center_of_geometry" title="MDAnalysis.core.groups.AtomGroup.center_of_geometry"><code class="xref py py-meth docutils literal"><span class="pre">center_of_geometry()</span></code></a> of
 the <cite>selection</cite> from the first frame of the trajectory.</p>
 <p>If <cite>cpoint</cite> is not set or set to <code class="docutils literal"><span class="pre">None</span></code> then HOLE guesses it
 with its own algorithm (for each individual frame).</p>

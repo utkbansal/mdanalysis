@@ -142,7 +142,7 @@
 
 <span class="sd">One can also run :program:`hole` on frames in a trajectory with</span>
 <span class="sd">:class:`HOLEtraj`. In this case, provide a</span>
-<span class="sd">:class:`~MDAnalysis.core.AtomGroup.Universe`::</span>
+<span class="sd">:class:`~MDAnalysis.core.universe.Universe`::</span>
 
 <span class="sd">   import MDAnalysis as mda</span>
 <span class="sd">   from MDAnalysis.analysis.hole import HOLEtraj</span>
@@ -1262,9 +1262,9 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        universe : :class:`~MDAnalysis.core.AtomGroup.Universe`</span>
+<span class="sd">        universe : :class:`~MDAnalysis.core.universe.Universe`</span>
 <span class="sd">             The input trajectory is taken from a</span>
-<span class="sd">             :class:`~MDAnalysis.core.AtomGroup.Universe`. The trajectory is</span>
+<span class="sd">             :class:`~MDAnalysis.core.universe.Universe`. The trajectory is</span>
 <span class="sd">             converted to a sequence of PDB files and :class:`HOLE` is run on</span>
 <span class="sd">             each individual file.</span>
 <span class="sd">        orderparameters : array_like or string, optional</span>
@@ -1276,7 +1276,7 @@
 <span class="sd">             so that the whole trajectory is analyzed</span>
 <span class="sd">        selection : string, optional</span>
 <span class="sd">             selection string for</span>
-<span class="sd">             :meth:`~MDAnalysis.core.AtomGroup.Universe.select_atoms` to select</span>
+<span class="sd">             :meth:`~MDAnalysis.core.universe.Universe.select_atoms` to select</span>
 <span class="sd">             the group of atoms that is to be analysed by HOLE. The default is</span>
 <span class="sd">             &quot;protein&quot; to include all protein residues.</span>
 <span class="sd">        cpoint : bool or array_like, optional</span>
@@ -1284,7 +1284,7 @@
 <span class="sd">             default is ``None`` to select HOLE&#39;s internal search procedure.</span>
 
 <span class="sd">             If set to ``True`` then *cpoint* is guessed as the</span>
-<span class="sd">             :meth:`~MDAnalysis.core.AtomGroup.AtomGroup.center_of_geometry` of</span>
+<span class="sd">             :meth:`~MDAnalysis.core.groups.AtomGroup.center_of_geometry` of</span>
 <span class="sd">             the `selection` from the first frame of the trajectory.</span>
 
 <span class="sd">             If `cpoint` is not set or set to ``None`` then HOLE guesses it</span>

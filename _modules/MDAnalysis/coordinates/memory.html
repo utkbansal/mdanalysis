@@ -87,7 +87,8 @@
 <span class="c1"># MDAnalysis: A Toolkit for the Analysis of Molecular Dynamics Simulations.</span>
 <span class="c1"># J. Comput. Chem. 32 (2011), 2319--2327, doi:10.1002/jcc.21787</span>
 <span class="c1">#</span>
-<span class="sd">&quot;&quot;&quot;=========================================================================</span>
+<span class="sd">&quot;&quot;&quot;\</span>
+<span class="sd">=========================================================================</span>
 <span class="sd">Reading trajectories from memory --- :mod:`MDAnalysis.coordinates.memory`</span>
 <span class="sd">=========================================================================</span>
 
@@ -104,7 +105,7 @@
 <span class="sd">operate on raw coordinate using existing MDAnalysis tools. In</span>
 <span class="sd">addition, it allows the user to make changes to the coordinates in a</span>
 <span class="sd">trajectory (e.g. through</span>
-<span class="sd">:attr:`MDAnalysis.core.AtomGroup.AtomGroup.positions`) without having</span>
+<span class="sd">:attr:`MDAnalysis.core.groups.AtomGroup.positions`) without having</span>
 <span class="sd">to write the entire state to file.</span>
 
 
@@ -124,7 +125,7 @@
 
 <span class="sd">The most straightforward use of the :class:`MemoryReader` is to simply</span>
 <span class="sd">use the ``in_memory=True`` flag for the</span>
-<span class="sd">:class:`~MDAnalysis.core.AtomGroup.Universe` class, which</span>
+<span class="sd">:class:`~MDAnalysis.core.universe.Universe` class, which</span>
 <span class="sd">automatically transfers a trajectory to memory::</span>
 
 <span class="sd"> import MDAnalysis as mda</span>
@@ -141,8 +142,8 @@
 
 <span class="sd">The decision to transfer the trajectory to memory can be made at any</span>
 <span class="sd">time with the</span>
-<span class="sd">:meth:`~MDAnalysis.core.AtomGroup.Universe.transfer_to_memory` method</span>
-<span class="sd">of a :class:`~MDAnalysis.core.AtomGroup.Universe`::</span>
+<span class="sd">:meth:`~MDAnalysis.core.universe.Universe.transfer_to_memory` method</span>
+<span class="sd">of a :class:`~MDAnalysis.core.universe.Universe`::</span>
 
 <span class="sd">    universe = mda.Universe(TPR, XTC)</span>
 <span class="sd">    universe.transfer_to_memory()</span>
@@ -156,7 +157,7 @@
 <span class="sd">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>
 
 <span class="sd">The :class:`MemoryReader` provides great flexibility because it</span>
-<span class="sd">becomes possible to create a :class:`~MDAnalysis.Universe` directly</span>
+<span class="sd">becomes possible to create a :class:`~MDAnalysis.core.universe.Universe` directly</span>
 <span class="sd">from a numpy array.</span>
 
 <span class="sd">A simple example consists of a new universe created from the array</span>
@@ -200,6 +201,7 @@
 <span class="sd">   ``results.swapaxes(0, 1)``. This might be changed in the</span>
 <span class="sd">   future.</span>
 
+<span class="sd">.. _creating-in-memory-trajectory-label:</span>
 
 <span class="sd">Creating an in-memory trajectory of a sub-system</span>
 <span class="sd">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>
@@ -207,9 +209,9 @@
 <span class="sd">Creating a trajectory for just a selection of an existing trajectory</span>
 <span class="sd">requires the transfer of the appropriate coordinates as well as</span>
 <span class="sd">creation of a topology of the sub-system. For the latter one can use</span>
-<span class="sd">the :func:`~MDAnalysis.core.AtomGroup.Merge` function, for the former</span>
-<span class="sd">the :meth:`~MDAnalysis.core.AtomGroup.Universe.load_new` method of a</span>
-<span class="sd">:class:`~MDAnalysis.Universe` together with the</span>
+<span class="sd">the :func:`~MDAnalysis.core.universe.Merge` function, for the former</span>
+<span class="sd">the :meth:`~MDAnalysis.core.universe.Universe.load_new` method of a</span>
+<span class="sd">:class:`~MDAnalysis.core.universe.Universe` together with the</span>
 <span class="sd">:class:`MemoryReader`. In the following, an in-memory trajectory of</span>
 <span class="sd">only the protein is created::</span>
 
@@ -227,8 +229,18 @@
 <span class="sd">  u2 = mda.Merge(protein)            # create the protein-only Universe</span>
 <span class="sd">  u2.load_new(coordinates, format=MemoryReader)</span>
 
-<span class="sd">The new :class:`~MDAnalysis.Universe` can be used to, for instance,</span>
-<span class="sd">write out a new trajectory or perform fast analysis on the sub-system.</span>
+<span class="sd">The protein coordinates are extracted into ``coordinates`` and then</span>
+<span class="sd">the in-memory trajectory is loaded from these coordinates. In</span>
+<span class="sd">principle, this could have all be done in one line::</span>
+
+<span class="sd">  u2 = mda.Merge(protein).load_new(</span>
+<span class="sd">           AnalysisFromFunction(lambda ag: ag.positions.copy(),</span>
+<span class="sd">                                protein).run().results.swapaxes(0, 1),</span>
+<span class="sd">           format=MemoryReader)</span>
+
+<span class="sd">The new :class:`~MDAnalysis.core.universe.Universe` ``u2`` can be used</span>
+<span class="sd">to, for instance, write out a new trajectory or perform fast analysis</span>
+<span class="sd">on the sub-system.</span>
 
 
 <span class="sd">Classes</span>
@@ -365,7 +377,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ---------</span>
-<span class="sd">        asel : :class:`~MDAnalysis.core.AtomGroup.AtomGroup` object</span>
+<span class="sd">        asel : :class:`~MDAnalysis.core.groups.AtomGroup` object</span>
 <span class="sd">            Atom selection. Defaults to None, in which case the full set of</span>
 <span class="sd">            coordinate data is returned. Note that in this case, a view</span>
 <span class="sd">            of the underlying numpy array is returned, while a copy of the</span>

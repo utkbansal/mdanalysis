@@ -117,7 +117,7 @@ trajectories. Single frame and multi-frame PDB files are automatically
 recognized; the only difference is thath the single-frame PDB is represented as
 a trajectory with only one frame.</p>
 <p>In order to write a selection to a PDB file one typically uses the
-<code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup.write()</span></code> method of the selection:</p>
+<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup.write" title="MDAnalysis.core.groups.AtomGroup.write"><code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup.write()</span></code></a> method of the selection:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">calphas</span> <span class="o">=</span> <span class="n">universe</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s2">&quot;name CA&quot;</span><span class="p">)</span>
 <span class="n">calphas</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;calpha_only.pdb&quot;</span><span class="p">)</span>
 </pre></div>
@@ -174,14 +174,14 @@ do the following:</p>
 </pre></div>
 </div>
 <p>A single frame can be written with the
-<code class="xref py py-meth docutils literal"><span class="pre">write()</span></code> method of any
-<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code>:</p>
+<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup.write" title="MDAnalysis.core.groups.AtomGroup.write"><code class="xref py py-meth docutils literal"><span class="pre">write()</span></code></a> method of any
+<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">protein</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s2">&quot;protein&quot;</span><span class="p">)</span>
 <span class="n">protein</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;protein.pdb&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Alternatively, get the single frame writer and supply the
-<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code>:</p>
+<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">pdb</span> <span class="o">=</span> <span class="n">MDAnalysis</span><span class="o">.</span><span class="n">Writer</span><span class="p">(</span><span class="s2">&quot;protein.pdb&quot;</span><span class="p">)</span>
 <span class="n">protein</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s2">&quot;protein&quot;</span><span class="p">)</span>
 <span class="n">pdb</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">protein</span><span class="p">)</span>
@@ -491,8 +491,8 @@ Raises <code class="xref py py-exc docutils literal"><span class="pre">NotImplem
 <p>Attributes initialized/updated:</p>
 <ul class="simple">
 <li><code class="xref py py-attr docutils literal"><span class="pre">PDBWriter.obj</span></code> (the entity that provides topology information <em>and</em>
-coordinates, either a <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> or a whole
-<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>)</li>
+coordinates, either a <a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> or a whole
+<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>)</li>
 <li><code class="xref py py-attr docutils literal"><span class="pre">PDBWriter.trajectory</span></code> (the underlying trajectory
 <a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Reader" title="MDAnalysis.coordinates.base.Reader"><code class="xref py py-class docutils literal"><span class="pre">Reader</span></code></a>)</li>
 <li><code class="xref py py-attr docutils literal"><span class="pre">PDBWriter.timestep</span></code> (the underlying trajectory
@@ -594,8 +594,8 @@ record.</p>
 <code class="descname">write</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/PDB.html#PDBWriter.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.PDB.PDBWriter.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write object <em>obj</em> at current trajectory frame to file.</p>
 <p><em>obj</em> can be a selection (i.e. a
-<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code>) or a whole
-<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>.</p>
+<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>) or a whole
+<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>.</p>
 <p>The last letter of the <code class="xref py py-attr docutils literal"><span class="pre">segid</span></code> is
 used as the PDB chainID (but see <code class="xref py py-meth docutils literal"><span class="pre">ATOM()</span></code> for
 details).</p>
@@ -605,8 +605,8 @@ details).</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><dl class="first last docutils">
 <dt><em>obj</em></dt>
-<dd><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> or
-<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></p>
+<dd><p class="first last"><a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> or
+<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a></p>
 </dd>
 </dl>
 </td>
@@ -619,8 +619,8 @@ details).</p>
 <dt id="MDAnalysis.coordinates.PDB.PDBWriter.write_all_timesteps">
 <code class="descname">write_all_timesteps</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/PDB.html#PDBWriter.write_all_timesteps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.PDB.PDBWriter.write_all_timesteps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write all timesteps associated with <em>obj</em> to the PDB file.</p>
-<p><em>obj</em> can be a <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code>
-or a <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>.</p>
+<p><em>obj</em> can be a <a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>
+or a <a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>.</p>
 <p>The method writes the frames from the one specified as <em>start</em> until
 the end, using a step of <em>skip</em> (<em>start</em> and <em>skip</em> are set in the
 constructor). Thus, if <em>u</em> is a Universe then</p>

@@ -172,13 +172,13 @@
 <span class="sd">   .. attribute:: ref_select</span>
 
 <span class="sd">      string, selection for</span>
-<span class="sd">      :meth:`~MDAnalysis.core.AtomGroup.AtomGroup.select_atoms` to select frame</span>
+<span class="sd">      :meth:`~MDAnalysis.core.groups.AtomGroup.select_atoms` to select frame</span>
 <span class="sd">      from :attr:`Path.u_reference`</span>
 
 <span class="sd">   .. attribute:: path_select</span>
 
 <span class="sd">      string, selection for</span>
-<span class="sd">      :meth:`~MDAnalysis.core.AtomGroup.AtomGroup.select_atoms` to select atoms</span>
+<span class="sd">      :meth:`~MDAnalysis.core.groups.AtomGroup.select_atoms` to select atoms</span>
 <span class="sd">      to compose :attr:`Path.path`</span>
 
 <span class="sd">   .. attribute:: ref_frame</span>
@@ -235,13 +235,13 @@
 <span class="sd">   .. attribute:: ref_select</span>
 
 <span class="sd">      string, selection for</span>
-<span class="sd">      :meth:`~MDAnalysis.core.AtomGroup.AtomGroup.select_atoms` to select frame</span>
+<span class="sd">      :meth:`~MDAnalysis.core.groups.AtomGroup.select_atoms` to select frame</span>
 <span class="sd">      from :attr:`PSAnalysis.u_reference`</span>
 
 <span class="sd">   .. attribute:: path_select</span>
 
 <span class="sd">      string, selection for</span>
-<span class="sd">      :meth:`~MDAnalysis.core.AtomGroup.AtomGroup.select_atoms` to select atoms</span>
+<span class="sd">      :meth:`~MDAnalysis.core.groups.AtomGroup.select_atoms` to select atoms</span>
 <span class="sd">      to compose :attr:`Path.path`</span>
 
 <span class="sd">   .. attribute:: ref_frame</span>
@@ -341,7 +341,7 @@
 
 <span class="sd">    *P* (*Q*) is a :class:`numpy.ndarray` of :math:`N_p` (:math:`N_q`) time</span>
 <span class="sd">    steps, :math:`N` atoms, and :math:`3N` coordinates (e.g.,</span>
-<span class="sd">    :meth:`MDAnalysis.core.AtomGroup.AtomGroup.coordinates`). The pairwise MSD</span>
+<span class="sd">    :meth:`MDAnalysis.core.groups.AtomGroup.coordinates`). The pairwise MSD</span>
 <span class="sd">    matrix has dimensions :math:`N_p` by :math:`N_q`.</span>
 
 <span class="sd">    :Arguments:</span>
@@ -401,7 +401,7 @@
 
 <span class="sd">    *P* (*Q*) is a :class:`numpy.ndarray` of :math:`N_p` (:math:`N_q`) time</span>
 <span class="sd">    steps, :math:`N` atoms, and :math:`3N` coordinates (e.g.,</span>
-<span class="sd">    :meth:`MDAnalysis.core.AtomGroup.AtomGroup.coordinates`). *P* (*Q*) has</span>
+<span class="sd">    :meth:`MDAnalysis.core.groups.AtomGroup.coordinates`). *P* (*Q*) has</span>
 <span class="sd">    either shape |3Dp| (|3Dq|), or |2Dp| (|2Dq|) in flattened form.</span>
 
 <span class="sd">    :Arguments:</span>
@@ -440,7 +440,7 @@
 
 <span class="sd">    *P* (*Q*) is a :class:`numpy.ndarray` of :math:`N_p` (:math:`N_q`) time</span>
 <span class="sd">    steps, :math:`N` atoms, and :math:`3N` coordinates (e.g.,</span>
-<span class="sd">    :meth:`MDAnalysis.core.AtomGroup.AtomGroup.coordinates`). *P* (*Q*) has</span>
+<span class="sd">    :meth:`MDAnalysis.core.groups.AtomGroup.coordinates`). *P* (*Q*) has</span>
 <span class="sd">    either shape |3Dp| (|3Dq|), or |2Dp| (|2Dq|) in flattened form. The nearest</span>
 <span class="sd">    neighbor distances for *P* (to *Q*) and those of *Q* (to *P*) are averaged</span>
 <span class="sd">    individually to get the average nearest neighbor distance for *P* and</span>
@@ -484,7 +484,7 @@
 
 <span class="sd">    *P* (*Q*) is a :class:`numpy.ndarray` of :math:`N_p` (:math:`N_q`) time</span>
 <span class="sd">    steps, :math:`N` atoms, and :math:`3N` coordinates (e.g.,</span>
-<span class="sd">    :meth:`MDAnalysis.core.AtomGroup.AtomGroup.coordinates`). *P* (*Q*) has</span>
+<span class="sd">    :meth:`MDAnalysis.core.groups.AtomGroup.coordinates`). *P* (*Q*) has</span>
 <span class="sd">    either shape |3Dp| (|3Dq|), or |2Dp| (|2Dq|) in flattened form. The nearest</span>
 <span class="sd">    neighbor distances for *P* (to *Q*) and those of *Q* (to *P*) are all</span>
 <span class="sd">    averaged together to get a mean nearest neighbor distance. This measure</span>
@@ -527,7 +527,7 @@
 
 <span class="sd">    *P* (*Q*) is a :class:`numpy.ndarray` of :math:`N_p` (:math:`N_q`) time</span>
 <span class="sd">    steps, :math:`N` atoms, and :math:`3N` coordinates (e.g.,</span>
-<span class="sd">    :meth:`MDAnalysis.core.AtomGroup.AtomGroup.coordinates`). *P* (*Q*) has</span>
+<span class="sd">    :meth:`MDAnalysis.core.groups.AtomGroup.coordinates`). *P* (*Q*) has</span>
 <span class="sd">    either shape |3Dp| (|3Dq|), or |2Dp| (|2Dq|) in flattened form.</span>
 
 <span class="sd">    :Arguments:</span>
@@ -558,7 +558,7 @@
 
 <span class="sd">    *P* (*Q*) is a :class:`numpy.ndarray` of :math:`N_p` (:math:`N_q`) time</span>
 <span class="sd">    steps, :math:`N` atoms, and :math:`3N` coordinates (e.g.,</span>
-<span class="sd">    :meth:`MDAnalysis.core.AtomGroup.AtomGroup.coordinates`). *P* (*Q*) has</span>
+<span class="sd">    :meth:`MDAnalysis.core.groups.AtomGroup.coordinates`). *P* (*Q*) has</span>
 <span class="sd">    either shape |3Dp| (|3Dq|), or :|2Dp| (|2Dq|) in flattened form.</span>
 
 <span class="sd">    :Arguments:</span>
@@ -687,7 +687,7 @@
 <span class="sd">             The selection to operate on for rms fitting; can be one of:</span>
 
 <span class="sd">             1. any valid selection string for</span>
-<span class="sd">                :meth:`~MDAnalysis.core.AtomGroup.AtomGroup.select_atoms` that</span>
+<span class="sd">                :meth:`~MDAnalysis.core.groups.AtomGroup.select_atoms` that</span>
 <span class="sd">                produces identical selections in *mobile* and *reference*; or</span>
 <span class="sd">             2. a dictionary ``{&#39;mobile&#39;:sel1, &#39;reference&#39;:sel2}`` (the</span>
 <span class="sd">                :func:`MDAnalysis.analysis.align.fasta2select` function returns</span>
@@ -783,7 +783,7 @@
 
 <span class="sd">        :Returns:</span>
 <span class="sd">          :class:`numpy.ndarray` representing a time series of atomic positions</span>
-<span class="sd">          of an :class:`MDAnalysis.core.AtomGroup.AtomGroup` selection from</span>
+<span class="sd">          of an :class:`MDAnalysis.core.groups.AtomGroup` selection from</span>
 <span class="sd">          :attr:`Path.u_fitted.trajectory`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">select</span> <span class="o">=</span> <span class="n">select</span> <span class="k">if</span> <span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">path_select</span>
@@ -1134,7 +1134,7 @@
 <span class="sd">             The selection to operate on; can be one of:</span>
 
 <span class="sd">             1. any valid selection string for</span>
-<span class="sd">                :meth:`~MDAnalysis.core.AtomGroup.AtomGroup.select_atoms` that</span>
+<span class="sd">                :meth:`~MDAnalysis.core.groups.AtomGroup.select_atoms` that</span>
 <span class="sd">                produces identical selections in *mobile* and *reference*; or</span>
 <span class="sd">             2. a dictionary ``{&#39;mobile&#39;:sel1, &#39;reference&#39;:sel2}`` (the</span>
 <span class="sd">                :func:`MDAnalysis.analysis.align.fasta2select` function returns</span>

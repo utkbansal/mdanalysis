@@ -73,7 +73,7 @@
             
   <h1>Source code for MDAnalysis.coordinates.MMTF</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-</span>
-<span class="c1"># vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 </span>
+<span class="c1"># vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4</span>
 <span class="c1">#</span>
 <span class="c1"># MDAnalysis --- http://www.MDAnalysis.org</span>
 <span class="c1"># Copyright (c) 2006-2015 Naveen Michaud-Agrawal, Elizabeth J. Denning, Oliver</span>
@@ -119,6 +119,11 @@
 
 
 <div class="viewcode-block" id="MMTFReader"><a class="viewcode-back" href="../../../documentation_pages/coordinates/MMTF.html#MDAnalysis.coordinates.MMTF.MMTFReader">[docs]</a><span class="k">class</span> <span class="nc">MMTFReader</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">SingleFrameReader</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Topology parser for the MMTF_ format.</span>
+
+<span class="sd">    .. _Macromolecular Transmission Format (MMTF) format:</span>
+<span class="sd">       https://mmtf.rcsb.org/</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;MMTF&#39;</span>
 
     <span class="k">def</span> <span class="nf">_read_first_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

@@ -398,7 +398,7 @@ of a trajectory <a class="reference internal" href="#franklin2007" id="id4">[Fra
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>u</strong> (<em>Universe</em>) &#8211; Universe with a trajectory</li>
+<li><strong>u</strong> (<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><em>Universe</em></a>) &#8211; Universe with a trajectory</li>
 <li><strong>selection</strong> (<em>string, optional</em>) &#8211; atoms to do analysis on</li>
 <li><strong>radius</strong> (<em>float, optional</em>) &#8211; distance at which contact is formed</li>
 <li><strong>start</strong> (<em>int, optional</em>) &#8211; First frame of trajectory to analyse, Default: 0</li>
@@ -445,7 +445,7 @@ argument <cite>method</cite>.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>u</strong> (<em>Universe</em>) &#8211; trajectory</li>
+<li><strong>u</strong> (<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><em>Universe</em></a>) &#8211; trajectory</li>
 <li><strong>selection</strong> (<em>tuple(string, string)</em>) &#8211; two contacting groups that change over time</li>
 <li><strong>refgroup</strong> (<em>tuple(AtomGroup, AtomGroup)</em>) &#8211; two contacting atomgroups in their reference conformation. This
 can also be a list of tuples containing different atom groups</li>
@@ -499,7 +499,7 @@ structure of a complex, and as the two groups atoms one selects two
 molecules A and B in the complex. Then the question to be answered by <em>q</em>
 is, is which percentage of the contacts between A and B persist during the
 simulation.</p>
-<p>First prepare <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> selections for
+<p>First prepare <a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> selections for
 the reference atoms; this example uses some arbitrary selections:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ref</span> <span class="o">=</span> <span class="n">Universe</span><span class="p">(</span><span class="s1">&#39;crystal.pdb&#39;</span><span class="p">)</span>
 <span class="n">refA</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s1">&#39;name CA and segid A and resid 6:100&#39;</span><span class="p">)</span>
@@ -580,7 +580,7 @@ B*&#8221;]</p>
 </dd>
 <dt><em>refgroup</em></dt>
 <dd><p class="first last">reference group, either a single
-<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> (if there is only a
+<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> (if there is only a
 single <em>selection</em>) or a list of two such groups. The reference
 contacts are directly computed from <em>refgroup</em> and hence the atoms
 in the reference group(s) must be equivalent to the ones produced
@@ -766,7 +766,7 @@ between sidechain centroids.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>g</strong> (<a class="reference internal" href="../core/AtomGroup.html#module-MDAnalysis.core.AtomGroup" title="MDAnalysis.core.AtomGroup"><em>AtomGroup</em></a>) &#8211; group of atoms to calculate distance array for</li>
+<li><strong>g</strong> (<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><em>AtomGroup</em></a>) &#8211; group of atoms to calculate distance array for</li>
 <li><strong>results</strong> (<em>array, optional</em>) &#8211; passed on to <a class="reference internal" href="../lib/distances.html#MDAnalysis.lib.distances.self_distance_array" title="MDAnalysis.lib.distances.self_distance_array"><code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.lib.distances.self_distance_array()</span></code></a>
 as a preallocated array</li>
 <li><strong>centroids</strong> (bool, optional, default <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <code class="docutils literal"><span class="pre">True</span></code>: calculate per-residue centroids from the selected

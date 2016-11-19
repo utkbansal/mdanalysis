@@ -118,7 +118,7 @@ the unit from the file. By default we are assuming that the unit for
 length is the ångström and for the time is the femtosecond. If this is
 not true then the user <em>should supply the appropriate units</em> in the
 keywords <em>timeunit</em> and/or <em>lengthunit</em> to <a class="reference internal" href="#MDAnalysis.coordinates.LAMMPS.DCDWriter" title="MDAnalysis.coordinates.LAMMPS.DCDWriter"><code class="xref py py-class docutils literal"><span class="pre">DCDWriter</span></code></a> and
-<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> (which then calls
+<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> (which then calls
 <a class="reference internal" href="#MDAnalysis.coordinates.LAMMPS.DCDReader" title="MDAnalysis.coordinates.LAMMPS.DCDReader"><code class="xref py py-class docutils literal"><span class="pre">DCDReader</span></code></a>).</p>
 <p class="rubric">Example: Loading a LAMMPS simulation</p>
 <p>To load a LAMMPS simulation from a LAMMPS data file (using the
@@ -806,7 +806,7 @@ time = <code class="xref py py-attr docutils literal"><span class="pre">Timestep
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><dl class="first docutils">
 <dt><em>asel</em></dt>
-<dd><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> object
+<dd><p class="first last"><a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> object
 Defaults to None, in which case the full set of coordinate data
 is returned.</p>
 </dd>
@@ -1169,8 +1169,8 @@ returned.</p>
 <dt id="MDAnalysis.coordinates.LAMMPS.DCDWriter.write">
 <code class="descname">write</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.LAMMPS.DCDWriter.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write current timestep, using the supplied <em>obj</em>.</p>
-<p>The argument should be a <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> or
-a <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> or a <code class="xref py py-class docutils literal"><span class="pre">Timestep</span></code> instance.</p>
+<p>The argument should be a <a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> or
+a <a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> or a <code class="xref py py-class docutils literal"><span class="pre">Timestep</span></code> instance.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The size of the <em>obj</em> must be the same as the number of atom
@@ -2121,7 +2121,7 @@ etc. whose atoms are contained within the selection will be included.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>selection</strong> (<a class="reference internal" href="../core/AtomGroup.html#module-MDAnalysis.core.AtomGroup" title="MDAnalysis.core.AtomGroup"><em>AtomGroup</em></a>) &#8211; MDAnalysis AtomGroup (selection or Universe.atoms) or also Universe</li>
+<li><strong>selection</strong> (<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><em>AtomGroup</em></a>) &#8211; MDAnalysis AtomGroup (selection or Universe.atoms) or also Universe</li>
 <li><strong>frame</strong> (<em>Optional[int]</em>) &#8211; optionally move to frame number <em>frame</em></li>
 </ul>
 </td>

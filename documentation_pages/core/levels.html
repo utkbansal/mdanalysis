@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    <title>8.2.2. Hierarchy levels — MDAnalysis.core.levels &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
     <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../index.html" />
     <link rel="up" title="8. Core modules" href="../core_modules.html" />
-    <link rel="next" title="8.2. Core Topology Objects — MDAnalysis.core.topologyobjects" href="topologyobjects.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="AtomGroup.html" /> 
+    <link rel="next" title="8.2.3. Core Topology Objects — MDAnalysis.core.topologyobjects" href="topologyobjects.html" />
+    <link rel="prev" title="8.2.1. Core Topology object — MDAnalysis.core.topology" href="topology.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -44,10 +44,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="topologyobjects.html" title="8.2. Core Topology Objects — MDAnalysis.core.topologyobjects"
+          <a href="topologyobjects.html" title="8.2.3. Core Topology Objects — MDAnalysis.core.topologyobjects"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="AtomGroup.html" title="&lt;no title&gt;"
+          <a href="topology.html" title="8.2.1. Core Topology object — MDAnalysis.core.topology"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../core_modules.html" accesskey="U">8. Core modules</a> &raquo;</li> 
@@ -59,15 +59,15 @@
               <img class="logo" src="../../_static/mdanalysis-logo-200x150.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="AtomGroup.html"
-                        title="previous chapter">&lt;no title&gt;</a></p>
+  <p class="topless"><a href="topology.html"
+                        title="previous chapter">8.2.1. Core Topology object &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.core.topology</span></code></a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="topologyobjects.html"
-                        title="next chapter">8.2. Core Topology Objects &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.core.topologyobjects</span></code></a></p>
+                        title="next chapter">8.2.3. Core Topology Objects &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.core.topologyobjects</span></code></a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/documentation_pages/core/Selection.txt"
+      <li><a href="../../_sources/documentation_pages/core/levels.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -92,7 +92,44 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
+  <span class="target" id="module-MDAnalysis.core.levels"></span><div class="section" id="hierarchy-levels-mdanalysis-core-levels">
+<h1>8.2.2. Hierarchy levels &#8212; <a class="reference internal" href="#module-MDAnalysis.core.levels" title="MDAnalysis.core.levels"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.core.levels</span></code></a><a class="headerlink" href="#hierarchy-levels-mdanalysis-core-levels" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="#MDAnalysis.core.levels.Level" title="MDAnalysis.core.levels.Level"><code class="xref py py-class docutils literal"><span class="pre">Level</span></code></a> instances are used to define the relationships between
+different containers (see <a class="reference internal" href="groups.html#module-MDAnalysis.core.groups" title="MDAnalysis.core.groups"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.core.groups</span></code></a>) in
+MDAnalysis.</p>
+<p>Levels can be navigated between using the <code class="xref py py-attr docutils literal"><span class="pre">child</span></code> and
+<code class="xref py py-attr docutils literal"><span class="pre">parent</span></code> attributes of the containers. Classes for containers
+at a given level are accessed using the <a class="reference internal" href="topologyattrs.html#MDAnalysis.core.topologyattrs.TopologyAttr.singular" title="MDAnalysis.core.topologyattrs.TopologyAttr.singular"><code class="xref py py-attr docutils literal"><span class="pre">singular</span></code></a> and
+<code class="xref py py-attr docutils literal"><span class="pre">plural</span></code> attributes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>                  Level:
+        .singular =====================  .plural
+Atom    &lt;-        Atomlevel    ^ .child  -&gt;  AtomGroup
+Residue &lt;-        Residuelevel !         -&gt;  ResidueGroup
+Segment &lt;-        Segmentlevel v .parent -&gt;  SegmentGroup
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="groups.html#module-MDAnalysis.core.groups" title="MDAnalysis.core.groups"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.core.groups</span></code></a></p>
+</div>
+<dl class="class">
+<dt id="MDAnalysis.core.levels.Level">
+<em class="property">class </em><code class="descclassname">MDAnalysis.core.levels.</code><code class="descname">Level</code><span class="sig-paren">(</span><em>name</em>, <em>singular</em>, <em>plural</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/levels.html#Level"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.levels.Level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes the level of hierarchy within MDA objects</p>
+<p>Can do comparisons with either</p>
+<ul class="simple">
+<li><a class="reference internal" href="topologyattrs.html#MDAnalysis.core.topologyattrs.TopologyAttr.singular" title="MDAnalysis.core.topologyattrs.TopologyAttr.singular"><code class="xref py py-attr docutils literal"><span class="pre">singular</span></code></a> gives the Class for Components of this Level</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">plural</span></code> gives the Class for Groups of this Level</li>
+</ul>
+<p>or</p>
+<ul class="simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">parent</span></code> gives the <a class="reference internal" href="#MDAnalysis.core.levels.Level" title="MDAnalysis.core.levels.Level"><code class="xref py py-class docutils literal"><span class="pre">Level</span></code></a> object above this</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">child</span></code> gives the <a class="reference internal" href="#MDAnalysis.core.levels.Level" title="MDAnalysis.core.levels.Level"><code class="xref py py-class docutils literal"><span class="pre">Level</span></code></a> object below this</li>
+</ul>
+</dd></dl>
+
+</div>
+
 
           </div>
         </div>
@@ -109,10 +146,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="topologyobjects.html" title="8.2. Core Topology Objects — MDAnalysis.core.topologyobjects"
+          <a href="topologyobjects.html" title="8.2.3. Core Topology Objects — MDAnalysis.core.topologyobjects"
              >next</a> |</li>
         <li class="right" >
-          <a href="AtomGroup.html" title="&lt;no title&gt;"
+          <a href="topology.html" title="8.2.1. Core Topology object — MDAnalysis.core.topology"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../core_modules.html" >8. Core modules</a> &raquo;</li> 

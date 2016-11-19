@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>8.1. Core functions of MDAnalysis &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    <title>8.4.1. Core functions of MDAnalysis &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
     <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../index.html" />
     <link rel="up" title="8. Core modules" href="../core_modules.html" />
-    <link rel="next" title="&lt;no title&gt;" href="AtomGroup.html" />
-    <link rel="prev" title="8. Core modules" href="../core_modules.html" /> 
+    <link rel="next" title="9. Visualization modules" href="../visualization_modules.html" />
+    <link rel="prev" title="8.3.1. Atom selection Hierarchy — MDAnalysis.core.selection" href="selection.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -44,10 +44,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="AtomGroup.html" title="&lt;no title&gt;"
+          <a href="../visualization_modules.html" title="9. Visualization modules"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../core_modules.html" title="8. Core modules"
+          <a href="selection.html" title="8.3.1. Atom selection Hierarchy — MDAnalysis.core.selection"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../core_modules.html" accesskey="U">8. Core modules</a> &raquo;</li> 
@@ -60,10 +60,10 @@
             </a></p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">8.1. Core functions of MDAnalysis</a><ul>
-<li><a class="reference internal" href="#flags">8.1.1. Flags</a><ul>
-<li><a class="reference internal" href="#list-of-mdanalysis-flags-with-default-values">8.1.1.1. List of MDAnalysis flags with default values</a></li>
-<li><a class="reference internal" href="#classes">8.1.1.2. Classes</a></li>
+<li><a class="reference internal" href="#">8.4.1. Core functions of MDAnalysis</a><ul>
+<li><a class="reference internal" href="#flags">8.4.1.1. Flags</a><ul>
+<li><a class="reference internal" href="#list-of-mdanalysis-flags-with-default-values">8.4.1.1.1. List of MDAnalysis flags with default values</a></li>
+<li><a class="reference internal" href="#classes">8.4.1.1.2. Classes</a></li>
 </ul>
 </li>
 </ul>
@@ -71,11 +71,11 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../core_modules.html"
-                        title="previous chapter">8. Core modules</a></p>
+  <p class="topless"><a href="selection.html"
+                        title="previous chapter">8.3.1. Atom selection Hierarchy &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.core.selection</span></code></a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="AtomGroup.html"
-                        title="next chapter">&lt;no title&gt;</a></p>
+  <p class="topless"><a href="../visualization_modules.html"
+                        title="next chapter">9. Visualization modules</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -105,12 +105,12 @@
           <div class="body" role="main">
             
   <span class="target" id="module-MDAnalysis.core.__init__"></span><div class="section" id="core-functions-of-mdanalysis">
-<h1>8.1. Core functions of MDAnalysis<a class="headerlink" href="#core-functions-of-mdanalysis" title="Permalink to this headline">¶</a></h1>
-<p>The basic class is an <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code>;
+<h1>8.4.1. Core functions of MDAnalysis<a class="headerlink" href="#core-functions-of-mdanalysis" title="Permalink to this headline">¶</a></h1>
+<p>The basic class is an <a class="reference internal" href="groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>;
 the whole simulation is called the
-<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>. Selections are computed
-on an <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> and return another
-<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code>.</p>
+<a class="reference internal" href="universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>. Selections are computed
+on an <a class="reference internal" href="groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> and return another
+<a class="reference internal" href="groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>.</p>
 <p><code class="xref py py-mod docutils literal"><span class="pre">Timeseries</span></code> are a convenient way to analyse trajectories.</p>
 <p>To get started, load the Universe:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">Universe</span><span class="p">(</span><span class="n">psffilename</span><span class="p">,</span><span class="n">dcdfilename</span><span class="p">)</span>
@@ -130,7 +130,7 @@ obtain the coordinates as a numpy array</p>
 </div>
 <p>and write your own Python code.</p>
 <div class="section" id="flags">
-<span id="flags-label"></span><h2>8.1.1. Flags<a class="headerlink" href="#flags" title="Permalink to this headline">¶</a></h2>
+<span id="flags-label"></span><h2>8.4.1.1. Flags<a class="headerlink" href="#flags" title="Permalink to this headline">¶</a></h2>
 <p>(This is an advanced topic and can probably be skipped by most people.)</p>
 <p>There are a number flags that influence how MDAnalysis behaves. They are accessible
 through the pseudo-dictionary <code class="xref py py-data docutils literal"><span class="pre">MDAnalysis.core.flags</span></code>.</p>
@@ -140,7 +140,7 @@ raise a <code class="xref py py-exc docutils literal"><span class="pre">ValueErr
 </pre></div>
 </div>
 <div class="section" id="list-of-mdanalysis-flags-with-default-values">
-<h3>8.1.1.1. List of MDAnalysis flags with default values<a class="headerlink" href="#list-of-mdanalysis-flags-with-default-values" title="Permalink to this headline">¶</a></h3>
+<h3>8.4.1.1.1. List of MDAnalysis flags with default values<a class="headerlink" href="#list-of-mdanalysis-flags-with-default-values" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="MDAnalysis.core.__init__.flagsDocs">
 <em class="property">class </em><code class="descclassname">MDAnalysis.core.__init__.</code><code class="descname">flagsDocs</code><a class="reference internal" href="../../_modules/MDAnalysis/core/__init__.html#flagsDocs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.__init__.flagsDocs" title="Permalink to this definition">¶</a></dt>
@@ -198,7 +198,7 @@ periodicity; if periodicity is crucial, disable KDTree routines with</p>
 <p><strong>use_pbc</strong> = <em>False</em></p>
 <blockquote>
 <div><p>Choose whether to consider periodic boundary conditions when
-performing many <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup</span></code> methods.
+performing many <a class="reference internal" href="groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup</span></code></a> methods.
 This is set to <code class="docutils literal"><span class="pre">False</span></code> by default but can be enabled with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MDAnalysis</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">flags</span><span class="p">[</span><span class="s1">&#39;use_pbc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
@@ -211,9 +211,9 @@ This is set to <code class="docutils literal"><span class="pre">False</span></co
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Changing this to <code class="docutils literal"><span class="pre">True</span></code> changes the default behaviour of
-commonly used <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup</span></code> methods
+commonly used <a class="reference internal" href="groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup</span></code></a> methods
 such as <code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup.center_of_mass()</span></code>
-and <code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup.center_of_geometry()</span></code>!</p>
+and <a class="reference internal" href="groups.html#MDAnalysis.core.groups.AtomGroup.center_of_geometry" title="MDAnalysis.core.groups.AtomGroup.center_of_geometry"><code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup.center_of_geometry()</span></code></a>!</p>
 </div>
 </div></blockquote>
 <p><strong>permissive_pdb_reader</strong> = <em>True</em></p>
@@ -267,7 +267,7 @@ presented as read from the trajectories.</p>
 
 </div>
 <div class="section" id="classes">
-<h3>8.1.1.2. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<h3>8.4.1.1.2. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
 <dl class="data">
 <dt id="MDAnalysis.core.__init__.flags">
 <code class="descclassname">MDAnalysis.core.__init__.</code><code class="descname">flags</code><a class="headerlink" href="#MDAnalysis.core.__init__.flags" title="Permalink to this definition">¶</a></dt>
@@ -375,10 +375,10 @@ all values are directly set.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="AtomGroup.html" title="&lt;no title&gt;"
+          <a href="../visualization_modules.html" title="9. Visualization modules"
              >next</a> |</li>
         <li class="right" >
-          <a href="../core_modules.html" title="8. Core modules"
+          <a href="selection.html" title="8.3.1. Atom selection Hierarchy — MDAnalysis.core.selection"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../core_modules.html" >8. Core modules</a> &raquo;</li> 

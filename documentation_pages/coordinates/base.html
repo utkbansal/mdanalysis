@@ -328,7 +328,7 @@ cartesian coordinates (in MDAnalysis units, i.e. Å).</p>
 <p class="first admonition-title">Note</p>
 <p class="last">Normally one does not directly access <a class="reference internal" href="#MDAnalysis.coordinates.base.Timestep._pos" title="MDAnalysis.coordinates.base.Timestep._pos"><code class="xref py py-attr docutils literal"><span class="pre">_pos</span></code></a> but uses
 the <code class="xref py py-meth docutils literal"><span class="pre">coordinates()</span></code>
-method of an <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> but
+method of an <a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> but
 sometimes it can be faster to directly use the raw
 coordinates. Any changes to this array are immediately
 reflected in atom positions. If the frame is written to a new
@@ -348,8 +348,8 @@ units, i.e. typically Å/ps).</p>
 <p class="first admonition-title">Note</p>
 <p>Normally velocities are accessed through the
 <a class="reference internal" href="#MDAnalysis.coordinates.base.Timestep.velocities" title="MDAnalysis.coordinates.base.Timestep.velocities"><code class="xref py py-attr docutils literal"><span class="pre">velocities</span></code></a> or the
-<code class="xref py py-meth docutils literal"><span class="pre">velocities()</span></code>
-method of an <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></p>
+<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup.velocities" title="MDAnalysis.core.groups.AtomGroup.velocities"><code class="xref py py-meth docutils literal"><span class="pre">velocities()</span></code></a>
+method of an <a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a></p>
 <p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.base.Timestep._velocities" title="MDAnalysis.coordinates.base.Timestep._velocities"><code class="xref py py-attr docutils literal"><span class="pre">_velocities</span></code></a> only exists if the <a class="reference internal" href="#MDAnalysis.coordinates.base.Timestep.has_velocities" title="MDAnalysis.coordinates.base.Timestep.has_velocities"><code class="xref py py-attr docutils literal"><span class="pre">has_velocities</span></code></a>
 flag is True</p>
 </div>
@@ -1251,8 +1251,8 @@ is not appropriate then this method has to be overriden.</p>
 <dt id="MDAnalysis.coordinates.base.Writer.write">
 <code class="descname">write</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/base.html#Writer.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write current timestep, using the supplied <em>obj</em>.</p>
-<p>The argument should be a <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> or
-a <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> or a <a class="reference internal" href="#MDAnalysis.coordinates.base.Timestep" title="MDAnalysis.coordinates.base.Timestep"><code class="xref py py-class docutils literal"><span class="pre">Timestep</span></code></a> instance.</p>
+<p>The argument should be a <a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> or
+a <a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> or a <a class="reference internal" href="#MDAnalysis.coordinates.base.Timestep" title="MDAnalysis.coordinates.base.Timestep"><code class="xref py py-class docutils literal"><span class="pre">Timestep</span></code></a> instance.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The size of the <em>obj</em> must be the same as the number of atom

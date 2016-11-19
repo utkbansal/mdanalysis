@@ -157,7 +157,7 @@ Conformational distance matrix in triangular representation.</p>
 <code class="descclassname">MDAnalysis.analysis.encore.confdistmatrix.</code><code class="descname">get_distance_matrix</code><span class="sig-paren">(</span><em>ensemble</em>, <em>selection='name CA'</em>, <em>load_matrix=None</em>, <em>save_matrix=None</em>, <em>superimpose=True</em>, <em>superimposition_subset='name CA'</em>, <em>mass_weighted=True</em>, <em>ncores=1</em>, <em>*conf_dist_args</em>, <em>**conf_dist_kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/confdistmatrix.html#get_distance_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.confdistmatrix.get_distance_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves or calculates the conformational distance (RMSD)
 matrix. The distance matrix is calculated between all the frames of all
-the <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> objects given as input.
+the <a class="reference internal" href="../../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> objects given as input.
 The order of the matrix elements depends on the order of the coordinates
 of the ensembles and on the order of the input ensembles themselves,
 therefore the order of the input list is significant.</p>
@@ -171,7 +171,7 @@ an encore.utils.TriangularMatrix object.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ensemble</strong> (<em>Universe</em>) &#8211; </li>
+<li><strong>ensemble</strong> (<a class="reference internal" href="../../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><em>Universe</em></a>) &#8211; </li>
 <li><strong>selection</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Atom selection string in the MDAnalysis format. Default is &#8220;name CA&#8221;</li>
 <li><strong>load_matrix</strong> (<em>str, optional</em>) &#8211; Load similarity/dissimilarity matrix from numpy binary file instead
 of calculating it (default is None). A filename is required.</li>

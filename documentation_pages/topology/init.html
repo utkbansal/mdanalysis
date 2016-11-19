@@ -176,13 +176,11 @@ is read by default</td>
 <td>pdb</td>
 <td>As PDB except
 icodes</td>
-<td><p class="first">Extended PDB format (can use 5-digit residue
-numbers). To use, specify the format &#8220;XPBD&#8221;</p>
-<blockquote class="last">
-<div>explicitly:
+<td>Extended PDB format (can use 5-digit residue
+numbers). To use, specify the format &#8220;XPBD&#8221;
+explicitly:
 <code class="docutils literal"><span class="pre">Universe(...,</span> <span class="pre">topology_format=&quot;XPDB&quot;)</span></code>.
-Module <a class="reference internal" href="../coordinates/PDB.html#module-MDAnalysis.coordinates.PDB" title="MDAnalysis.coordinates.PDB"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates.PDB</span></code></a></div></blockquote>
-</td>
+Module <a class="reference internal" href="../coordinates/PDB.html#module-MDAnalysis.coordinates.PDB" title="MDAnalysis.coordinates.PDB"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates.PDB</span></code></a></td>
 </tr>
 <tr class="row-even"><td>PQR <a class="footnote-reference" href="#a" id="id4">[1]</a></td>
 <td>pqr</td>
@@ -331,9 +329,9 @@ segids, models</td>
 <tbody valign="top">
 <tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>, <a class="fn-backref" href="#id3">3</a>, <a class="fn-backref" href="#id4">4</a>, <a class="fn-backref" href="#id5">5</a>, <a class="fn-backref" href="#id6">6</a>, <a class="fn-backref" href="#id7">7</a>, <a class="fn-backref" href="#id9">8</a>, <a class="fn-backref" href="#id10">9</a>, <a class="fn-backref" href="#id11">10</a>, <a class="fn-backref" href="#id12">11</a>, <a class="fn-backref" href="#id13">12</a>)</em> This format can also be used to provide <em>coordinates</em> so that
 it is possible to create a full
-<code class="xref py py-mod docutils literal"><span class="pre">Universe</span></code> by simply providing a
-file of this format as the sole argument to
-<code class="xref py py-mod docutils literal"><span class="pre">Universe</span></code>: <code class="docutils literal"><span class="pre">u</span> <span class="pre">=</span>
+<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-mod docutils literal"><span class="pre">Universe</span></code></a> by simply providing
+a file of this format as the sole argument to
+<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-mod docutils literal"><span class="pre">Universe</span></code></a>: <code class="docutils literal"><span class="pre">u</span> <span class="pre">=</span>
 <span class="pre">Universe(filename)</span></code></td></tr>
 </tbody>
 </table>
@@ -350,9 +348,13 @@ in <a class="reference internal" href="TPRParser.html#module-MDAnalysis.topology
 <p class="last"><a class="reference internal" href="../coordinates_modules.html#coordinates"><span>Coordinates modules</span></a> with the <a class="reference internal" href="../coordinates/init.html#id1"><span>Table of supported coordinate formats</span></a></p>
 </div>
 <div class="section" id="developer-notes">
-<h2>4.1.1. Developer Notes<a class="headerlink" href="#developer-notes" title="Permalink to this headline">¶</a></h2>
+<span id="topology-parsers-developer-notes"></span><h2>4.1.1. Developer Notes<a class="headerlink" href="#developer-notes" title="Permalink to this headline">¶</a></h2>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.8.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.16.0: </span>The new array-based topology system completely replaced the old
+system that was based on a list of Atom instances.</p>
 </div>
 <p>Topology information consists of data that do not change over time,
 i.e. information that is the same for all time steps of a
@@ -368,38 +370,25 @@ atoms found in the topology.</li>
 <li>dihedral angles (quadruplets of atoms) — proper and improper
 dihedrals should be treated separately</li>
 </ul>
-<p>At the moment, only the identity of atoms is mandatory and at its most
-basic, the topology is simply a list of atoms to be associated with a
-list of coordinates.</p>
-<p>The current implementation contains submodules for different topology
-file types. Each submodule <em>must</em> contain a function <code class="xref py py-func docutils literal"><span class="pre">parse()</span></code>:</p>
-<p>The function returns the basic MDAnalysis representation of the
-topology. At the moment, this is simply a dictionary with keys
-<em>atoms</em>, <em>bonds</em>, <em>angles</em>, <em>dihedrals</em>, <em>impropers</em>. The dictionary is
-stored as <code class="xref py py-attr docutils literal"><span class="pre">MDAnalysis.AtomGroup.Universe._topology</span></code>.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The internal dictionary representation is subject to change. User
-code should <em>not</em> access this dictionary directly. The information
-provided here is solely for developers who need to work with the
-existing parsers.</p>
-</div>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference external" href="https://github.com/MDAnalysis/mdanalysis/wiki/TopologyDataStructures">Topology Data Structures Wiki page</a></p>
-</div>
-<p>The format of the individual keys is the following (see
-<code class="xref py py-mod docutils literal"><span class="pre">PSFParser</span></code> for a reference implementation):</p>
+<p>Topology readers are generally called &#8220;parsers&#8221; in MDAnalysis (for
+historical reasons and in order to distinguish them from coordinate
+&#8220;readers&#8221;). All parsers are derived from
+<a class="reference internal" href="base.html#MDAnalysis.topology.base.TopologyReader" title="MDAnalysis.topology.base.TopologyReader"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.topology.base.TopologyReader</span></code></a> and have a
+<code class="xref py py-meth docutils literal"><span class="pre">parse()</span></code> method that
+returns a <a class="reference internal" href="../core/topology.html#MDAnalysis.core.topology.Topology" title="MDAnalysis.core.topology.Topology"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.topology.Topology</span></code></a> instance.</p>
 <div class="section" id="atoms">
 <h3>4.1.1.1. atoms<a class="headerlink" href="#atoms" title="Permalink to this headline">¶</a></h3>
-<p>The <strong>atoms</strong> are represented as a <a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> of
-<code class="xref py py-class docutils literal"><span class="pre">Atom</span></code> instances. The parser needs
-to initialize the <code class="xref py py-class docutils literal"><span class="pre">Atom</span></code> objects
-with the data read from the topology file.</p>
-<p>The order of atoms in the list must correspond to the sequence of
-atoms in the topology file. The atom&#8217;s
-<code class="xref py py-attr docutils literal"><span class="pre">index</span></code> corresponds to its
-index in this list.</p>
+<p>The <strong>atoms</strong> appear to the user as an array of
+<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.Atom" title="MDAnalysis.core.groups.Atom"><code class="xref py py-class docutils literal"><span class="pre">Atom</span></code></a> instances. However, under the
+hood this is essentially only an array of atom indices that are used
+to index the various components of the topology database
+<a class="reference internal" href="../core/topology.html#MDAnalysis.core.topology.Topology" title="MDAnalysis.core.topology.Topology"><code class="xref py py-class docutils literal"><span class="pre">Topology</span></code></a>. The parser needs to
+initialize the <a class="reference internal" href="../core/topology.html#MDAnalysis.core.topology.Topology" title="MDAnalysis.core.topology.Topology"><code class="xref py py-class docutils literal"><span class="pre">Topology</span></code></a> with the
+data read from the topology file.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../core_modules.html#topology-system-label"><span>Topology system</span></a></p>
+</div>
 </div>
 <div class="section" id="bonds">
 <h3>4.1.1.2. bonds<a class="headerlink" href="#bonds" title="Permalink to this headline">¶</a></h3>

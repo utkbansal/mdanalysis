@@ -111,15 +111,15 @@ treats atoms, groups of atoms, trajectories, etc as different
 objects. Each object has a number of operations defined on itself
 (also known as &#8220;methods&#8221;) and also contains values describing the
 object (&#8220;attributes&#8221;). For example, a
-<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> object has a
+<a class="reference internal" href="core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> object has a
 <code class="xref py py-meth docutils literal"><span class="pre">center_of_mass()</span></code> method that
 returns the center of mass of the group of atoms. It also contains an
-attribute called <code class="xref py py-attr docutils literal"><span class="pre">residues</span></code>
+attribute called <a class="reference internal" href="core/groups.html#MDAnalysis.core.groups.AtomGroup.residues" title="MDAnalysis.core.groups.AtomGroup.residues"><code class="xref py py-attr docutils literal"><span class="pre">residues</span></code></a>
 that lists all the residues that belong to the group. Using methods
-such as <code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code>
+such as <a class="reference internal" href="core/groups.html#MDAnalysis.core.groups.AtomGroup.select_atoms" title="MDAnalysis.core.groups.AtomGroup.select_atoms"><code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code></a>
 (which uses <a class="reference external" href="http://www.charmm.org/documentation/c37b1/select.html">CHARMM-style</a> atom <a class="reference internal" href="selections.html#selection-commands-label"><span>Selection Commands</span></a>) one
 can create new objects (in this case, another
-<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code>).</p>
+<a class="reference internal" href="core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>).</p>
 <p>A typical usage pattern is to iterate through a trajectory and analyze
 coordinates for every frame. In the following example the end-to-end distance
 of a protein and the radius of gyration of the backbone atoms are calculated:</p>
@@ -157,7 +157,7 @@ allows one to interactively explore the objects (using TAB-completion and
 online help), do analysis and immediately plot results. The examples in this manual
 are typically run from an interactive <strong class="program">ipython</strong> session.</p>
 <p>Invariably, a MDAnalysis session starts with loading data into the
-<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> class (which can be accessed
+<a class="reference internal" href="core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> class (which can be accessed
 as <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.Universe</span></code>):</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">MDAnalysis</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="n">universe</span> <span class="o">=</span> <span class="n">Universe</span><span class="p">(</span><span class="n">topology</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>
@@ -184,7 +184,7 @@ trajectory is loaded with</p>
 </div>
 <p>(The <code class="docutils literal"><span class="pre">&gt;&gt;&gt;</span></code> signs are the Python input prompt and are not to be typed; they
 just make clear in the examples what is input and what is output.)</p>
-<p>The <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> contains a number of important attributes,
+<p>The <a class="reference internal" href="core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> contains a number of important attributes,
 the most important ones of which is
 <code class="xref py py-attr docutils literal"><span class="pre">atoms</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">u</span><span class="o">.</span><span class="n">atoms</span>
@@ -192,9 +192,9 @@ the most important ones of which is
 </pre></div>
 </div>
 <p><code class="xref py py-attr docutils literal"><span class="pre">Universe.atoms</span></code> is a
-<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> and can be thought of as
-list consisting of <code class="xref py py-class docutils literal"><span class="pre">Atom</span></code>
-objects. The <code class="xref py py-class docutils literal"><span class="pre">Atom</span></code> is the
+<a class="reference internal" href="core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> and can be thought of as
+list consisting of <a class="reference internal" href="core/groups.html#MDAnalysis.core.groups.Atom" title="MDAnalysis.core.groups.Atom"><code class="xref py py-class docutils literal"><span class="pre">Atom</span></code></a>
+objects. The <a class="reference internal" href="core/groups.html#MDAnalysis.core.groups.Atom" title="MDAnalysis.core.groups.Atom"><code class="xref py py-class docutils literal"><span class="pre">Atom</span></code></a> is the
 elementary and fundamental object in MDAnalysis.</p>
 <p>The <code class="xref py py-attr docutils literal"><span class="pre">MDAnalysis.Universe.trajectory</span></code> attribute gives access to the coordinates
 over time:</p>
@@ -203,7 +203,7 @@ over time:</p>
 </pre></div>
 </div>
 <p>Finally, the <code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.Universe.select_atoms()</span></code> method generates a new
-<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> according to a selection criterion</p>
+<a class="reference internal" href="core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> according to a selection criterion</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calphas</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s2">&quot;name CA&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">calphas</span>
 <span class="go">&lt;AtomGroup with 214 atoms&gt;</span>

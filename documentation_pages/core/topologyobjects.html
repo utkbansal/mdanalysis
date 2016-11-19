@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>8.2. Core Topology Objects — MDAnalysis.core.topologyobjects &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    <title>8.2.3. Core Topology Objects — MDAnalysis.core.topologyobjects &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="../../_static/mdanalysis-logo.ico"/>
     <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../index.html" />
     <link rel="up" title="8. Core modules" href="../core_modules.html" />
-    <link rel="next" title="8.3. Compute observable timeseries from trajectories — MDAnalysis.core.Timeseries" href="Timeseries.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="Selection.html" /> 
+    <link rel="next" title="8.2.4. Topology attribute objects — MDAnalysis.core.topologyattrs" href="topologyattrs.html" />
+    <link rel="prev" title="8.2.2. Hierarchy levels — MDAnalysis.core.levels" href="levels.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -44,10 +44,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Timeseries.html" title="8.3. Compute observable timeseries from trajectories — MDAnalysis.core.Timeseries"
+          <a href="topologyattrs.html" title="8.2.4. Topology attribute objects — MDAnalysis.core.topologyattrs"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Selection.html" title="&lt;no title&gt;"
+          <a href="levels.html" title="8.2.2. Hierarchy levels — MDAnalysis.core.levels"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../core_modules.html" accesskey="U">8. Core modules</a> &raquo;</li> 
@@ -59,11 +59,11 @@
               <img class="logo" src="../../_static/mdanalysis-logo-200x150.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Selection.html"
-                        title="previous chapter">&lt;no title&gt;</a></p>
+  <p class="topless"><a href="levels.html"
+                        title="previous chapter">8.2.2. Hierarchy levels &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.core.levels</span></code></a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="Timeseries.html"
-                        title="next chapter">8.3. Compute observable timeseries from trajectories &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.core.Timeseries</span></code></a></p>
+  <p class="topless"><a href="topologyattrs.html"
+                        title="next chapter">8.2.4. Topology attribute objects &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.core.topologyattrs</span></code></a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -93,12 +93,12 @@
           <div class="body" role="main">
             
   <span class="target" id="module-MDAnalysis.core.topologyobjects"></span><div class="section" id="core-topology-objects-mdanalysis-core-topologyobjects">
-<h1>8.2. Core Topology Objects &#8212; <a class="reference internal" href="#module-MDAnalysis.core.topologyobjects" title="MDAnalysis.core.topologyobjects"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.core.topologyobjects</span></code></a><a class="headerlink" href="#core-topology-objects-mdanalysis-core-topologyobjects" title="Permalink to this headline">¶</a></h1>
+<h1>8.2.3. Core Topology Objects &#8212; <a class="reference internal" href="#module-MDAnalysis.core.topologyobjects" title="MDAnalysis.core.topologyobjects"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.core.topologyobjects</span></code></a><a class="headerlink" href="#core-topology-objects-mdanalysis-core-topologyobjects" title="Permalink to this headline">¶</a></h1>
 <p>The building blocks for MDAnalysis&#8217; description of topology</p>
 <dl class="class">
 <dt id="MDAnalysis.core.topologyobjects.Angle">
 <em class="property">class </em><code class="descclassname">MDAnalysis.core.topologyobjects.</code><code class="descname">Angle</code><span class="sig-paren">(</span><em>ix</em>, <em>universe</em>, <em>type=None</em>, <em>guessed=False</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/topologyobjects.html#Angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.topologyobjects.Angle" title="Permalink to this definition">¶</a></dt>
-<dd><p>An angle between three <code class="xref py py-class docutils literal"><span class="pre">Atom</span></code> instances.
+<dd><p>An angle between three <a class="reference internal" href="groups.html#MDAnalysis.core.groups.Atom" title="MDAnalysis.core.groups.Atom"><code class="xref py py-class docutils literal"><span class="pre">Atom</span></code></a> instances.
 Atom 2 is the apex of the angle</p>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.8.</span></p>
@@ -169,7 +169,7 @@ Atom 2 is the apex of the angle</p>
 <dl class="class">
 <dt id="MDAnalysis.core.topologyobjects.Bond">
 <em class="property">class </em><code class="descclassname">MDAnalysis.core.topologyobjects.</code><code class="descname">Bond</code><span class="sig-paren">(</span><em>ix</em>, <em>universe</em>, <em>type=None</em>, <em>guessed=False</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/topologyobjects.html#Bond"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.topologyobjects.Bond" title="Permalink to this definition">¶</a></dt>
-<dd><p>A bond between two <code class="xref py py-class docutils literal"><span class="pre">Atom</span></code> instances.</p>
+<dd><p>A bond between two <a class="reference internal" href="groups.html#MDAnalysis.core.groups.Atom" title="MDAnalysis.core.groups.Atom"><code class="xref py py-class docutils literal"><span class="pre">Atom</span></code></a> instances.</p>
 <p>Two <a class="reference internal" href="#MDAnalysis.core.topologyobjects.Bond" title="MDAnalysis.core.topologyobjects.Bond"><code class="xref py py-class docutils literal"><span class="pre">Bond</span></code></a> instances can be compared with the <code class="docutils literal"><span class="pre">==</span></code> and
 <code class="docutils literal"><span class="pre">!=</span></code> operators. A bond is equal to another if the same atom
 numbers are connected and they have the same bond order. The
@@ -216,7 +216,7 @@ bond was guessed.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li>the other <code class="xref py py-class docutils literal"><span class="pre">Atom</span></code> in this</li>
+<li>the other <a class="reference internal" href="groups.html#MDAnalysis.core.groups.Atom" title="MDAnalysis.core.groups.Atom"><code class="xref py py-class docutils literal"><span class="pre">Atom</span></code></a> in this</li>
 <li><em>bond</em></li>
 </ul>
 </td>
@@ -240,7 +240,7 @@ bond was guessed.</p>
 <dt id="MDAnalysis.core.topologyobjects.Dihedral">
 <em class="property">class </em><code class="descclassname">MDAnalysis.core.topologyobjects.</code><code class="descname">Dihedral</code><span class="sig-paren">(</span><em>ix</em>, <em>universe</em>, <em>type=None</em>, <em>guessed=False</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/topologyobjects.html#Dihedral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.topologyobjects.Dihedral" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dihedral (dihedral angle) between four
-<code class="xref py py-class docutils literal"><span class="pre">Atom</span></code> instances.</p>
+<a class="reference internal" href="groups.html#MDAnalysis.core.groups.Atom" title="MDAnalysis.core.groups.Atom"><code class="xref py py-class docutils literal"><span class="pre">Atom</span></code></a> instances.</p>
 <p>The dihedral is defined as the angle between the planes formed by
 Atoms (1, 2, 3) and (2, 3, 4).</p>
 <div class="versionadded">
@@ -320,7 +320,7 @@ between the planes spanned by atoms (0,1,2) and (1,2,3)):</p>
 <dt id="MDAnalysis.core.topologyobjects.ImproperDihedral">
 <em class="property">class </em><code class="descclassname">MDAnalysis.core.topologyobjects.</code><code class="descname">ImproperDihedral</code><span class="sig-paren">(</span><em>ix</em>, <em>universe</em>, <em>type=None</em>, <em>guessed=False</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/topologyobjects.html#ImproperDihedral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.topologyobjects.ImproperDihedral" title="Permalink to this definition">¶</a></dt>
 <dd><p>Improper Dihedral (improper dihedral angle) between four
-<code class="xref py py-class docutils literal"><span class="pre">Atom</span></code> instances.</p>
+<a class="reference internal" href="groups.html#MDAnalysis.core.groups.Atom" title="MDAnalysis.core.groups.Atom"><code class="xref py py-class docutils literal"><span class="pre">Atom</span></code></a> instances.</p>
 <p>MDAnalysis treats the improper dihedral angle as the angle between
 the planes formed by Atoms (1, 2, 3) and (2, 3, 4).</p>
 <div class="admonition warning">
@@ -464,11 +464,11 @@ otherwise returns <code class="docutils literal"><span class="pre">None</span></
 </pre></div>
 </div>
 <p>Where <em>key</em> describes the desired bond as a tuple of the involved
-<code class="xref py py-class docutils literal"><span class="pre">Atom</span></code> types, as defined by the .type Atom
+<a class="reference internal" href="groups.html#MDAnalysis.core.groups.Atom" title="MDAnalysis.core.groups.Atom"><code class="xref py py-class docutils literal"><span class="pre">Atom</span></code></a> types, as defined by the .type Atom
 attribute). A list of available keys can be displayed using the
 <a class="reference internal" href="#MDAnalysis.core.topologyobjects.TopologyGroup.types" title="MDAnalysis.core.topologyobjects.TopologyGroup.types"><code class="xref py py-meth docutils literal"><span class="pre">types()</span></code></a> method.</p>
 <p>Alternatively, all the bonds which are in a given
-<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> can be extracted using
+<a class="reference internal" href="groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> can be extracted using
 <a class="reference internal" href="#MDAnalysis.core.topologyobjects.TopologyGroup.atomgroup_intersection" title="MDAnalysis.core.topologyobjects.TopologyGroup.atomgroup_intersection"><code class="xref py py-meth docutils literal"><span class="pre">atomgroup_intersection()</span></code></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">tg2</span> <span class="o">=</span> <span class="n">tg</span><span class="o">.</span><span class="n">atomgroup_intersection</span><span class="p">(</span><span class="n">ag</span><span class="p">)</span>
 </pre></div>
@@ -853,10 +853,10 @@ of the type too, i.e.:</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Timeseries.html" title="8.3. Compute observable timeseries from trajectories — MDAnalysis.core.Timeseries"
+          <a href="topologyattrs.html" title="8.2.4. Topology attribute objects — MDAnalysis.core.topologyattrs"
              >next</a> |</li>
         <li class="right" >
-          <a href="Selection.html" title="&lt;no title&gt;"
+          <a href="levels.html" title="8.2.2. Hierarchy levels — MDAnalysis.core.levels"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../core_modules.html" >8. Core modules</a> &raquo;</li> 

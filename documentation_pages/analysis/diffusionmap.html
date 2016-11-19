@@ -294,13 +294,13 @@ This matrix is symmetric with zeros on the diagonal.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>u</strong> (universe <cite>~MDAnalysis.core.AtomGroup.Universe</cite>) &#8211; The MD Trajectory for dimension reduction, remember that
+<li><strong>u</strong> (universe <cite>~MDAnalysis.core.universe.Universe</cite>) &#8211; The MD Trajectory for dimension reduction, remember that
 computational cost of eigenvalue decomposition
 scales at O(N^3) where N is the number of frames.
 Cost can be reduced by increasing step interval or specifying a
 start and stop.</li>
 <li><strong>select</strong> (<em>str, optional</em>) &#8211; Any valid selection string for
-<code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code>
+<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup.select_atoms" title="MDAnalysis.core.groups.AtomGroup.select_atoms"><code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code></a>
 This selection of atoms is used to calculate the RMSD between
 different frames. Water should be excluded.</li>
 <li><strong>metric</strong> (<em>function, optional</em>) &#8211; Maps two numpy arrays to a float, is positive definite and

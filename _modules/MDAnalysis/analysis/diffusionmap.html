@@ -277,7 +277,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        u : universe `~MDAnalysis.core.AtomGroup.Universe`</span>
+<span class="sd">        u : universe `~MDAnalysis.core.universe.Universe`</span>
 <span class="sd">            The MD Trajectory for dimension reduction, remember that</span>
 <span class="sd">            computational cost of eigenvalue decomposition</span>
 <span class="sd">            scales at O(N^3) where N is the number of frames.</span>
@@ -285,7 +285,7 @@
 <span class="sd">            start and stop.</span>
 <span class="sd">        select: str, optional</span>
 <span class="sd">            Any valid selection string for</span>
-<span class="sd">            :meth:`~MDAnalysis.core.AtomGroup.AtomGroup.select_atoms`</span>
+<span class="sd">            :meth:`~MDAnalysis.core.groups.AtomGroup.select_atoms`</span>
 <span class="sd">            This selection of atoms is used to calculate the RMSD between</span>
 <span class="sd">            different frames. Water should be excluded.</span>
 <span class="sd">        metric : function, optional</span>

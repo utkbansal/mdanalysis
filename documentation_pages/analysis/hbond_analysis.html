@@ -116,7 +116,7 @@
 </tr>
 </tbody>
 </table>
-<p>Given a <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> (simulation
+<p>Given a <a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> (simulation
 trajectory with 1 or more frames) measure all hydrogen bonds for each
 frame between selections 1 and 2.</p>
 <p>The <a class="reference internal" href="#MDAnalysis.analysis.hbonds.hbond_analysis.HydrogenBondAnalysis" title="MDAnalysis.analysis.hbonds.hbond_analysis.HydrogenBondAnalysis"><code class="xref py py-class docutils literal"><span class="pre">HydrogenBondAnalysis</span></code></a> class is modeled after the <a class="reference external" href="http://www.ks.uiuc.edu/Research/vmd/plugins/hbonds/">VMD
@@ -702,7 +702,7 @@ facilitate understanding of the internals of
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of hydrogens (can be a
-<code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code>) or empty list
+<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>) or empty list
 <code class="docutils literal"><span class="pre">[]</span></code> if none were found.</td>
 </tr>
 </tbody>
@@ -860,7 +860,7 @@ with e.g. <a class="reference external" href="http://pypi.python.org/pypi/RecSQL
 
 <dl class="attribute">
 <dt id="MDAnalysis.analysis.hbonds.hbond_analysis.HydrogenBondAnalysis.r_cov">
-<code class="descname">r_cov</code><em class="property"> = defaultdict(&lt;function &lt;lambda&gt; at 0x2b36bedd3668&gt;, {'P': 1.58, 'S': 1.55, 'O': 1.31, 'N': 1.31})</em><a class="headerlink" href="#MDAnalysis.analysis.hbonds.hbond_analysis.HydrogenBondAnalysis.r_cov" title="Permalink to this definition">¶</a></dt>
+<code class="descname">r_cov</code><em class="property"> = defaultdict(&lt;function &lt;lambda&gt; at 0x2b84ca240398&gt;, {'P': 1.58, 'S': 1.55, 'O': 1.31, 'N': 1.31})</em><a class="headerlink" href="#MDAnalysis.analysis.hbonds.hbond_analysis.HydrogenBondAnalysis.r_cov" title="Permalink to this definition">¶</a></dt>
 <dd><p>A <a class="reference external" href="http://docs.python.org/library/collections.html#collections.defaultdict" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.defaultdict</span></code></a> of covalent radii of common donors
 (used in :meth`_get_bonded_hydrogens_list` to check if a hydrogen is
 sufficiently close to its donor heavy atom). Values are stored for

@@ -222,7 +222,7 @@
 
 <div class="viewcode-block" id="Bond"><a class="viewcode-back" href="../../../documentation_pages/core/topologyobjects.html#MDAnalysis.core.topologyobjects.Bond">[docs]</a><span class="k">class</span> <span class="nc">Bond</span><span class="p">(</span><span class="n">TopologyObject</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;A bond between two :class:`~MDAnalysis.core.AtomGroup.Atom` instances.</span>
+    <span class="sd">&quot;&quot;&quot;A bond between two :class:`~MDAnalysis.core.groups.Atom` instances.</span>
 
 <span class="sd">    Two :class:`Bond` instances can be compared with the ``==`` and</span>
 <span class="sd">    ``!=`` operators. A bond is equal to another if the same atom</span>
@@ -247,7 +247,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        the other :class:`~MDAnalysis.core.AtomGroup.Atom` in this</span>
+<span class="sd">        the other :class:`~MDAnalysis.core.groups.Atom` in this</span>
 <span class="sd">        bond</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">atom</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
@@ -276,7 +276,7 @@
 
 <div class="viewcode-block" id="Angle"><a class="viewcode-back" href="../../../documentation_pages/core/topologyobjects.html#MDAnalysis.core.topologyobjects.Angle">[docs]</a><span class="k">class</span> <span class="nc">Angle</span><span class="p">(</span><span class="n">TopologyObject</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;An angle between three :class:`~MDAnalysis.core.AtomGroup.Atom` instances.</span>
+    <span class="sd">&quot;&quot;&quot;An angle between three :class:`~MDAnalysis.core.groups.Atom` instances.</span>
 <span class="sd">    Atom 2 is the apex of the angle</span>
 
 <span class="sd">    .. versionadded:: 0.8</span>
@@ -314,7 +314,7 @@
 <div class="viewcode-block" id="Dihedral"><a class="viewcode-back" href="../../../documentation_pages/core/topologyobjects.html#MDAnalysis.core.topologyobjects.Dihedral">[docs]</a><span class="k">class</span> <span class="nc">Dihedral</span><span class="p">(</span><span class="n">TopologyObject</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;Dihedral (dihedral angle) between four</span>
-<span class="sd">    :class:`~MDAnalysis.core.AtomGroup.Atom` instances.</span>
+<span class="sd">    :class:`~MDAnalysis.core.groups.Atom` instances.</span>
 
 <span class="sd">    The dihedral is defined as the angle between the planes formed by</span>
 <span class="sd">    Atoms (1, 2, 3) and (2, 3, 4).</span>
@@ -363,7 +363,7 @@
 <div class="viewcode-block" id="ImproperDihedral"><a class="viewcode-back" href="../../../documentation_pages/core/topologyobjects.html#MDAnalysis.core.topologyobjects.ImproperDihedral">[docs]</a><span class="k">class</span> <span class="nc">ImproperDihedral</span><span class="p">(</span><span class="n">Dihedral</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Improper Dihedral (improper dihedral angle) between four</span>
-<span class="sd">    :class:`~MDAnalysis.core.AtomGroup.Atom` instances.</span>
+<span class="sd">    :class:`~MDAnalysis.core.groups.Atom` instances.</span>
 
 <span class="sd">    MDAnalysis treats the improper dihedral angle as the angle between</span>
 <span class="sd">    the planes formed by Atoms (1, 2, 3) and (2, 3, 4).</span>
@@ -541,12 +541,12 @@
 <span class="sd">      tg2 = tg.select_bonds([key])</span>
 
 <span class="sd">    Where *key* describes the desired bond as a tuple of the involved</span>
-<span class="sd">    :class:`~MDAnalysis.AtomGroup.Atom` types, as defined by the .type Atom</span>
+<span class="sd">    :class:`~MDAnalysis.core.groups.Atom` types, as defined by the .type Atom</span>
 <span class="sd">    attribute). A list of available keys can be displayed using the</span>
 <span class="sd">    :meth:`types` method.</span>
 
 <span class="sd">    Alternatively, all the bonds which are in a given</span>
-<span class="sd">    :class:`~MDAnalysis.AtomGroup.AtomGroup` can be extracted using</span>
+<span class="sd">    :class:`~MDAnalysis.core.groups.AtomGroup` can be extracted using</span>
 <span class="sd">    :meth:`atomgroup_intersection`::</span>
 
 <span class="sd">      tg2 = tg.atomgroup_intersection(ag)</span>

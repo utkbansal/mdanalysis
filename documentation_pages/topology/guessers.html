@@ -184,7 +184,7 @@ guessed by <a class="reference internal" href="#MDAnalysis.topology.guessers.gue
 <dd><p>Guess if bonds exist between two atoms based on their distance.</p>
 <p>Bond between two atoms is created, if the two atoms are within</p>
 <div class="math">
-\[\begin{split}d &lt; f * (R_1 + R_2)\end{split}\]</div>
+\[\begin{split}d &lt; f \cdot (R_1 + R_2)\end{split}\]</div>
 <p>of each other, where <span class="math">\(R_1\)</span> and <span class="math">\(R_2\)</span> are the VdW radii
 of the atoms and <span class="math">\(f\)</span> is an ad-hoc <em>fudge_factor</em>. This is
 the <a class="reference external" href="http://www.ks.uiuc.edu/Research/vmd/vmd-1.9.1/ug/node26.html">same algorithm that VMD uses</a>.</p>
@@ -193,24 +193,29 @@ the <a class="reference external" href="http://www.ks.uiuc.edu/Research/vmd/vmd-
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fudge_factor</strong> &#8211; The factor by which atoms must overlap eachother to be considered a
+<li><strong>atoms</strong> (<a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><em>AtomGroup</em></a>) &#8211; atoms for which bonds should be guessed</li>
+<li><strong>coords</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; coordinates of the atoms (i.e., <cite>AtomGroup.positions)</cite>)</li>
+<li><strong>fudge_factor</strong> (<em>float, optional</em>) &#8211; The factor by which atoms must overlap eachother to be considered a
 bond.  Larger values will increase the number of bonds found. [0.72]</li>
-<li><strong>vdwradii</strong> &#8211; To supply custom vdwradii for atoms in the algorithm. Must be a dict
+<li><strong>vdwradii</strong> (<em>dict, optional</em>) &#8211; To supply custom vdwradii for atoms in the algorithm. Must be a dict
 of format {type:radii}. The default table of van der Waals radii is
 hard-coded as <code class="xref py py-data docutils literal"><span class="pre">MDAnalysis.topology.tables.vdwradii</span></code>.  Any user
 defined vdwradii passed as an argument will supercede the table
 values. [<code class="docutils literal"><span class="pre">None</span></code>]</li>
-<li><strong>lower_bound</strong> &#8211; The minimum bond length. All bonds found shorter than this length will
+<li><strong>lower_bound</strong> (<em>float, optional</em>) &#8211; The minimum bond length. All bonds found shorter than this length will
 be ignored. This is useful for parsing PDB with altloc records where
 atoms with altloc A and B maybe very close together and there should be
 no chemical bond between them. [0.1]</li>
-<li><strong>box</strong> &#8211; Bonds are found using a distance search, if unit cell information is
+<li><strong>box</strong> (<em>dimensions, optional</em>) &#8211; Bonds are found using a distance search, if unit cell information is
 given, periodic boundary conditions will be considered in the distance
 search. [<code class="docutils literal"><span class="pre">None</span></code>]</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of tuples suitable for use in Universe topology building.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">List of tuples suitable for use in Universe topology building.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)">list</a></p>
 </td>
 </tr>
 </tbody>
@@ -224,7 +229,7 @@ structure is correct. This is wrong and will burn somebody.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">ValueError if inputs are malformed or <em>vdwradii</em> data is missing.</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> if inputs are malformed or <cite>vdwradii</cite> data is missing.</td>
 </tr>
 </tbody>
 </table>
