@@ -131,22 +131,26 @@
   <span class="target" id="module-MDAnalysis.coordinates.__init__"></span><div class="section" id="trajectory-readers-and-writers-mdanalysis-coordinates">
 <h1>5.1. Trajectory Readers and Writers  &#8212; <code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates</span></code><a class="headerlink" href="#trajectory-readers-and-writers-mdanalysis-coordinates" title="Permalink to this headline">¶</a></h1>
 <p>The coordinates submodule contains code to read, write and store coordinate
-information,
-either single frames (e.g. the GRO module) or trajectories (such as the DCD
-reader).</p>
+information, either single frames (e.g., the <a class="reference internal" href="GRO.html#module-MDAnalysis.coordinates.GRO" title="MDAnalysis.coordinates.GRO"><code class="xref py py-mod docutils literal"><span class="pre">GRO</span></code></a>
+format) or trajectories (such as the <code class="xref py py-mod docutils literal"><span class="pre">DCD</span></code> format);
+see the <a class="reference internal" href="#id1"><span>Table of supported coordinate formats</span></a> for all formats.</p>
+<p>MDAnalysis calls the classes that read a coordinate trajectory and make the
+data available <em>&#8220;Readers&#8221;</em>. Similarly, classes that write out coordinates are
+called <em>&#8220;Writers&#8221;</em>. Readers and Writers provide a common interface to the
+underlying coordinate data. This abstraction of coordinate access through an
+object-oriented interface is one of the key capabilities of MDAnalysis.</p>
 <div class="section" id="readers">
 <h2>5.1.1. Readers<a class="headerlink" href="#readers" title="Permalink to this headline">¶</a></h2>
-<p>All Readers are supposed to expose a <code class="xref py py-class docutils literal"><span class="pre">ProtoReader</span></code> object
-that presents a common <a class="reference internal" href="#trajectory-api">Trajectory API</a> to other code.</p>
-<p>The <a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> contains the API
-entry point attribute</p>
-<blockquote>
-<div><code class="xref py py-attr docutils literal"><span class="pre">Universe.trajectory</span></code></div></blockquote>
-<p>that points to the actual <a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Reader" title="MDAnalysis.coordinates.base.Reader"><code class="xref py py-class docutils literal"><span class="pre">Reader</span></code></a>
-object; all Readers are supposed to be accessible through this entry
-point in the same manner (&#8220;<a class="reference external" href="http://c2.com/cgi/wiki?DuckTyping">duck typing</a>&#8221;).</p>
-<p>There are three types of base Reader which act as starting points
-for each specific format. These are:</p>
+<p>All Readers are based on a <code class="xref py py-class docutils literal"><span class="pre">ProtoReader</span></code> class that defines a common
+;ref:<cite>Trajectory API</cite> and allows other code to interface with all trajectory
+formats in the same way, independent of the details of the trajectory format
+itself.</p>
+<p>The <a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> contains the API entry point
+attribute <code class="xref py py-attr docutils literal"><span class="pre">Universe.trajectory</span></code> that points to the actual
+<a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Reader" title="MDAnalysis.coordinates.base.Reader"><code class="xref py py-class docutils literal"><span class="pre">Reader</span></code></a> object; all Readers are accessible
+through this entry point in the same manner (&#8220;<a class="reference external" href="http://c2.com/cgi/wiki?DuckTyping">duck typing</a>&#8221;).</p>
+<p>There are three types of base Reader which act as starting points for each
+specific format. These are:</p>
 <dl class="docutils">
 <dt><a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Reader" title="MDAnalysis.coordinates.base.Reader"><code class="xref py py-class docutils literal"><span class="pre">Reader</span></code></a></dt>
 <dd>A standard multi frame Reader which allows iteration over a single
@@ -156,7 +160,7 @@ such as TRR and DCD.</dd>
 <dd>A simplified Reader which reads a file containing only a single
 frame of information.  This is used with formats such as GRO
 and CRD</dd>
-<dt><code class="xref py py-class docutils literal"><span class="pre">baseChainReader</span></code></dt>
+<dt><a class="reference internal" href="chain.html#MDAnalysis.coordinates.chain.ChainReader" title="MDAnalysis.coordinates.chain.ChainReader"><code class="xref py py-class docutils literal"><span class="pre">ChainReader</span></code></a></dt>
 <dd>An advanced Reader designed to read a sequence of files, to
 provide iteration over all the frames in each file seamlessly.
 This Reader can also provide this functionality over a
@@ -169,27 +173,25 @@ extension but this choice can be overriden with the <code class="docutils litera
 <a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>).</p>
 <p>If additional simulation data is available, it may be added to and read
 alongside a trajectory using
-<a class="reference internal" href="base.html#MDAnalysis.coordinates.base.ProtoReader.add_auxiliary" title="MDAnalysis.coordinates.base.ProtoReader.add_auxiliary"><code class="xref py py-meth docutils literal"><span class="pre">add_auxiliary()</span></code></a>. See the
-<a class="reference internal" href="../auxiliary/init.html#auxiliary-api"><span>Auxiliary API</span></a>.</p>
+<a class="reference internal" href="base.html#MDAnalysis.coordinates.base.ProtoReader.add_auxiliary" title="MDAnalysis.coordinates.base.ProtoReader.add_auxiliary"><code class="xref py py-meth docutils literal"><span class="pre">add_auxiliary()</span></code></a> as described in
+the <a class="reference internal" href="../auxiliary/init.html#auxiliary-api"><span>Auxiliary API</span></a>.</p>
 </div>
 <div class="section" id="writers">
 <h2>5.1.2. Writers<a class="headerlink" href="#writers" title="Permalink to this headline">¶</a></h2>
 <p>In order to <strong>write coordinates</strong>, a factory function is provided
-(<a class="reference internal" href="core.html#MDAnalysis.coordinates.core.writer" title="MDAnalysis.coordinates.core.writer"><code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.coordinates.core.writer()</span></code></a>) which is made available
-as <code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.Writer()</span></code>) that returns a <em>Writer</em> appropriate for
-the desired file format (as indicated by the filename
-suffix). Furthermore, a trajectory
+(<a class="reference internal" href="core.html#MDAnalysis.coordinates.core.writer" title="MDAnalysis.coordinates.core.writer"><code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.coordinates.core.writer()</span></code></a>, which is also made available as
+<code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.Writer()</span></code>) that returns a <em>Writer</em> appropriate for the desired
+file format (as indicated by the filename suffix). Furthermore, a trajectory
 <a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Reader" title="MDAnalysis.coordinates.base.Reader"><code class="xref py py-class docutils literal"><span class="pre">Reader</span></code></a> can also have a method
-<code class="xref py py-meth docutils literal"><span class="pre">Writer()</span></code> that returns an
-appropriate <a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Writer" title="MDAnalysis.coordinates.base.Writer"><code class="xref py py-class docutils literal"><span class="pre">Writer</span></code></a> for the file
-format of the trajectory.</p>
-<p>In analogy to <a class="reference internal" href="core.html#MDAnalysis.coordinates.core.writer" title="MDAnalysis.coordinates.core.writer"><code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.coordinates.core.writer()</span></code></a>, there is
-also a <a class="reference internal" href="core.html#MDAnalysis.coordinates.core.reader" title="MDAnalysis.coordinates.core.reader"><code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.coordinates.core.reader()</span></code></a> function available
-to return a trajectory <a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Reader" title="MDAnalysis.coordinates.base.Reader"><code class="xref py py-class docutils literal"><span class="pre">Reader</span></code></a>
-instance although this is often not needed because the
-<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> class can choose an
-appropriate reader automatically.</p>
-<p>A typical approach is to generate a new trajectory from an old one, e.g. to
+<a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Reader.Writer" title="MDAnalysis.coordinates.base.Reader.Writer"><code class="xref py py-meth docutils literal"><span class="pre">Writer()</span></code></a> that returns an appropriate
+<a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Writer" title="MDAnalysis.coordinates.base.Writer"><code class="xref py py-class docutils literal"><span class="pre">Writer</span></code></a> for the file format of the
+trajectory.</p>
+<p>In analogy to <a class="reference internal" href="core.html#MDAnalysis.coordinates.core.writer" title="MDAnalysis.coordinates.core.writer"><code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.coordinates.core.writer()</span></code></a>, there is also a
+<a class="reference internal" href="core.html#MDAnalysis.coordinates.core.reader" title="MDAnalysis.coordinates.core.reader"><code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.coordinates.core.reader()</span></code></a> function available to return a
+trajectory <a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Reader" title="MDAnalysis.coordinates.base.Reader"><code class="xref py py-class docutils literal"><span class="pre">Reader</span></code></a> instance although this
+is often not needed because the <a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>
+class can choose an appropriate reader automatically.</p>
+<p>A typical approach is to generate a new trajectory from an old one, e.g., to
 only keep the protein:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">MDAnalysis</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">PDB</span><span class="p">,</span> <span class="n">XTC</span><span class="p">)</span>
 <span class="n">protein</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s2">&quot;protein&quot;</span><span class="p">)</span>
@@ -203,19 +205,23 @@ the last frame has been written.</p>
 </div>
 <div class="section" id="timesteps">
 <h2>5.1.3. Timesteps<a class="headerlink" href="#timesteps" title="Permalink to this headline">¶</a></h2>
-<p>Both Readers and Writers use Timesteps as their working object.  A Timestep
-represents all data for a given frame in a trajectory.  The data inside a
-Timestep is often accessed indirectly through a <a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>
-but it is also possible to manipulate Timesteps directly.</p>
-<p>The current Timestep can be accessed through the trajectory read attached
-to the active <a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a></p>
-<blockquote>
-<div>ts = u.trajectory.ts
-ts.positions  # returns a numpy array of positions</div></blockquote>
-<p>Most individual formats have slightly different data available
-in each Timestep due to differences in individual simulation
-packages, but all share in common a broad set of basic data,
-detailed in <a class="reference internal" href="#timestep-api">Timestep API</a></p>
+<p>Both Readers and Writers use Timesteps as their working object.  A
+<a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Timestep" title="MDAnalysis.coordinates.base.Timestep"><code class="xref py py-class docutils literal"><span class="pre">Timestep</span></code></a> represents all data for a given
+frame in a trajectory.  The data inside a
+<a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Timestep" title="MDAnalysis.coordinates.base.Timestep"><code class="xref py py-class docutils literal"><span class="pre">Timestep</span></code></a> is often accessed indirectly
+through a <a class="reference internal" href="../core/groups.html#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> but it is also possible to
+manipulate Timesteps directly.</p>
+<p>The current <a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Timestep" title="MDAnalysis.coordinates.base.Timestep"><code class="xref py py-class docutils literal"><span class="pre">Timestep</span></code></a> can be accessed
+through the <code class="xref py py-attr docutils literal"><span class="pre">ts</span></code> attribute of
+the trajectory attached to the active
+<a class="reference internal" href="../core/universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">ts</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">positions</span>  <span class="c1"># returns a numpy array of positions</span>
+</pre></div>
+</div>
+<p>Most individual formats have slightly different data available in each Timestep
+due to differences in individual simulation packages, but all share in common a
+broad set of basic data, detailed in <a class="reference internal" href="#timestep-api">Timestep API</a></p>
 </div>
 <div class="section" id="supported-coordinate-formats">
 <h2>5.1.4. Supported coordinate formats<a class="headerlink" href="#supported-coordinate-formats" title="Permalink to this headline">¶</a></h2>
@@ -448,12 +454,12 @@ I/O code can be written in C or python or a mixture thereof.</p>
 (e.g. by looking at file extensions). In order to allow it to choose the
 correct format, all I/O classes must subclass either
 <a class="reference internal" href="base.html#MDAnalysis.coordinates.base.ProtoReader" title="MDAnalysis.coordinates.base.ProtoReader"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.coordinates.base.ProtoReader</span></code></a> or
-<a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Writer" title="MDAnalysis.coordinates.base.Writer"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.coordinates.base.Writer</span></code></a> and set the <cite>format</cite> attribute
-with a string defining the expected suffix.
-To assign multiple suffixes to an I/O class, a list of suffixes
-can be given.</p>
+<a class="reference internal" href="base.html#MDAnalysis.coordinates.base.Writer" title="MDAnalysis.coordinates.base.Writer"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.coordinates.base.Writer</span></code></a> and set the
+<code class="xref py py-attr docutils literal"><span class="pre">format</span></code> attribute with a string
+defining the expected suffix.  To assign multiple suffixes to an I/O class, a
+list of suffixes can be given.</p>
 <p>To define that a Writer can write multiple trajectory frames, set the
-<cite>multiframe</cite> attribute to True.  The default is False.</p>
+<cite>multiframe</cite> attribute to <code class="docutils literal"><span class="pre">True</span></code>.  The default is <code class="docutils literal"><span class="pre">False</span></code>.</p>
 </div>
 <div class="section" id="timestep-class">
 <span id="timestep-api"></span><h3>5.1.5.3. Timestep class<a class="headerlink" href="#timestep-class" title="Permalink to this headline">¶</a></h3>

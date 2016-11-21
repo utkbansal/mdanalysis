@@ -148,7 +148,7 @@ loaded from the &#8220;topology&#8221; file unless a trajectory is supplied.</p>
 </pre></div>
 </div>
 <p>Select atoms, with syntax similar to CHARMM (see
-<code class="xref py py-class docutils literal"><span class="pre">select_atoms</span></code> for details):</p>
+<a class="reference internal" href="#MDAnalysis.core.universe.Universe.select_atoms" title="MDAnalysis.core.universe.Universe.select_atoms"><code class="xref py py-class docutils literal"><span class="pre">select_atoms</span></code></a> for details):</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -287,6 +287,24 @@ If any attributes were not specified as a keyword.</td>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="MDAnalysis.core.universe.Universe.add_TopologyAttr">
+<code class="descname">add_TopologyAttr</code><span class="sig-paren">(</span><em>topologyattr</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/universe.html#Universe.add_TopologyAttr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.universe.Universe.add_TopologyAttr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new topology attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.core.universe.Universe.angles">
+<code class="descname">angles</code><a class="headerlink" href="#MDAnalysis.core.universe.Universe.angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Angles between atoms</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.core.universe.Universe.bonds">
+<code class="descname">bonds</code><a class="headerlink" href="#MDAnalysis.core.universe.Universe.bonds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bonds between atoms</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="MDAnalysis.core.universe.Universe.coord">
 <code class="descname">coord</code><a class="headerlink" href="#MDAnalysis.core.universe.Universe.coord" title="Permalink to this definition">¶</a></dt>
@@ -298,17 +316,28 @@ represented as a <code class="xref py py-class docutils literal"><span class="pr
 while one is stepping through the trajectory.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">In order to access the coordinates it is probably better to use the
-<code class="xref py py-meth docutils literal"><span class="pre">AtomGroup.coordinates()</span></code> method; for instance, all coordinates
-of the Universe as a numpy array:
-<code class="xref py py-meth docutils literal"><span class="pre">Universe.atoms.coordinates()</span></code>.</p>
+<p class="last">In order to access the coordinates it is better to use the
+<code class="xref py py-meth docutils literal"><span class="pre">AtomGroup.positions()</span></code> method; for instance, all coordinates of
+the Universe as a numpy array: <code class="xref py py-meth docutils literal"><span class="pre">Universe.atoms.positions()</span></code>.</p>
 </div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.core.universe.Universe.dihedrals">
+<code class="descname">dihedrals</code><a class="headerlink" href="#MDAnalysis.core.universe.Universe.dihedrals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dihedral angles between atoms</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt>
 <code class="descname">dimensions</code></dt>
 <dd><p>Current dimensions of the unitcell</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.core.universe.Universe.impropers">
+<code class="descname">impropers</code><a class="headerlink" href="#MDAnalysis.core.universe.Universe.impropers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Improper dihedral angles between atoms</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -320,20 +349,23 @@ of the Universe as a numpy array:
 <dl class="method">
 <dt id="MDAnalysis.core.universe.Universe.load_new">
 <code class="descname">load_new</code><span class="sig-paren">(</span><em>filename</em>, <em>format=None</em>, <em>in_memory=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/universe.html#Universe.load_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.universe.Universe.load_new" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load coordinates from <em>filename</em>, using the suffix to detect file
-format.</p>
+<dd><p>Load coordinates from <cite>filename</cite>.</p>
+<p>The file format of <cite>filename</cite> is autodetected from the file name suffix
+or can be explicitly set with the <cite>format</cite> keyword. A sequence of files
+can be read as a single virtual trajectory by providing a list of
+filenames.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the coordinate file (single frame or trajectory) <em>or</em> a list of
+<li><strong>filename</strong> (<em>str or list</em>) &#8211; the coordinate file (single frame or trajectory) <em>or</em> a list of
 filenames, which are read one after another.</li>
-<li><strong>format</strong> (<em>str (optional)</em>) &#8211; provide the file format of the coordinate or trajectory file;
+<li><strong>format</strong> (<em>str or list or object (optional)</em>) &#8211; provide the file format of the coordinate or trajectory file;
 <code class="docutils literal"><span class="pre">None</span></code> guesses it from the file extension. Note that this
 keyword has no effect if a list of file names is supplied because
 the &#8220;chained&#8221; reader has to guess the file format for each
-individual list member [<code class="docutils literal"><span class="pre">None</span></code>] Can also pass a subclass of
+individual list member [<code class="docutils literal"><span class="pre">None</span></code>]. Can also pass a subclass of
 <a class="reference internal" href="../coordinates/base.html#MDAnalysis.coordinates.base.Reader" title="MDAnalysis.coordinates.base.Reader"><code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.coordinates.base.Reader</span></code></a> to define a custom
 reader to be used on the trajectory file.</li>
 <li><strong>in_memory</strong> (<em>bool (optional)</em>) &#8211; <p>Directly load trajectory into memory with the
@@ -349,7 +381,7 @@ advanced use)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><ul class="simple">
-<li><strong>filename</strong> (<em>str</em>)</li>
+<li><strong>filename</strong> (<em>str or list</em>)</li>
 <li><strong>trajectory_format</strong> (<em>str</em>)</li>
 </ul>
 </p>
@@ -362,14 +394,21 @@ determined or no appropriate trajectory reader found</p>
 </tbody>
 </table>
 <div class="versionchanged">
-<p><span class="versionmodified">Changed in version 0.8: </span>If a list or sequence that is provided for <em>filename</em> only contains
+<p><span class="versionmodified">Changed in version 0.8: </span>If a list or sequence that is provided for <cite>filename</cite> only contains
 a single entry then it is treated as single coordinate file. This
 has the consequence that it is not read by the
-<a class="reference internal" href="../coordinates/base.html#MDAnalysis.coordinates.base.ChainReader" title="MDAnalysis.coordinates.base.ChainReader"><code class="xref py py-class docutils literal"><span class="pre">ChainReader</span></code></a> but directly by
+<a class="reference internal" href="../coordinates/chain.html#MDAnalysis.coordinates.chain.ChainReader" title="MDAnalysis.coordinates.chain.ChainReader"><code class="xref py py-class docutils literal"><span class="pre">ChainReader</span></code></a> but directly by
 its specialized file format reader, which typically has more
 features than the
-<a class="reference internal" href="../coordinates/base.html#MDAnalysis.coordinates.base.ChainReader" title="MDAnalysis.coordinates.base.ChainReader"><code class="xref py py-class docutils literal"><span class="pre">ChainReader</span></code></a>.</p>
+<a class="reference internal" href="../coordinates/chain.html#MDAnalysis.coordinates.chain.ChainReader" title="MDAnalysis.coordinates.chain.ChainReader"><code class="xref py py-class docutils literal"><span class="pre">ChainReader</span></code></a>.</p>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.core.universe.Universe.select_atoms">
+<code class="descname">select_atoms</code><span class="sig-paren">(</span><em>sel</em>, <em>*othersel</em>, <em>**selgroups</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/universe.html#Universe.select_atoms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.universe.Universe.select_atoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select atoms.</p>
+<p><a class="reference internal" href="groups.html#MDAnalysis.core.groups.AtomGroup.select_atoms" title="MDAnalysis.core.groups.AtomGroup.select_atoms"><code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.core.groups.AtomGroup.select_atoms()</span></code></a></p>
 </dd></dl>
 
 <dl class="attribute">
@@ -434,7 +473,7 @@ empty and <code class="xref py py-exc docutils literal"><span class="pre">TypeEr
 <p>The resulting <a class="reference internal" href="#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a> will only inherit the common topology
 attributes that all merged universes share.</p>
 <p><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> instances can come from different Universes, or can come
-directly from a <code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code> call.</p>
+directly from a <a class="reference internal" href="#MDAnalysis.core.universe.Universe.select_atoms" title="MDAnalysis.core.universe.Universe.select_atoms"><code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code></a> call.</p>
 <p><a class="reference internal" href="#MDAnalysis.core.universe.Merge" title="MDAnalysis.core.universe.Merge"><code class="xref py py-class docutils literal"><span class="pre">Merge</span></code></a> can also be used with a single <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> if the
 user wants to, for example, re-order the atoms in the <a class="reference internal" href="#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>.</p>
 <p>If multiple <code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code> instances from the same <a class="reference internal" href="#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>

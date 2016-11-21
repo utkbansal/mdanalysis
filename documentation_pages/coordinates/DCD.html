@@ -153,10 +153,13 @@ Trajectory API.</p>
 when attributes require trajectory manipulation (e.g. dt)</li>
 <li><strong>dt</strong> (<em>float, optional</em>) &#8211; The time difference between frames (ps).  If <a class="reference internal" href="#MDAnalysis.coordinates.DCD.Timestep.time" title="MDAnalysis.coordinates.DCD.Timestep.time"><code class="xref py py-attr docutils literal"><span class="pre">time</span></code></a>
 is set, then <cite>dt</cite> will be ignored.</li>
-<li><strong>time_offset</strong> (<em>float, optional</em>) &#8211; The starting time from which to calculate time (ps)</li>
-<li><strong>versionchanged</strong> (<em>.</em>) &#8211; Added keywords for positions, velocities and forces
+<li><strong>time_offset</strong> (<em>float, optional</em>) &#8211; <p>The starting time from which to calculate time (ps)</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.11.0: </span>Added keywords for <cite>positions</cite>, <cite>velocities</cite> and <cite>forces</cite>.
 Can add and remove position/velocity/force information by using
-the has_* attribute</li>
+the <code class="docutils literal"><span class="pre">has_*</span></code> attribute.</p>
+</div>
+</li>
 </ul>
 </td>
 </tr>

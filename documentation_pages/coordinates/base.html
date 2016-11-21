@@ -94,9 +94,9 @@
             
   <span class="target" id="module-MDAnalysis.coordinates.base"></span><div class="section" id="base-classes-mdanalysis-coordinates-base">
 <h1>5.22. Base classes &#8212; <a class="reference internal" href="#module-MDAnalysis.coordinates.base" title="MDAnalysis.coordinates.base"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates.base</span></code></a><a class="headerlink" href="#base-classes-mdanalysis-coordinates-base" title="Permalink to this headline">¶</a></h1>
-<p>Derive other Timestep, Reader and Writer classes from the classes in this
-module. The derived classes must follow the Trajectory API in
-<a class="reference internal" href="init.html#module-MDAnalysis.coordinates.__init__" title="MDAnalysis.coordinates.__init__"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates.__init__</span></code></a>.</p>
+<p>Derive other Timestep, Reader and Writer classes from the classes in
+this module. The derived classes must follow the <a class="reference internal" href="init.html#trajectory-api"><span>Trajectory API</span></a>
+in <a class="reference internal" href="init.html#module-MDAnalysis.coordinates.__init__" title="MDAnalysis.coordinates.__init__"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates.__init__</span></code></a>.</p>
 <dl class="class">
 <dt id="MDAnalysis.coordinates.base.Timestep">
 <em class="property">class </em><code class="descclassname">MDAnalysis.coordinates.base.</code><code class="descname">Timestep</code><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/base.html#Timestep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.base.Timestep" title="Permalink to this definition">¶</a></dt>
@@ -117,10 +117,13 @@ module. The derived classes must follow the Trajectory API in
 when attributes require trajectory manipulation (e.g. dt)</li>
 <li><strong>dt</strong> (<em>float, optional</em>) &#8211; The time difference between frames (ps).  If <a class="reference internal" href="#MDAnalysis.coordinates.base.Timestep.time" title="MDAnalysis.coordinates.base.Timestep.time"><code class="xref py py-attr docutils literal"><span class="pre">time</span></code></a>
 is set, then <cite>dt</cite> will be ignored.</li>
-<li><strong>time_offset</strong> (<em>float, optional</em>) &#8211; The starting time from which to calculate time (ps)</li>
-<li><strong>versionchanged</strong> (<em>.</em>) &#8211; Added keywords for positions, velocities and forces
+<li><strong>time_offset</strong> (<em>float, optional</em>) &#8211; <p>The starting time from which to calculate time (ps)</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.11.0: </span>Added keywords for <cite>positions</cite>, <cite>velocities</cite> and <cite>forces</cite>.
 Can add and remove position/velocity/force information by using
-the has_* attribute</li>
+the <code class="docutils literal"><span class="pre">has_*</span></code> attribute.</p>
+</div>
+</li>
 </ul>
 </td>
 </tr>
@@ -766,7 +769,7 @@ methods.</p>
 available). <em>n_atoms</em> is always set from <code class="xref py py-attr docutils literal"><span class="pre">Reader.n_atoms</span></code>.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><code class="xref py py-meth docutils literal"><span class="pre">Reader.Writer()</span></code> and <code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.Writer()</span></code></p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.Writer" title="MDAnalysis.coordinates.base.Reader.Writer"><code class="xref py py-meth docutils literal"><span class="pre">Reader.Writer()</span></code></a> and <code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.Writer()</span></code></p>
 </div>
 </dd></dl>
 
@@ -1085,7 +1088,7 @@ time = <code class="xref py py-attr docutils literal"><span class="pre">Timestep
 <dd><p>Base class for trajectory readers that extends <a class="reference internal" href="#MDAnalysis.coordinates.base.ProtoReader" title="MDAnalysis.coordinates.base.ProtoReader"><code class="xref py py-class docutils literal"><span class="pre">ProtoReader</span></code></a> with a
 <code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code> method.</p>
 <p>New Readers should subclass <a class="reference internal" href="#MDAnalysis.coordinates.base.Reader" title="MDAnalysis.coordinates.base.Reader"><code class="xref py py-class docutils literal"><span class="pre">Reader</span></code></a> and properly implement a
-<code class="xref py py-meth docutils literal"><span class="pre">close()</span></code> method, to ensure proper release of resources (mainly file
+<a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.close" title="MDAnalysis.coordinates.base.Reader.close"><code class="xref py py-meth docutils literal"><span class="pre">close()</span></code></a> method, to ensure proper release of resources (mainly file
 handles). Readers that are inherently safe in this regard should subclass
 <a class="reference internal" href="#MDAnalysis.coordinates.base.ProtoReader" title="MDAnalysis.coordinates.base.ProtoReader"><code class="xref py py-class docutils literal"><span class="pre">ProtoReader</span></code></a> instead.</p>
 <p>See the <a class="reference internal" href="init.html#trajectory-api"><span>Trajectory API</span></a> definition in
@@ -1103,104 +1106,573 @@ functionality, all Reader subclasses must now <a class="reference external" href
 class.  Added attribute <code class="xref py py-attr docutils literal"><span class="pre">_ts_kwargs</span></code>, which is created in init.
 Provides kwargs to be passed to <a class="reference internal" href="#MDAnalysis.coordinates.base.Timestep" title="MDAnalysis.coordinates.base.Timestep"><code class="xref py py-class docutils literal"><span class="pre">Timestep</span></code></a></p>
 </div>
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.OtherWriter">
+<code class="descname">OtherWriter</code><span class="sig-paren">(</span><em>filename</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.OtherWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a writer appropriate for <em>filename</em>.</p>
+<p>Sets the default keywords <em>start</em>, <em>step</em> and <em>dt</em> (if
+available). <em>n_atoms</em> is always set from <code class="xref py py-attr docutils literal"><span class="pre">Reader.n_atoms</span></code>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.Writer" title="MDAnalysis.coordinates.base.Reader.Writer"><code class="xref py py-meth docutils literal"><span class="pre">Reader.Writer()</span></code></a> and <code class="xref py py-func docutils literal"><span class="pre">MDAnalysis.Writer()</span></code></p>
+</div>
 </dd></dl>
 
-<dl class="class">
-<dt id="MDAnalysis.coordinates.base.ChainReader">
-<em class="property">class </em><code class="descclassname">MDAnalysis.coordinates.base.</code><code class="descname">ChainReader</code><span class="sig-paren">(</span><em>filenames</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/base.html#ChainReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.base.ChainReader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reader that concatenates multiple trajectories on the fly.</p>
-<p><strong>Known issues</strong></p>
-<ul class="simple">
-<li>Trajectory API attributes exist but most of them only reflect
-the first trajectory in the list; <code class="xref py py-attr docutils literal"><span class="pre">ChainReader.n_frames</span></code>,
-<code class="xref py py-attr docutils literal"><span class="pre">ChainReader.n_atoms</span></code>, and <code class="xref py py-attr docutils literal"><span class="pre">ChainReader.fixed</span></code> are
-properly set, though</li>
-<li>slicing not implemented</li>
-</ul>
-<div class="versionchanged">
-<p><span class="versionmodified">Changed in version 0.11.0: </span>Frames now 0-based instead of 1-based</p>
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.Writer">
+<code class="descname">Writer</code><span class="sig-paren">(</span><em>filename</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.Writer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A trajectory writer with the same properties as this trajectory.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Reader.__delattr__">
+<code class="descname">__delattr__</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.__delattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__delattr__(&#8216;name&#8217;) &lt;==&gt; del x.name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.__format__">
+<code class="descname">__format__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.__format__" title="Permalink to this definition">¶</a></dt>
+<dd><p>default object formatter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Reader.__getattribute__">
+<code class="descname">__getattribute__</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.__getattribute__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__getattribute__(&#8216;name&#8217;) &lt;==&gt; x.name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Reader.__hash__">
+<code class="descname">__hash__</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.__reduce__">
+<code class="descname">__reduce__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.__reduce__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.__reduce_ex__">
+<code class="descname">__reduce_ex__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.__reduce_ex__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Reader.__setattr__">
+<code class="descname">__setattr__</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.__setattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__setattr__(&#8216;name&#8217;, value) &lt;==&gt; x.name = value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.__sizeof__">
+<code class="descname">__sizeof__</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &rarr; int<a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.__sizeof__" title="Permalink to this definition">¶</a></dt>
+<dd><p>size of object in memory, in bytes</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Reader.__str__">
+<code class="descname">__str__</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.add_auxiliary">
+<code class="descname">add_auxiliary</code><span class="sig-paren">(</span><em>auxname</em>, <em>auxdata</em>, <em>format=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.add_auxiliary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add auxiliary data to be read alongside trajectory.</p>
+<p>Auxiliary data may be any data timeseries from the trajectory additional
+to that read in by the trajectory reader. <em>auxdata</em> can be an
+<a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxReader" title="MDAnalysis.auxiliary.base.AuxReader"><code class="xref py py-class docutils literal"><span class="pre">AuxReader</span></code></a> instance, or the data
+itself as e.g. a filename; in the latter case an appropriate
+<a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxReader" title="MDAnalysis.auxiliary.base.AuxReader"><code class="xref py py-class docutils literal"><span class="pre">AuxReader</span></code></a> is guessed from the
+data/file format. An appropriate <em>format</em> may also be directly provided
+as a key word argument.</p>
+<p>On adding, the AuxReader is initially matched to the current timestep
+of the trajectory, and will be updated when the trajectory timestep
+changes (through a call to <a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.next" title="MDAnalysis.coordinates.base.Reader.next"><code class="xref py py-meth docutils literal"><span class="pre">next()</span></code></a> or jumping timesteps with
+<code class="docutils literal"><span class="pre">trajectory[i]</span></code>).</p>
+<p>The representative value(s) of the auxiliary data for each timestep (as
+calculated by the <a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxReader" title="MDAnalysis.auxiliary.base.AuxReader"><code class="xref py py-class docutils literal"><span class="pre">AuxReader</span></code></a>) are
+stored in the current timestep in the <code class="docutils literal"><span class="pre">ts.aux</span></code> namespace under <em>auxname</em>;
+e.g. to add additional pull force data stored in pull-force.xvg:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">MDAnalysis</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">PDB</span><span class="p">,</span> <span class="n">XTC</span><span class="p">)</span>
+<span class="n">u</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">add_auxiliary</span><span class="p">(</span><span class="s1">&#39;pull&#39;</span><span class="p">,</span> <span class="s1">&#39;pull-force.xvg&#39;</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="versionchanged">
-<p><span class="versionmodified">Changed in version 0.13.0: </span><a class="reference internal" href="#MDAnalysis.coordinates.base.ChainReader.time" title="MDAnalysis.coordinates.base.ChainReader.time"><code class="xref py py-attr docutils literal"><span class="pre">time</span></code></a> now reports the time summed over each trajectory&#8217;s
-frames and individual <code class="xref py py-attr docutils literal"><span class="pre">dt</span></code>.</p>
+<p>The representative value for the current timestep may then be accessed
+as <code class="docutils literal"><span class="pre">u.trajectory.ts.aux.pull</span></code> or <code class="docutils literal"><span class="pre">u.trajectory.ts.aux['pull']</span></code>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.remove_auxiliary" title="MDAnalysis.coordinates.base.Reader.remove_auxiliary"><code class="xref py py-meth docutils literal"><span class="pre">remove_auxiliary()</span></code></a></p>
 </div>
-<p>Set up the chain reader.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Auxiliary data is assumed to be time-ordered, with no duplicates. See
+the <a class="reference internal" href="../auxiliary/init.html#auxiliary-api"><span>Auxiliary API</span></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Reader.aux_list">
+<code class="descname">aux_list</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.aux_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists the names of added auxiliary data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.check_slice_indices">
+<code class="descname">check_slice_indices</code><span class="sig-paren">(</span><em>start</em>, <em>stop</em>, <em>step</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.check_slice_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check frame indices are valid and clip to fit trajectory</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><dl class="first last docutils">
-<dt><em>filenames</em></dt>
-<dd><p class="first">file name or list of file names; the reader will open
-all file names and provide frames in the order of
-trajectories from the list. Each trajectory must
-contain the same number of atoms in the same order
-(i.e. they all must belong to the same topology). The trajectory
-format is deduced from the extension of <em>filename</em>.</p>
-<p class="last">Extension: filenames are either single filename or list of file names in either plain file names
-format or (filename,format) tuple combination</p>
-</dd>
-<dt><em>skip</em></dt>
-<dd><p class="first last">skip step (also passed on to the individual trajectory
-readers); must be same for all trajectories</p>
-</dd>
-<dt><em>dt</em></dt>
-<dd><p class="first last">Passed to individual trajectory readers to enforce a common
-time difference between frames, in MDAnalysis time units. If
-not set, each reader&#8217;s <em>dt</em> will be used (either inferred from
-the trajectory files, or set to the reader&#8217;s default) when
-reporting frame times; note that this might mean an inconstant
-time difference between frames.</p>
-</dd>
-<dt><em>kwargs</em></dt>
-<dd><p class="first last">all other keyword arguments are passed on to each
-trajectory reader unchanged</p>
-</dd>
-</dl>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>stop, step</strong> (<em>start,</em>) &#8211; Values representing the slice indices.
+Can use <cite>None</cite> to use defaults of (0, n_frames, and 1)
+respectively.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>start, stop, step</strong> &#8211;
+Integers representing the slice</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the trajectory file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.convert_forces_from_native">
+<code class="descname">convert_forces_from_native</code><span class="sig-paren">(</span><em>force</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.convert_forces_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of forces array <em>force</em> from native to base units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>force</strong> (<em>array_like</em>) &#8211; Forces to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
 </td>
 </tr>
 </tbody>
 </table>
-<div class="versionchanged">
-<p><span class="versionmodified">Changed in version 0.8: </span>The <em>delta</em> keyword was added.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>force</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.7.</span></p>
 </div>
-<div class="versionchanged">
-<p><span class="versionmodified">Changed in version 0.13: </span>The <em>delta</em> keyword was deprecated in favor of using <em>dt</em>.</p>
 </div>
-<dl class="method">
-<dt id="MDAnalysis.coordinates.base.ChainReader.__iter__">
-<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/base.html#ChainReader.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.base.ChainReader.__iter__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generator for all frames, starting at frame 1.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MDAnalysis.coordinates.base.ChainReader.active_reader">
-<code class="descname">active_reader</code><a class="headerlink" href="#MDAnalysis.coordinates.base.ChainReader.active_reader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reader instance from which frames are being read.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MDAnalysis.coordinates.base.ChainReader.frame">
-<code class="descname">frame</code><a class="headerlink" href="#MDAnalysis.coordinates.base.ChainReader.frame" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cumulative frame number of the current time step.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="MDAnalysis.coordinates.base.ChainReader.get_flname">
-<code class="descname">get_flname</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/base.html#ChainReader.get_flname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.base.ChainReader.get_flname" title="Permalink to this definition">¶</a></dt>
-<dd><p>retrieve the actual filename of the list element</p>
+<dt id="MDAnalysis.coordinates.base.Reader.convert_forces_to_native">
+<code class="descname">convert_forces_to_native</code><span class="sig-paren">(</span><em>force</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.convert_forces_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of force array <em>force</em> from base to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>force</strong> (<em>array_like</em>) &#8211; Forces to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>force</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.7.</span></p>
+</div>
+</div>
 </dd></dl>
 
 <dl class="method">
-<dt id="MDAnalysis.coordinates.base.ChainReader.rewind">
-<code class="descname">rewind</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/base.html#ChainReader.rewind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.base.ChainReader.rewind" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set current frame to the beginning.</p>
+<dt id="MDAnalysis.coordinates.base.Reader.convert_pos_from_native">
+<code class="descname">convert_pos_from_native</code><span class="sig-paren">(</span><em>x</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.convert_pos_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array x from native units to base units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>array_like</em>) &#8211; Positions to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>x</em> is modified in place and also returned.</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.convert_pos_to_native">
+<code class="descname">convert_pos_to_native</code><span class="sig-paren">(</span><em>x</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.convert_pos_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array x from base units to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>array_like</em>) &#8211; Positions to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>x</em> is modified in place and also returned.</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.convert_time_from_native">
+<code class="descname">convert_time_from_native</code><span class="sig-paren">(</span><em>t</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.convert_time_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert time <em>t</em> from native units to base units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>t</strong> (<em>array_like</em>) &#8211; Time values to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>t</em> is modified in place and also
+returned (although note that scalar values <em>t</em> are passed by
+value in Python and hence an in-place modification has no
+effect on the caller.)</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.convert_time_to_native">
+<code class="descname">convert_time_to_native</code><span class="sig-paren">(</span><em>t</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.convert_time_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert time <em>t</em> from base units to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>t</strong> (<em>array_like</em>) &#8211; Time values to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>t</em> is modified in place and also
+returned. (Also note that scalar values <em>t</em> are passed by
+value in Python and hence an in-place modification has no
+effect on the caller.)</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.convert_velocities_from_native">
+<code class="descname">convert_velocities_from_native</code><span class="sig-paren">(</span><em>v</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.convert_velocities_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of velocities array <em>v</em> from native to base units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> (<em>array_like</em>) &#8211; Velocities to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>v</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.5.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.convert_velocities_to_native">
+<code class="descname">convert_velocities_to_native</code><span class="sig-paren">(</span><em>v</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.convert_velocities_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array <em>v</em> from base to native units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> (<em>array_like</em>) &#8211; Velocities to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>v</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.5.</span></p>
+</div>
+</div>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="MDAnalysis.coordinates.base.ChainReader.time">
-<code class="descname">time</code><a class="headerlink" href="#MDAnalysis.coordinates.base.ChainReader.time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cumulative time of the current frame in MDAnalysis time units (typically ps).</p>
+<dt id="MDAnalysis.coordinates.base.Reader.dt">
+<code class="descname">dt</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time between two trajectory frames in picoseconds.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Reader.frame">
+<code class="descname">frame</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frame number of the current time step.</p>
+<p>This is a simple short cut to <code class="xref py py-attr docutils literal"><span class="pre">Timestep.frame</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.get_aux_attribute">
+<code class="descname">get_aux_attribute</code><span class="sig-paren">(</span><em>auxname</em>, <em>attrname</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.get_aux_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of <em>attrname</em> from the auxiliary <em>auxname</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>auxname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the auxiliary to get value for</li>
+<li><strong>attrname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of gettable attribute in the auxiliary reader</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.set_aux_attribute" title="MDAnalysis.coordinates.base.Reader.set_aux_attribute"><code class="xref py py-meth docutils literal"><span class="pre">set_aux_attribute()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.get_aux_descriptions">
+<code class="descname">get_aux_descriptions</code><span class="sig-paren">(</span><em>auxnames=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.get_aux_descriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get descriptions to allow reloading the specified auxiliaries.</p>
+<p>If no auxnames are provided, defaults to the full list of added
+auxiliaries.</p>
+<p>Passing the resultant description to <code class="docutils literal"><span class="pre">add_auxiliary()</span></code> will allow
+recreation of the auxiliary. e.g., to duplicate all auxiliaries into a
+second trajectory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">descriptions</span> <span class="o">=</span> <span class="n">trajectory_1</span><span class="o">.</span><span class="n">get_aux_descriptions</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">aux</span> <span class="ow">in</span> <span class="n">descriptions</span><span class="p">:</span>
+    <span class="n">trajectory_2</span><span class="o">.</span><span class="n">add_auxiliary</span><span class="p">(</span><span class="o">**</span><span class="n">aux</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of dictionaries of the args/kwargs describing each auxiliary.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)">list</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxReader.get_description" title="MDAnalysis.auxiliary.base.AuxReader.get_description"><code class="xref py py-meth docutils literal"><span class="pre">MDAnalysis.auxiliary.base.AuxReader.get_description()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.iter_as_aux">
+<code class="descname">iter_as_aux</code><span class="sig-paren">(</span><em>auxname</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.iter_as_aux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate through timesteps for which there is at least one assigned
+step from the auxiliary <em>auxname</em> within the cutoff specified in <em>auxname</em>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.next_as_aux" title="MDAnalysis.coordinates.base.Reader.next_as_aux"><code class="xref py py-meth docutils literal"><span class="pre">next_as_aux()</span></code></a>, <a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.iter_auxiliary" title="MDAnalysis.coordinates.base.Reader.iter_auxiliary"><code class="xref py py-meth docutils literal"><span class="pre">iter_auxiliary()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.iter_auxiliary">
+<code class="descname">iter_auxiliary</code><span class="sig-paren">(</span><em>auxname</em>, <em>start=None</em>, <em>stop=None</em>, <em>step=None</em>, <em>selected=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.iter_auxiliary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate through the auxiliary <em>auxname</em> independently of the trajectory.</p>
+<p>Will iterate over the specified steps of the auxiliary (defaults to all
+steps). Allows to access all values in an auxiliary, including those out
+of the time range of the trajectory, without having to also iterate
+through the trajectory.</p>
+<p>After interation, the auxiliary will be repositioned at the current step.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>auxname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the auxiliary to iterate over.</li>
+<li><strong>stop, step)</strong> (<em>(start,</em>) &#8211; Options for iterating over a slice of the auxiliary.</li>
+<li><strong>selected</strong> (<em>lst | ndarray, optional</em>) &#8211; List of steps to iterate over.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Yields:</th><td class="field-body"><p class="first last"><a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxStep" title="MDAnalysis.auxiliary.base.AuxStep"><code class="xref py py-class docutils literal"><span class="pre">AuxStep</span></code></a> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.iter_as_aux" title="MDAnalysis.coordinates.base.Reader.iter_as_aux"><code class="xref py py-meth docutils literal"><span class="pre">iter_as_aux()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.next">
+<code class="descname">next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forward one step to next frame.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.next_as_aux">
+<code class="descname">next_as_aux</code><span class="sig-paren">(</span><em>auxname</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.next_as_aux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to the next timestep for which there is at least one step from
+the auxiliary <em>auxname</em> within the cutoff specified in <em>auxname</em>.</p>
+<p>This allows progression through the trajectory without encountering
+<code class="docutils literal"><span class="pre">NaN</span></code> representative values (unless these are specifically part of the
+auxiliary data).</p>
+<p>If the auxiliary cutoff is not set, where auxiliary steps are less frequent
+(<code class="docutils literal"><span class="pre">auxiliary.dt</span> <span class="pre">&gt;</span> <span class="pre">trajectory.dt</span></code>), this allows progression at the
+auxiliary pace (rounded to nearest timestep); while if the auxiliary
+steps are more frequent, this will work the same as calling
+<a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.next" title="MDAnalysis.coordinates.base.Reader.next"><code class="xref py py-meth docutils literal"><span class="pre">next()</span></code></a>.</p>
+<p>See the <a class="reference internal" href="../auxiliary/init.html#auxiliary-api"><span>Auxiliary API</span></a>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.iter_as_aux" title="MDAnalysis.coordinates.base.Reader.iter_as_aux"><code class="xref py py-meth docutils literal"><span class="pre">iter_as_aux()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.remove_auxiliary">
+<code class="descname">remove_auxiliary</code><span class="sig-paren">(</span><em>auxname</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.remove_auxiliary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear data and close the <a class="reference internal" href="../auxiliary/base.html#MDAnalysis.auxiliary.base.AuxReader" title="MDAnalysis.auxiliary.base.AuxReader"><code class="xref py py-class docutils literal"><span class="pre">AuxReader</span></code></a>
+for the auxiliary <em>auxname</em>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.add_auxiliary" title="MDAnalysis.coordinates.base.Reader.add_auxiliary"><code class="xref py py-meth docutils literal"><span class="pre">add_auxiliary()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.rename_aux">
+<code class="descname">rename_aux</code><span class="sig-paren">(</span><em>auxname</em>, <em>new</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.rename_aux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the name of the auxiliary <em>auxname</em> to <em>new</em>.</p>
+<p>Provided there is not already an auxiliary named <em>new</em>, the auxiliary
+name will be changed in ts.aux namespace, the trajectory&#8217;s
+list of added auxiliaries, and in the auxiliary reader itself.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>auxname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the auxiliary to rename</li>
+<li><strong>new</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; New name to try set</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211;
+If the name <em>new</em> is already in use by an existing auxiliary.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.rewind">
+<code class="descname">rewind</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.rewind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Position at beginning of trajectory</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Reader.set_aux_attribute">
+<code class="descname">set_aux_attribute</code><span class="sig-paren">(</span><em>auxname</em>, <em>attrname</em>, <em>new</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.set_aux_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of <em>attrname</em> in the auxiliary <em>auxname</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>auxname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the auxiliary to alter</li>
+<li><strong>attrname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of settable attribute in the auxiliary reader</li>
+<li><strong>new</strong> &#8211; New value to try set <em>attrname</em> to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.get_aux_attribute" title="MDAnalysis.coordinates.base.Reader.get_aux_attribute"><code class="xref py py-meth docutils literal"><span class="pre">get_aux_attribute()</span></code></a>, <a class="reference internal" href="#MDAnalysis.coordinates.base.Reader.rename_aux" title="MDAnalysis.coordinates.base.Reader.rename_aux"><code class="xref py py-meth docutils literal"><span class="pre">rename_aux()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Reader.time">
+<code class="descname">time</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time of the current frame in MDAnalysis time units (typically ps).</p>
+<p>This is either read straight from the Timestep, or calculated as
+time = <code class="xref py py-attr docutils literal"><span class="pre">Timestep.frame</span></code> * <a class="reference internal" href="#MDAnalysis.coordinates.base.Timestep.dt" title="MDAnalysis.coordinates.base.Timestep.dt"><code class="xref py py-attr docutils literal"><span class="pre">Timestep.dt</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Reader.totaltime">
+<code class="descname">totaltime</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Reader.totaltime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total length of the trajectory n_frames * dt.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1211,12 +1683,288 @@ trajectory reader unchanged</p>
 <dd><p>Base class for trajectory writers.</p>
 <p>See Trajectory API definition in <a class="reference internal" href="init.html#module-MDAnalysis.coordinates.__init__" title="MDAnalysis.coordinates.__init__"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates.__init__</span></code></a> for
 the required attributes and methods.</p>
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Writer.__delattr__">
+<code class="descname">__delattr__</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.__delattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__delattr__(&#8216;name&#8217;) &lt;==&gt; del x.name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.__format__">
+<code class="descname">__format__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.__format__" title="Permalink to this definition">¶</a></dt>
+<dd><p>default object formatter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Writer.__getattribute__">
+<code class="descname">__getattribute__</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.__getattribute__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__getattribute__(&#8216;name&#8217;) &lt;==&gt; x.name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Writer.__hash__">
+<code class="descname">__hash__</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.__reduce__">
+<code class="descname">__reduce__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.__reduce__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.__reduce_ex__">
+<code class="descname">__reduce_ex__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.__reduce_ex__" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper for pickle</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Writer.__setattr__">
+<code class="descname">__setattr__</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.__setattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__setattr__(&#8216;name&#8217;, value) &lt;==&gt; x.name = value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.__sizeof__">
+<code class="descname">__sizeof__</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &rarr; int<a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.__sizeof__" title="Permalink to this definition">¶</a></dt>
+<dd><p>size of object in memory, in bytes</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.coordinates.base.Writer.__str__">
+<code class="descname">__str__</code><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the trajectory file.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="MDAnalysis.coordinates.base.Writer.convert_dimensions_to_unitcell">
 <code class="descname">convert_dimensions_to_unitcell</code><span class="sig-paren">(</span><em>ts</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/base.html#Writer.convert_dimensions_to_unitcell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.convert_dimensions_to_unitcell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read dimensions from timestep <em>ts</em> and return appropriate unitcell.</p>
 <p>The default is to return <code class="docutils literal"><span class="pre">[A,B,C,alpha,beta,gamma]</span></code>; if this
 is not appropriate then this method has to be overriden.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.convert_forces_from_native">
+<code class="descname">convert_forces_from_native</code><span class="sig-paren">(</span><em>force</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.convert_forces_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of forces array <em>force</em> from native to base units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>force</strong> (<em>array_like</em>) &#8211; Forces to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>force</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.7.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.convert_forces_to_native">
+<code class="descname">convert_forces_to_native</code><span class="sig-paren">(</span><em>force</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.convert_forces_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of force array <em>force</em> from base to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>force</strong> (<em>array_like</em>) &#8211; Forces to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>force</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.7.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.convert_pos_from_native">
+<code class="descname">convert_pos_from_native</code><span class="sig-paren">(</span><em>x</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.convert_pos_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array x from native units to base units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>array_like</em>) &#8211; Positions to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>x</em> is modified in place and also returned.</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.convert_pos_to_native">
+<code class="descname">convert_pos_to_native</code><span class="sig-paren">(</span><em>x</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.convert_pos_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array x from base units to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>array_like</em>) &#8211; Positions to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>x</em> is modified in place and also returned.</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.convert_time_from_native">
+<code class="descname">convert_time_from_native</code><span class="sig-paren">(</span><em>t</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.convert_time_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert time <em>t</em> from native units to base units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>t</strong> (<em>array_like</em>) &#8211; Time values to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>t</em> is modified in place and also
+returned (although note that scalar values <em>t</em> are passed by
+value in Python and hence an in-place modification has no
+effect on the caller.)</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.convert_time_to_native">
+<code class="descname">convert_time_to_native</code><span class="sig-paren">(</span><em>t</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.convert_time_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert time <em>t</em> from base units to native units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>t</strong> (<em>array_like</em>) &#8211; Time values to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>t</em> is modified in place and also
+returned. (Also note that scalar values <em>t</em> are passed by
+value in Python and hence an in-place modification has no
+effect on the caller.)</p>
+<div class="last versionchanged">
+<p><span class="versionmodified">Changed in version 0.7.5: </span>Keyword <em>inplace</em> can be set to <code class="docutils literal"><span class="pre">False</span></code> so that a
+modified copy is returned <em>unless</em> no conversion takes
+place, in which case the reference to the unmodified <em>x</em> is
+returned.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.convert_velocities_from_native">
+<code class="descname">convert_velocities_from_native</code><span class="sig-paren">(</span><em>v</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.convert_velocities_from_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of velocities array <em>v</em> from native to base units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> (<em>array_like</em>) &#8211; Velocities to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>v</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.5.</span></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.coordinates.base.Writer.convert_velocities_to_native">
+<code class="descname">convert_velocities_to_native</code><span class="sig-paren">(</span><em>v</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.coordinates.base.Writer.convert_velocities_to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conversion of coordinate array <em>v</em> from base to native units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> (<em>array_like</em>) &#8211; Velocities to transform</li>
+<li><strong>inplace</strong> (<em>bool, optional</em>) &#8211; Whether to modify the array inplace, overwriting previous data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>By default, the input <em>v</em> is modified in place and also returned.</p>
+<div class="last versionadded">
+<p><span class="versionmodified">New in version 0.7.5.</span></p>
+</div>
+</div>
 </dd></dl>
 
 <dl class="method">
