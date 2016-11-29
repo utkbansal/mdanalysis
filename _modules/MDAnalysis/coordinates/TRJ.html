@@ -299,11 +299,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">box_line_parser</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">FORTRANReader</span><span class="p">(</span><span class="s2">&quot;3F8.3&quot;</span><span class="p">)</span>
 
         <span class="c1"># Now check for box</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">periodic</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_detect_amber_box</span><span class="p">()</span>
 
         <span class="c1"># open file, read first frame</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_read_next_timestep</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_read_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trjfile</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">open_trajectory</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trjfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span><span class="p">[</span><span class="n">frame</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ts</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># gets +1&#39;d in _read_next</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_next_timestep</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_read_next_timestep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># FORMAT(10F8.3)  (X(i), Y(i), Z(i), i=1,NATOM)</span>
@@ -400,17 +406,21 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_frames</span>
 
     <span class="k">def</span> <span class="nf">_read_trj_n_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_reopen</span><span class="p">()</span>
+        <span class="n">lpf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines_per_frame</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">periodic</span><span class="p">:</span>
+            <span class="n">lpf</span> <span class="o">+=</span> <span class="mi">1</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">offsets</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-                <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">util</span><span class="o">.</span><span class="n">openany</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>  <span class="c1"># ignore first line</span>
+            <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">counter</span> <span class="o">%</span> <span class="n">lpf</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">tell</span><span class="p">())</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
                 <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rewind</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">counter</span>
+        <span class="n">offsets</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>  <span class="c1"># last offset is EOF</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">n_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
