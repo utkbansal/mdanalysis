@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MDAnalysis.core._get_readers &mdash; MDAnalysis 0.16.0-dev0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.16.0-dev0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within MDAnalysis 0.16.0-dev0 documentation"
+          href="../../../_static/opensearch.xml"/>
+    <link rel="shortcut icon" href="../../../_static/mdanalysis-logo.ico"/>
+    <link rel="top" title="MDAnalysis 0.16.0-dev0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/mdanalysis-logo-200x150.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for MDAnalysis.core._get_readers</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-</span>
+<span class="c1"># vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4</span>
+<span class="c1">#</span>
+<span class="c1"># MDAnalysis --- http://www.MDAnalysis.org</span>
+<span class="c1"># Copyright (c) 2006-2015 Naveen Michaud-Agrawal, Elizabeth J. Denning, Oliver Beckstein</span>
+<span class="c1"># and contributors (see AUTHORS for the full list)</span>
+<span class="c1">#</span>
+<span class="c1"># Released under the GNU Public Licence, v2 or any higher version</span>
+<span class="c1">#</span>
+<span class="c1"># Please cite your use of MDAnalysis in published work:</span>
+<span class="c1"># N. Michaud-Agrawal, E. J. Denning, T. B. Woolf, and O. Beckstein.</span>
+<span class="c1"># MDAnalysis: A Toolkit for the Analysis of Molecular Dynamics Simulations.</span>
+<span class="c1"># J. Comput. Chem. 32 (2011), 2319--2327, doi:10.1002/jcc.21787</span>
+<span class="c1">#</span>
+<span class="sd">&quot;&quot;&quot;Functions for fetching Readers</span>
+
+<span class="sd">These functions officially live in in topology/core (parsers) and</span>
+<span class="sd">coordinates/core (all others).  They are declared here to avoid</span>
+<span class="sd">circular imports.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">mmtf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">_READERS</span><span class="p">,</span> <span class="n">_PARSERS</span><span class="p">,</span> <span class="n">_MULTIFRAME_WRITERS</span><span class="p">,</span> <span class="n">_SINGLEFRAME_WRITERS</span>
+<span class="kn">from</span> <span class="nn">..lib</span> <span class="kn">import</span> <span class="n">util</span>
+
+
+<div class="viewcode-block" id="get_reader_for"><a class="viewcode-back" href="../../../documentation_pages/coordinates/core.html#MDAnalysis.coordinates.core.get_reader_for">[docs]</a><span class="k">def</span> <span class="nf">get_reader_for</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the appropriate trajectory reader class for `filename`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename</span>
+<span class="sd">        filename of the input trajectory or coordinate file.  Also can</span>
+<span class="sd">        handle a few special cases, see notes below.</span>
+<span class="sd">    format</span>
+<span class="sd">        Define the desired format.  Can be a string to request a given</span>
+<span class="sd">        Reader.</span>
+<span class="sd">        If a class is passed, it will be assumed that this is</span>
+<span class="sd">        a Reader and will be returned.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A Reader object</span>
+
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If no appropriate Reader is found</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    There are a number of special cases that can be handled:</span>
+<span class="sd">      If `filename` is a numpy array, MemoryReader is returned.</span>
+<span class="sd">      If `filename` is an MMTF object, MMTFReader is returned.</span>
+<span class="sd">      If `filename` is an iterable of filenames, ChainReader is returned.</span>
+
+<span class="sd">    Automatic detection is disabled when an explicit `format` is</span>
+<span class="sd">    provided, unless a list of filenames is given, in which case</span>
+<span class="sd">    ChainReader is returned and `format` passed to the ChainReader.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># check if format is actually a Reader</span>
+    <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">format</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">format</span>
+
+    <span class="c1"># ChainReader gets returned even if format is specified</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">util</span><span class="o">.</span><span class="n">iterable</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;CHAIN&#39;</span>
+    <span class="c1"># Only guess if format is not specified</span>
+    <span class="k">elif</span> <span class="n">format</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c1"># Checks for specialised formats</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="c1"># memoryreader slurps numpy arrays</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;MEMORY&#39;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mmtf</span><span class="o">.</span><span class="n">MMTFDecoder</span><span class="p">):</span>
+            <span class="c1"># mmtf slurps mmtf object</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;MMTF&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># else let the guessing begin!</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">guess_format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">format</span> <span class="o">=</span> <span class="n">format</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_READERS</span><span class="p">[</span><span class="n">format</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Unknown coordinate trajectory format &#39;{0}&#39; for &#39;{1}&#39;. The FORMATs </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;           {2}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;           are implemented in MDAnalysis.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;           See http://docs.mdanalysis.org/documentation_pages/coordinates/init.html#id1</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;           Use the format keyword to explicitly set the format: &#39;Universe(...,format=FORMAT)&#39;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;           For missing formats, raise an issue at &quot;</span>
+            <span class="s2">&quot;http://issues.mdanalysis.org&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">format</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">_READERS</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
+
+
+<div class="viewcode-block" id="get_writer_for"><a class="viewcode-back" href="../../../documentation_pages/coordinates/core.html#MDAnalysis.coordinates.core.get_writer_for">[docs]</a><span class="k">def</span> <span class="nf">get_writer_for</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">multiframe</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return an appropriate trajectory or frame writer class for `filename`.</span>
+
+<span class="sd">    The format is determined by the `format` argument or the extension of</span>
+<span class="sd">    `filename`. If `format` is provided, it takes precedence over The</span>
+<span class="sd">    extension of `filename`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str or ``None``</span>
+<span class="sd">        If no *format* is supplied, then the filename for the trajectory is</span>
+<span class="sd">        examined for its extension and the Writer is chosen accordingly.</span>
+<span class="sd">        If ``None`` is provided, the</span>
+<span class="sd">        :class:`~MDAnalysis.coordinates.null.NullWriter` is selected.</span>
+<span class="sd">    format : str, optional</span>
+<span class="sd">        Explicitly set a format.</span>
+<span class="sd">    multiframe : bool, optional</span>
+<span class="sd">        ``True``: write multiple frames to the trajectory; ``False``: only</span>
+<span class="sd">        write a single coordinate frame; ``None``: first try trajectory (multi</span>
+<span class="sd">        frame writers), then the single frame ones. Default is ``None``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A Writer object</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError:</span>
+<span class="sd">        The format could not be deduced from `filename` or an unexpected value</span>
+<span class="sd">        was provided for the `multiframe` argument.</span>
+<span class="sd">    TypeError:</span>
+<span class="sd">        No writer was found for the required format or the required `filename`</span>
+<span class="sd">        argument was omitted.</span>
+
+
+<span class="sd">    .. versionchanged:: 0.7.6</span>
+<span class="sd">       Added `multiframe` keyword; the default ``None`` reflects the previous</span>
+<span class="sd">       behaviour.</span>
+
+<span class="sd">    .. versionchanged:: 0.14.0</span>
+<span class="sd">       Removed the default value for the `format` argument. Now, the value</span>
+<span class="sd">       provided with the `format` parameter takes precedence over the extension</span>
+<span class="sd">       of `filename`. A :exc:`ValueError` is raised if the format cannot be</span>
+<span class="sd">       deduced from `filename`.</span>
+
+<span class="sd">    .. versionchanged:: 0.16.0</span>
+<span class="sd">       The `filename` argument has been made mandatory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;NULL&#39;</span>
+    <span class="k">elif</span> <span class="n">format</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">root</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_ext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="c1"># An AttributeError is raised if filename cannot</span>
+            <span class="c1"># be manipulated as a string.</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;File format could not be guessed from &quot;{0}&quot;&#39;</span>
+                             <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">check_compressed_format</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">multiframe</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_MULTIFRAME_WRITERS</span><span class="p">[</span><span class="n">format</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">_SINGLEFRAME_WRITERS</span><span class="p">[</span><span class="n">format</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;No trajectory or frame writer for format &#39;{0}&#39;&quot;</span>
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">format</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">multiframe</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_MULTIFRAME_WRITERS</span><span class="p">[</span><span class="n">format</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;No trajectory writer for format {0}&quot;</span>
+                <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">format</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">multiframe</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_SINGLEFRAME_WRITERS</span><span class="p">[</span><span class="n">format</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;No single frame writer for format {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">format</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown value &#39;{0}&#39; for multiframe,&quot;</span>
+                         <span class="s2">&quot; only True, False, None allowed&quot;</span>
+                         <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">multiframe</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">get_parser_for</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the appropriate topology parser for `filename`.</span>
+
+<span class="sd">    Automatic detection is disabled when an explicit `format` is</span>
+<span class="sd">    provided.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If no appropriate parser could be found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">format</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">format</span>
+
+    <span class="c1"># Only guess if format is not provided</span>
+    <span class="k">if</span> <span class="n">format</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mmtf</span><span class="o">.</span><span class="n">MMTFDecoder</span><span class="p">):</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;mmtf&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">guess_format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">format</span> <span class="o">=</span> <span class="n">format</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_PARSERS</span><span class="p">[</span><span class="n">format</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Cannot autodetect topology type for file &#39;{0}&#39; &quot;</span>
+            <span class="s2">&quot;(file extension could not be parsed).</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;           You can use &#39;Universe(topology, ..., topology_format=FORMAT)&#39; &quot;</span>
+            <span class="s2">&quot;to explicitly specify the format and</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;           override automatic detection. Known FORMATs are:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;           {1}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;           See http://docs.mdanalysis.org/documentation_pages/topology/init.html#supported-topology-formats</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;           For missing formats, raise an issue at &quot;</span>
+            <span class="s2">&quot;http://issues.mdanalysis.org&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">_PARSERS</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MDAnalysis 0.16.0-dev0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2005-2015, Naveen Michaud-Agrawal, Elizabeth J. Denning, Christian Beckstein (logo), Joshua L. Adelman, Balasubramanian, Jonathan Barnoud, Tone Bengtsen, Alejandro Bernardin, Wouter Boomsma, Bart Bruininks, Sébastien Buchoux, David Caplan, Matthieu Chavent, Robert Delgado, John Detlefs, Xavier Deupi, Jan Domanski, David L. Dotson, Lennard van der Feltz, Philip Fowler, Joseph Goose, Richard J. Gowers, Lukas Grossar, Abhinav Gupta, Benjamin Hall, Eugen Hruska, Kyle J. Huston, Joe Jordan, Max Linke, Jinju Lu, Robert McGibbon, Manuel Nuno Melo, Fiona Naughton, Alex Nesterenko, Hai Nguyen, Mattia F. Palermo, Danny Parton, Joshua L. Phillips, Tyler Reddy, Paul Rigor, Carlos Yanez S., Utkarsh Saxena, Sean L. Seyler, Andy Somogyi, Caio S. Souza, Shantanu Srivastava, Lukas Stelzl, Gorman Stock, Matteo Tiberti, Isaac Virshup, Zhuyi Xue, and Oliver Beckstein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>
