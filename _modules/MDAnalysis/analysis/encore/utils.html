@@ -72,29 +72,34 @@
           <div class="body" role="main">
             
   <h1>Source code for MDAnalysis.analysis.encore.utils</h1><div class="highlight"><pre>
-<span></span><span class="c1"># utils.py --- Utility functions for encore package</span>
-<span class="c1"># Copyright (C) 2014 Wouter Boomsma, Matteo Tiberti</span>
+<span></span><span class="c1"># -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-</span>
+<span class="c1"># vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4</span>
 <span class="c1">#</span>
-<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
-<span class="c1"># it under the terms of the GNU General Public License as published by</span>
-<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
-<span class="c1"># (at your option) any later version.</span>
-
-<span class="c1"># This program is distributed in the hope that it will be useful,</span>
-<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c1"># GNU General Public License for more details.</span>
-
-<span class="c1"># You should have received a copy of the GNU General Public License</span>
-<span class="c1"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-
-
+<span class="c1"># MDAnalysis --- http://www.mdanalysis.org</span>
+<span class="c1"># Copyright (c) 2006-2016 The MDAnalysis Development Team and contributors</span>
+<span class="c1"># (see the file AUTHORS for the full list of names)</span>
+<span class="c1">#</span>
+<span class="c1"># Released under the GNU Public Licence, v2 or any higher version</span>
+<span class="c1">#</span>
+<span class="c1"># Please cite your use of MDAnalysis in published work:</span>
+<span class="c1">#</span>
+<span class="c1"># R. J. Gowers, M. Linke, J. Barnoud, T. J. E. Reddy, M. N. Melo, S. L. Seyler,</span>
+<span class="c1"># D. L. Dotson, J. Domanski, S. Buchoux, I. M. Kenney, and O. Beckstein.</span>
+<span class="c1"># MDAnalysis: A Python package for the rapid analysis of molecular dynamics</span>
+<span class="c1"># simulations. In S. Benthall and S. Rostrup editors, Proceedings of the 15th</span>
+<span class="c1"># Python in Science Conference, pages 102-109, Austin, TX, 2016. SciPy.</span>
+<span class="c1">#</span>
+<span class="c1"># N. Michaud-Agrawal, E. J. Denning, T. B. Woolf, and O. Beckstein.</span>
+<span class="c1"># MDAnalysis: A Toolkit for the Analysis of Molecular Dynamics Simulations.</span>
+<span class="c1"># J. Comput. Chem. 32 (2011), 2319--2327, doi:10.1002/jcc.21787</span>
+<span class="c1">#</span>
 <span class="kn">from</span> <span class="nn">multiprocessing.sharedctypes</span> <span class="kn">import</span> <span class="n">SynchronizedArray</span>
 <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Manager</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="kn">as</span> <span class="nn">mda</span>
 <span class="kn">from</span> <span class="nn">...coordinates.memory</span> <span class="kn">import</span> <span class="n">MemoryReader</span>
+
 
 <div class="viewcode-block" id="TriangularMatrix"><a class="viewcode-back" href="../../../../documentation_pages/analysis/encore/utils.html#MDAnalysis.analysis.encore.utils.TriangularMatrix">[docs]</a><span class="k">class</span> <span class="nc">TriangularMatrix</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Triangular matrix class. This class is designed to provide a</span>

@@ -72,22 +72,27 @@
           <div class="body" role="main">
             
   <h1>Source code for MDAnalysis.analysis.encore.confdistmatrix</h1><div class="highlight"><pre>
-<span></span><span class="c1"># confdistmatrix.py --- Conformational distance matrix calculator</span>
-<span class="c1"># Copyright (C) 2014 Wouter Boomsma, Matteo Tiberti</span>
+<span></span><span class="c1"># -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-</span>
+<span class="c1"># vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4</span>
 <span class="c1">#</span>
-<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
-<span class="c1"># it under the terms of the GNU General Public License as published by</span>
-<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
-<span class="c1"># (at your option) any later version.</span>
-
-<span class="c1"># This program is distributed in the hope that it will be useful,</span>
-<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c1"># GNU General Public License for more details.</span>
-
-<span class="c1"># You should have received a copy of the GNU General Public License</span>
-<span class="c1"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-
+<span class="c1"># MDAnalysis --- http://www.mdanalysis.org</span>
+<span class="c1"># Copyright (c) 2006-2016 The MDAnalysis Development Team and contributors</span>
+<span class="c1"># (see the file AUTHORS for the full list of names)</span>
+<span class="c1">#</span>
+<span class="c1"># Released under the GNU Public Licence, v2 or any higher version</span>
+<span class="c1">#</span>
+<span class="c1"># Please cite your use of MDAnalysis in published work:</span>
+<span class="c1">#</span>
+<span class="c1"># R. J. Gowers, M. Linke, J. Barnoud, T. J. E. Reddy, M. N. Melo, S. L. Seyler,</span>
+<span class="c1"># D. L. Dotson, J. Domanski, S. Buchoux, I. M. Kenney, and O. Beckstein.</span>
+<span class="c1"># MDAnalysis: A Python package for the rapid analysis of molecular dynamics</span>
+<span class="c1"># simulations. In S. Benthall and S. Rostrup editors, Proceedings of the 15th</span>
+<span class="c1"># Python in Science Conference, pages 102-109, Austin, TX, 2016. SciPy.</span>
+<span class="c1">#</span>
+<span class="c1"># N. Michaud-Agrawal, E. J. Denning, T. B. Woolf, and O. Beckstein.</span>
+<span class="c1"># MDAnalysis: A Toolkit for the Analysis of Molecular Dynamics Simulations.</span>
+<span class="c1"># J. Comput. Chem. 32 (2011), 2319--2327, doi:10.1002/jcc.21787</span>
+<span class="c1">#</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Distance Matrix calculation --- :mod:`MDAnalysis.analysis.ensemble.confdistmatrix`</span>
 <span class="sd">==================================================================================</span>
@@ -99,9 +104,6 @@
 <span class="sd">class to compute an RMSD matrix in such a way is also available.</span>
 
 <span class="sd">:Author: Matteo Tiberti, Wouter Boomsma, Tone Bengtsen</span>
-<span class="sd">:Year: 2015--2016</span>
-<span class="sd">:Copyright: GNU Public License v3</span>
-<span class="sd">:Mantainer: Matteo Tiberti &lt;matteo.tiberti@gmail.com&gt;, mtiberti on github</span>
 
 <span class="sd">.. versionadded:: 0.16.0</span>
 
@@ -146,7 +148,7 @@
 <span class="sd">        values. See set_rmsd_matrix_elements for an example.</span>
 
 <span class="sd">    pairwise_align : bool</span>
-<span class="sd">        Whether to perform pairwise alignment between conformations. </span>
+<span class="sd">        Whether to perform pairwise alignment between conformations.</span>
 <span class="sd">        Default is True (do the superimposition)</span>
 
 <span class="sd">    mass_weighted : bool</span>
@@ -158,7 +160,7 @@
 <span class="sd">        Default is True.</span>
 
 <span class="sd">    ncores : int</span>
-<span class="sd">        Number of cores to be used for parallel calculation </span>
+<span class="sd">        Number of cores to be used for parallel calculation</span>
 <span class="sd">        Default is 1.</span>
 
 <span class="sd">    Returns</span>
@@ -275,7 +277,7 @@
 
     <span class="c1"># Initialize workers. Simple worker doesn&#39;t perform fitting,</span>
     <span class="c1"># fitter worker does.</span>
-    
+
     <span class="n">workers</span> <span class="o">=</span> <span class="p">[</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">conf_dist_function</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span>
         <span class="n">tasks_per_worker</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
         <span class="n">rmsd_coordinates</span><span class="p">,</span>
@@ -292,7 +294,7 @@
         <span class="n">w</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">workers</span><span class="p">:</span>
         <span class="n">w</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
-    
+
     <span class="c1"># When the workers have finished, return a TriangularMatrix object</span>
     <span class="k">return</span> <span class="n">TriangularMatrix</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span></div>
 
@@ -316,7 +318,7 @@
 
 <span class="sd">        If fit_coords and fit_masses are specified, the structures</span>
 <span class="sd">        will be superimposed before calculating RMSD, and fit_coords and fit_masses</span>
-<span class="sd">        will be used to place both structures at their center of mass and </span>
+<span class="sd">        will be used to place both structures at their center of mass and</span>
 <span class="sd">        compute the rotation matrix. In this case, both fit_coords and fit_masses</span>
 <span class="sd">        must be specified.</span>
 
@@ -349,7 +351,7 @@
             <span class="n">summasses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span>
             <span class="n">rmsdmat</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">PureRMSD</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
                                                     <span class="n">coords</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
-                                                    <span class="n">coords</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+                                                    <span class="n">coords</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                                                     <span class="n">masses</span><span class="p">,</span>
                                                     <span class="n">summasses</span><span class="p">)</span>
 
@@ -372,7 +374,7 @@
                 <span class="n">rotated_i</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">translated_j</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
                 <span class="n">coords</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">masses</span><span class="p">,</span> <span class="n">summasses</span><span class="p">)</span>
 
-    <span class="k">else</span><span class="p">:</span> 
+    <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Both fit_coords and fit_masses must be specified </span><span class="se">\</span>
 <span class="s2">                        if one of them is given&quot;</span><span class="p">)</span>
 
