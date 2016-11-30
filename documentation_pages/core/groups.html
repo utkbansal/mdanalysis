@@ -353,8 +353,43 @@ Coordinates of sphere center as <code class="docutils literal"><span class="pre"
 </dd></dl>
 
 <dl class="method">
+<dt id="MDAnalysis.core.groups.AtomGroup.center">
+<code class="descname">center</code><span class="sig-paren">(</span><em>weights</em>, <em>pbc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.AtomGroup.center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate center of group given some weights</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>weights</strong> (<em>array_like</em>) &#8211; weights to be used</li>
+<li><strong>pbc</strong> (<em>boolean, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code>: Move all atoms within the primary unit cell
+before calculation [<code class="docutils literal"><span class="pre">False</span></code>]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>center</strong> &#8211;
+weighted center of group</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>To find the charge weighted center of a given Atomgroup:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sel</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s1">&#39;prop mass &gt; 4.0&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sel</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">sel</span><span class="o">.</span><span class="n">charges</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>If the <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.flags</span></code> flag <em>use_pbc</em> is set to
+<code class="docutils literal"><span class="pre">True</span></code> then the <cite>pbc</cite> keyword is used by default.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="MDAnalysis.core.groups.AtomGroup.center_of_geometry">
-<code class="descname">center_of_geometry</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.AtomGroup.center_of_geometry" title="Permalink to this definition">¶</a></dt>
+<code class="descname">center_of_geometry</code><span class="sig-paren">(</span><em>pbc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.AtomGroup.center_of_geometry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Center of geometry (also known as centroid) of the selection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -362,6 +397,11 @@ Coordinates of sphere center as <code class="docutils literal"><span class="pre"
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pbc</strong> (<em>boolean, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code>: Move all atoms within the primary unit cell
 before calculation [<code class="docutils literal"><span class="pre">False</span></code>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>center</strong> &#8211;
+geometric center of group</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
 </tr>
 </tbody>
 </table>
@@ -375,7 +415,7 @@ before calculation [<code class="docutils literal"><span class="pre">False</span
 
 <dl class="method">
 <dt id="MDAnalysis.core.groups.AtomGroup.centroid">
-<code class="descname">centroid</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.AtomGroup.centroid" title="Permalink to this definition">¶</a></dt>
+<code class="descname">centroid</code><span class="sig-paren">(</span><em>pbc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.AtomGroup.centroid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Center of geometry (also known as centroid) of the selection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -383,6 +423,11 @@ before calculation [<code class="docutils literal"><span class="pre">False</span
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pbc</strong> (<em>boolean, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code>: Move all atoms within the primary unit cell
 before calculation [<code class="docutils literal"><span class="pre">False</span></code>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>center</strong> &#8211;
+geometric center of group</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
 </tr>
 </tbody>
 </table>
@@ -1185,8 +1230,43 @@ Coordinates of sphere center as <code class="docutils literal"><span class="pre"
 </dd></dl>
 
 <dl class="method">
+<dt id="MDAnalysis.core.groups.ResidueGroup.center">
+<code class="descname">center</code><span class="sig-paren">(</span><em>weights</em>, <em>pbc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.ResidueGroup.center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate center of group given some weights</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>weights</strong> (<em>array_like</em>) &#8211; weights to be used</li>
+<li><strong>pbc</strong> (<em>boolean, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code>: Move all atoms within the primary unit cell
+before calculation [<code class="docutils literal"><span class="pre">False</span></code>]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>center</strong> &#8211;
+weighted center of group</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>To find the charge weighted center of a given Atomgroup:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sel</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s1">&#39;prop mass &gt; 4.0&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sel</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">sel</span><span class="o">.</span><span class="n">charges</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>If the <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.flags</span></code> flag <em>use_pbc</em> is set to
+<code class="docutils literal"><span class="pre">True</span></code> then the <cite>pbc</cite> keyword is used by default.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="MDAnalysis.core.groups.ResidueGroup.center_of_geometry">
-<code class="descname">center_of_geometry</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.ResidueGroup.center_of_geometry" title="Permalink to this definition">¶</a></dt>
+<code class="descname">center_of_geometry</code><span class="sig-paren">(</span><em>pbc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.ResidueGroup.center_of_geometry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Center of geometry (also known as centroid) of the selection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1194,6 +1274,11 @@ Coordinates of sphere center as <code class="docutils literal"><span class="pre"
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pbc</strong> (<em>boolean, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code>: Move all atoms within the primary unit cell
 before calculation [<code class="docutils literal"><span class="pre">False</span></code>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>center</strong> &#8211;
+geometric center of group</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
 </tr>
 </tbody>
 </table>
@@ -1207,7 +1292,7 @@ before calculation [<code class="docutils literal"><span class="pre">False</span
 
 <dl class="method">
 <dt id="MDAnalysis.core.groups.ResidueGroup.centroid">
-<code class="descname">centroid</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.ResidueGroup.centroid" title="Permalink to this definition">¶</a></dt>
+<code class="descname">centroid</code><span class="sig-paren">(</span><em>pbc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.ResidueGroup.centroid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Center of geometry (also known as centroid) of the selection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1215,6 +1300,11 @@ before calculation [<code class="docutils literal"><span class="pre">False</span
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pbc</strong> (<em>boolean, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code>: Move all atoms within the primary unit cell
 before calculation [<code class="docutils literal"><span class="pre">False</span></code>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>center</strong> &#8211;
+geometric center of group</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
 </tr>
 </tbody>
 </table>
@@ -1660,8 +1750,43 @@ Coordinates of sphere center as <code class="docutils literal"><span class="pre"
 </dd></dl>
 
 <dl class="method">
+<dt id="MDAnalysis.core.groups.SegmentGroup.center">
+<code class="descname">center</code><span class="sig-paren">(</span><em>weights</em>, <em>pbc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.SegmentGroup.center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate center of group given some weights</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>weights</strong> (<em>array_like</em>) &#8211; weights to be used</li>
+<li><strong>pbc</strong> (<em>boolean, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code>: Move all atoms within the primary unit cell
+before calculation [<code class="docutils literal"><span class="pre">False</span></code>]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>center</strong> &#8211;
+weighted center of group</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>To find the charge weighted center of a given Atomgroup:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sel</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s1">&#39;prop mass &gt; 4.0&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sel</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">sel</span><span class="o">.</span><span class="n">charges</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>If the <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.core.flags</span></code> flag <em>use_pbc</em> is set to
+<code class="docutils literal"><span class="pre">True</span></code> then the <cite>pbc</cite> keyword is used by default.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="MDAnalysis.core.groups.SegmentGroup.center_of_geometry">
-<code class="descname">center_of_geometry</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.SegmentGroup.center_of_geometry" title="Permalink to this definition">¶</a></dt>
+<code class="descname">center_of_geometry</code><span class="sig-paren">(</span><em>pbc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.SegmentGroup.center_of_geometry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Center of geometry (also known as centroid) of the selection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1669,6 +1794,11 @@ Coordinates of sphere center as <code class="docutils literal"><span class="pre"
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pbc</strong> (<em>boolean, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code>: Move all atoms within the primary unit cell
 before calculation [<code class="docutils literal"><span class="pre">False</span></code>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>center</strong> &#8211;
+geometric center of group</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
 </tr>
 </tbody>
 </table>
@@ -1682,7 +1812,7 @@ before calculation [<code class="docutils literal"><span class="pre">False</span
 
 <dl class="method">
 <dt id="MDAnalysis.core.groups.SegmentGroup.centroid">
-<code class="descname">centroid</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.SegmentGroup.centroid" title="Permalink to this definition">¶</a></dt>
+<code class="descname">centroid</code><span class="sig-paren">(</span><em>pbc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.SegmentGroup.centroid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Center of geometry (also known as centroid) of the selection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1690,6 +1820,11 @@ before calculation [<code class="docutils literal"><span class="pre">False</span
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pbc</strong> (<em>boolean, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code>: Move all atoms within the primary unit cell
 before calculation [<code class="docutils literal"><span class="pre">False</span></code>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>center</strong> &#8211;
+geometric center of group</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
 </tr>
 </tbody>
 </table>

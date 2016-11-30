@@ -449,7 +449,48 @@
     <span class="k">def</span> <span class="nf">dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">ts</span><span class="o">.</span><span class="n">dimensions</span>
 
-    <span class="k">def</span> <span class="nf">center_of_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">pbc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculate center of group given some weights</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        weights : array_like</span>
+<span class="sd">            weights to be used</span>
+<span class="sd">        pbc : boolean, optional</span>
+<span class="sd">            ``True``: Move all atoms within the primary unit cell</span>
+<span class="sd">            before calculation [``False``]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        center : ndarray</span>
+<span class="sd">            weighted center of group</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        To find the charge weighted center of a given Atomgroup::</span>
+
+<span class="sd">            &gt;&gt;&gt; sel = u.select_atoms(&#39;prop mass &gt; 4.0&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; sel.center(sel.charges)</span>
+
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        If the :class:`MDAnalysis.core.flags` flag *use_pbc* is set to</span>
+<span class="sd">        ``True`` then the `pbc` keyword is used by default.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span>
+        <span class="k">if</span> <span class="n">pbc</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">pbc</span> <span class="o">=</span> <span class="n">flags</span><span class="p">[</span><span class="s1">&#39;use_pbc&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">pbc</span><span class="p">:</span>
+            <span class="n">xyz</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">pack_into_box</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xyz</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">center_of_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pbc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Center of geometry (also known as centroid) of the selection.</span>
 
 <span class="sd">        Parameters</span>
@@ -457,6 +498,11 @@
 <span class="sd">        pbc : boolean, optional</span>
 <span class="sd">            ``True``: Move all atoms within the primary unit cell</span>
 <span class="sd">            before calculation [``False``]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        center : ndarray</span>
+<span class="sd">            geometric center of group</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -466,13 +512,7 @@
 
 <span class="sd">        .. versionchanged:: 0.8 Added `pbc` keyword</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">atomgroup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span>
-
-        <span class="n">pbc</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;pbc&#39;</span><span class="p">,</span> <span class="n">flags</span><span class="p">[</span><span class="s1">&#39;use_pbc&#39;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">pbc</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">.</span><span class="n">pack_into_box</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">atomgroup</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">.</span><span class="n">positions</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">atomgroup</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">pbc</span><span class="o">=</span><span class="n">pbc</span><span class="p">)</span>
 
     <span class="n">centroid</span> <span class="o">=</span> <span class="n">center_of_geometry</span>
 

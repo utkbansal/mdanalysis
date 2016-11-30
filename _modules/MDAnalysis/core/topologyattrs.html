@@ -588,7 +588,7 @@
 
         <span class="k">return</span> <span class="n">masses</span>
 
-    <span class="k">def</span> <span class="nf">center_of_mass</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">center_of_mass</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">pbc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Center of mass of the Group.</span>
 
 <span class="sd">        Parameters</span>
@@ -597,24 +597,20 @@
 <span class="sd">            If ``True``, move all atoms within the primary unit cell before</span>
 <span class="sd">            calculation. [``False``]</span>
 
-<span class="sd">        .. note::</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        center : ndarray</span>
+<span class="sd">            center of group given masses as weights</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
 <span class="sd">            The :class:`MDAnalysis.core.flags` flag *use_pbc* when set to</span>
 <span class="sd">            ``True`` allows the *pbc* flag to be used by default.</span>
 
 <span class="sd">        .. versionchanged:: 0.8 Added `pbc` parameter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">atomgroup</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">atoms</span>
-
-        <span class="n">pbc</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;pbc&#39;</span><span class="p">,</span> <span class="n">flags</span><span class="p">[</span><span class="s1">&#39;use_pbc&#39;</span><span class="p">])</span>
-        <span class="n">masses</span> <span class="o">=</span> <span class="n">atomgroup</span><span class="o">.</span><span class="n">masses</span>
-
-        <span class="k">if</span> <span class="n">pbc</span><span class="p">:</span>
-            <span class="n">positions</span> <span class="o">=</span> <span class="n">atomgroup</span><span class="o">.</span><span class="n">pack_into_box</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">positions</span> <span class="o">=</span> <span class="n">atomgroup</span><span class="o">.</span><span class="n">positions</span>
-
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">positions</span> <span class="o">*</span> <span class="n">masses</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
-                      <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">masses</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">group</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">masses</span><span class="p">,</span>
+                                  <span class="n">pbc</span><span class="o">=</span><span class="n">pbc</span><span class="p">)</span>
 
     <span class="n">transplants</span><span class="p">[</span><span class="n">GroupBase</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
         <span class="p">(</span><span class="s1">&#39;center_of_mass&#39;</span><span class="p">,</span> <span class="n">center_of_mass</span><span class="p">))</span>
