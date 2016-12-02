@@ -922,11 +922,11 @@
 <span class="sd">        [ 6880.34140106     0.        ]]</span>
 
 <span class="sd">    Alternatively, for greater flexibility in how the alignment should be done</span>
-<span class="sd">    you can call the rms_fit_trj function manually:</span>
+<span class="sd">    you can call use an AlignTraj object manually:</span>
 
 <span class="sd">        &gt;&gt;&gt; from MDAnalysis.analysis import align</span>
-<span class="sd">        &gt;&gt;&gt; align.rms_fit_trj(ens1, ens1, select=&quot;name CA&quot;, in_memory=True)</span>
-<span class="sd">        &gt;&gt;&gt; align.rms_fit_trj(ens2, ens1, select=&quot;name CA&quot;, in_memory=True)</span>
+<span class="sd">        &gt;&gt;&gt; align.AlignTraj(ens1, ens1, select=&quot;name CA&quot;, in_memory=True).run()</span>
+<span class="sd">        &gt;&gt;&gt; align.AlignTraj(ens2, ens1, select=&quot;name CA&quot;, in_memory=True).run()</span>
 <span class="sd">        &gt;&gt;&gt; print encore.hes([ens1, ens2])[0]</span>
 <span class="sd">        [[    0.          7032.19607004]</span>
 <span class="sd">         [ 7032.19607004     0.        ]]</span>
@@ -937,10 +937,10 @@
     <span class="c1"># on the universe.</span>
     <span class="k">if</span> <span class="n">align</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">ensemble</span> <span class="ow">in</span> <span class="n">ensembles</span><span class="p">:</span>
-            <span class="n">mda</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">align</span><span class="o">.</span><span class="n">rms_fit_trj</span><span class="p">(</span><span class="n">ensemble</span><span class="p">,</span> <span class="n">ensembles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                           <span class="n">select</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span>
-                                           <span class="n">mass_weighted</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                                           <span class="n">in_memory</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">mda</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">align</span><span class="o">.</span><span class="n">AlignTraj</span><span class="p">(</span><span class="n">ensemble</span><span class="p">,</span> <span class="n">ensembles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                         <span class="n">select</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span>
+                                         <span class="n">mass_weighted</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                         <span class="n">in_memory</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">ensemble</span> <span class="ow">in</span> <span class="n">ensembles</span><span class="p">:</span>
             <span class="n">ensemble</span><span class="o">.</span><span class="n">transfer_to_memory</span><span class="p">()</span>
