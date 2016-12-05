@@ -61,6 +61,7 @@
 <li><a class="reference internal" href="#">10. Library functions &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.lib</span></code></a><ul>
 <li><a class="reference internal" href="#overview">10.1. Overview</a></li>
 <li><a class="reference internal" href="#list-of-modules">10.2. List of modules</a></li>
+<li><a class="reference internal" href="#low-level-file-formats">10.3. Low level file formats</a></li>
 </ul>
 </li>
 </ul>
@@ -136,6 +137,20 @@ searches with MDAnalysis objects.</p>
 <li class="toctree-l1"><a class="reference internal" href="lib/transformations.html">10.2.6. Homogeneous Transformation Matrices and Quaternions &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.lib.transformations</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="lib/qcprot.html">10.2.7. Fast QCP RMSD structure alignment &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.lib.qcprot</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="lib/util.html">10.2.8. Helper functions &#8212; <code class="docutils literal"><span class="pre">MDAnalysis.lib.util</span></code></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="low-level-file-formats">
+<h2>10.3. Low level file formats<a class="headerlink" href="#low-level-file-formats" title="Permalink to this headline">¶</a></h2>
+<p>The modules in <code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.lib.formats</span></code> contain code to access various file
+formats in a way that is <em>independent from other MDAnalysis functionality</em>
+(i.e., they do not use any classes from <code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.core</span></code> or
+<code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.topology</span></code>). This low-level code is used in the
+<code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates</span></code> module but can also be re-used by other
+Python-based projects.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lib/formats/libmdaxdr.html">10.3.1. Low-level Gromacs XDR trajectory reading — <code class="docutils literal"><span class="pre">MDAnalysis.lib.formats.libmdaxdr</span></code></a></li>
 </ul>
 </div>
 </div>

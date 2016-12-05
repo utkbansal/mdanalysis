@@ -102,6 +102,7 @@
 <span class="sd">See Also</span>
 <span class="sd">--------</span>
 <span class="sd">MDAnalysis.coordinates.TRR: Read and write GROMACS TRR trajectory files.</span>
+<span class="sd">MDAnalysis.coordinates.XDR: BaseReader/Writer for XDR based formats</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">.XDR</span> <span class="kn">import</span> <span class="n">XDRBaseReader</span><span class="p">,</span> <span class="n">XDRBaseWriter</span>
@@ -110,23 +111,11 @@
 
 
 <div class="viewcode-block" id="XTCWriter"><a class="viewcode-back" href="../../../documentation_pages/coordinates/XTC.html#MDAnalysis.coordinates.XTC.XTCWriter">[docs]</a><span class="k">class</span> <span class="nc">XTCWriter</span><span class="p">(</span><span class="n">XDRBaseWriter</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    XTC is a compressed trajectory format from Gromacs. The trajectory is saved</span>
+    <span class="sd">&quot;&quot;&quot;XTC is a compressed trajectory format from Gromacs. The trajectory is saved</span>
 <span class="sd">    with reduced precision (3 decimal places by default) compared to other</span>
 <span class="sd">    lossless formarts like TRR and DCD. The main advantage of XTC files is that</span>
 <span class="sd">    they require significantly less disk space and the loss of precision is</span>
 <span class="sd">    usually not a problem.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    filename : str</span>
-<span class="sd">        filename of the trajectory</span>
-<span class="sd">    n_atoms : int</span>
-<span class="sd">        number of atoms to write</span>
-<span class="sd">    convert_units : bool (optional)</span>
-<span class="sd">        convert into MDAnalysis units</span>
-<span class="sd">    precision : float (optional)</span>
-<span class="sd">        set precision of saved trjactory to this number of decimal places.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;XTC&#39;</span>
     <span class="n">units</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="s1">&#39;ps&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">:</span> <span class="s1">&#39;nm&#39;</span><span class="p">}</span>
@@ -134,6 +123,17 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">n_atoms</span><span class="p">,</span> <span class="n">convert_units</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                  <span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            filename of the trajectory</span>
+<span class="sd">        n_atoms : int</span>
+<span class="sd">            number of atoms to write</span>
+<span class="sd">        convert_units : bool (optional)</span>
+<span class="sd">            convert into MDAnalysis units</span>
+<span class="sd">        precision : float (optional)</span>
+<span class="sd">            set precision of saved trjactory to this number of decimal places.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">XTCWriter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">n_atoms</span><span class="p">,</span> <span class="n">convert_units</span><span class="p">,</span>
                                         <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="n">precision</span>
@@ -174,17 +174,10 @@
 <span class="sd">    require significantly less disk space and the loss of precision is usually</span>
 <span class="sd">    not a problem.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    filename : str</span>
-<span class="sd">        filename of the trajectory</span>
-<span class="sd">    convert_units : bool (optional)</span>
-<span class="sd">        convert into MDAnalysis units</span>
-<span class="sd">    sub : atomgroup (optional)</span>
-<span class="sd">        Yeah what is that exactly</span>
-<span class="sd">    refresh_offsets : bool (optional)</span>
-<span class="sd">        Recalculate offsets for random access from file. If ``False`` try to</span>
-<span class="sd">        retrieve offsets from hidden offsets file.</span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    See :ref:`Notes on offsets &lt;offsets-label&gt;` for more information about</span>
+<span class="sd">    offsets.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">format</span> <span class="o">=</span> <span class="s1">&#39;XTC&#39;</span>
