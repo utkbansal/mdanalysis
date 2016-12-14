@@ -108,7 +108,8 @@ Changes
     raising TypeError and filename is now a required arg instead of kwarg
   * moved coordinates.base.ChainReader to coordinates.chain.ChainReader
   * renamed private method ChainReader.get_flname() to ChainReader._get_filename()
-
+  * made online docs responsive with the Alabaster Sphinx theme (#378)
+        
 Deprecations (Issue #599)
   * Use of rms_fit_trj deprecated in favor of AlignTraj class (Issue #845)
   * Moved analysis.x3dna to the analysis.legacy module (Issue #906)

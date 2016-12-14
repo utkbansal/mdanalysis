@@ -15,9 +15,10 @@ import sys
 import os
 import platform
 
+# http://alabaster.readthedocs.io/en/latest/
+import alabaster
 
 class Mock(object):
-
     __all__ = []
 
     def __init__(self, *args, **kwargs):
@@ -37,9 +38,11 @@ class Mock(object):
         else:
             return Mock()
 
-#MOCK_MODULES = ['MDAnalysis']
-#for mod_name in MOCK_MODULES:
-    #sys.modules[mod_name] = Mock()
+# for some reason, can't get the following to work in
+# my virtualenv
+# MOCK_MODULES = ['mmtf']
+# for mod_name in MOCK_MODULES:
+#     sys.modules[mod_name] = Mock()
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -58,7 +61,8 @@ sys.path.insert(0, os.path.abspath('../../..'))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx',
               'sphinx.ext.mathjax', 'sphinx.ext.viewcode',
-              'sphinx.ext.napoleon',]
+              'sphinx.ext.napoleon',
+              'alabaster']
 mathjax_path = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
 
 # Add any paths that contain templates here, relative to this directory.
@@ -81,7 +85,7 @@ master_doc = 'index'
 author_list = __import__('MDAnalysis').__authors__
 authors = u', '.join(author_list[:-1]) + u', and ' + author_list[-1]
 project = u'MDAnalysis'
-copyright = u'2005-2015, ' + authors
+copyright = u'2005-2016, ' + authors
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -135,15 +139,44 @@ autoclass_content = 'both'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'sphinxdoc'
+html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+#
+# styles/fonts to match http://mdanalysis.org (see public/css)
+#
+# /* MDAnalysis orange: #FF9200 */
+# /* MDAnalysis gray: #808080 */
+# /* MDAnalysis white: #FFFFFF */
+# /* MDAnalysis black: #000000 */
+
+color = {'orange': '#FF9200',
+         'gray': '#808080',
+         'white': '#FFFFFF',
+         'black': '#000000',}
+
+html_theme_options = {
+    'logo' : "logos/mdanalysis-logo-200x150.png",
+    'github_user': 'MDAnalysis',
+    'github_repo': 'mdanalysis',
+    'travis_button': 'MDAnalysis/mdanalysis',
+    'github_type': 'star',
+    'github_banner': True,
+    'show_related': True,
+    'fixed_sidebar': True,
+    # style
+    'link': color['orange'],
+    'link_hover': color['orange'],
+    # typography
+    'font_family': "'PT Sans', Helvetica, Arial, 'sans-serif'",
+    'head_font_family': "",
+    'code_font_family': "Menlo, Monaco, 'Courier New', monospace",
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
+html_theme_path = [alabaster.get_path()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -153,18 +186,18 @@ html_theme = 'sphinxdoc'
 #html_short_title = None
 
 # The name of an image file (relative to this directory) to place at the top
-# of the sidebar.
-html_logo = "logos/mdanalysis-logo-200x150.png"
+# of the sidebar. --- use theme
+##html_logo = "logos/mdanalysis-logo-200x150.png"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = "logos/mdanalysis-logo.ico"
+html_favicon = "_static/logos/mdanalysis-logo.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-#html_static_path = ['_static']
+html_static_path = ['_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -175,7 +208,15 @@ html_favicon = "logos/mdanalysis-logo.ico"
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
+# alabaster sidebars
+html_sidebars = {
+    '**': [
+        'about.html',
+        'navigation.html',
+        'relations.html',
+        'searchbox.html',
+    ]
+}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
