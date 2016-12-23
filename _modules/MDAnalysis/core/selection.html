@@ -128,15 +128,6 @@
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">SelectionError</span><span class="p">,</span> <span class="n">NoDataError</span>
 
 
-<div class="viewcode-block" id="unique"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.unique">[docs]</a><span class="k">def</span> <span class="nf">unique</span><span class="p">(</span><span class="n">ag</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the unique elements of ag&quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">ag</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ag</span><span class="o">.</span><span class="n">indices</span><span class="p">)]</span>
-    <span class="k">except</span> <span class="n">NoDataError</span><span class="p">:</span>
-        <span class="c1"># zero length AG has no Universe</span>
-        <span class="k">return</span> <span class="n">ag</span></div>
-
-
 <div class="viewcode-block" id="is_keyword"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.is_keyword">[docs]</a><span class="k">def</span> <span class="nf">is_keyword</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Is val a selection keyword?</span>
 
@@ -221,7 +212,7 @@
         <span class="c1"># Mask which lsel indices appear in rsel</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">rsel</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">lsel</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
         <span class="c1"># and mask rsel according to that</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">rsel</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">rsel</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
 
 <span class="k">class</span> <span class="nc">OrOperation</span><span class="p">(</span><span class="n">LogicOperation</span><span class="p">):</span>
@@ -265,7 +256,7 @@
         <span class="c1"># are unique by construction.</span>
         <span class="k">if</span> <span class="n">group</span> <span class="ow">is</span> <span class="n">group</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">atoms</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">group</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[:])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[:]</span><span class="o">.</span><span class="n">unique</span>
 
 
 <span class="k">class</span> <span class="nc">UnarySelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">):</span>
@@ -280,7 +271,7 @@
 
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="n">notsel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sel</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">notsel</span><span class="o">.</span><span class="n">indices</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">notsel</span><span class="o">.</span><span class="n">indices</span><span class="p">)]</span><span class="o">.</span><span class="n">unique</span>
 
 
 <span class="k">class</span> <span class="nc">GlobalSelection</span><span class="p">(</span><span class="n">UnarySelection</span><span class="p">):</span>
@@ -288,7 +279,7 @@
     <span class="n">precedence</span> <span class="o">=</span> <span class="mi">5</span>
 
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sel</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">atoms</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sel</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span>
 
 
 <span class="k">class</span> <span class="nc">ByResSelection</span><span class="p">(</span><span class="n">UnarySelection</span><span class="p">):</span>
@@ -300,7 +291,7 @@
         <span class="n">unique_res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">resids</span><span class="p">)</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">resids</span><span class="p">,</span> <span class="n">unique_res</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
 
 <div class="viewcode-block" id="DistanceSelection"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.DistanceSelection">[docs]</a><span class="k">class</span> <span class="nc">DistanceSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">):</span>
@@ -353,7 +344,7 @@
         <span class="c1"># These are the indices from SYS that were seen when</span>
         <span class="c1"># probing with SEL</span>
         <span class="n">unique_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">found_indices</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">unique_idx</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="n">sys</span><span class="p">[</span><span class="n">unique_idx</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)]</span><span class="o">.</span><span class="n">unique</span>
 
     <span class="k">def</span> <span class="nf">_apply_distmat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="n">sel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sel</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
@@ -365,7 +356,7 @@
 
         <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">dist</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">sys</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
 
 <span class="k">class</span> <span class="nc">SphericalLayerSelection</span><span class="p">(</span><span class="n">DistanceSelection</span><span class="p">):</span>
@@ -392,7 +383,7 @@
         <span class="n">kdtree</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inRadius</span><span class="p">)</span>
         <span class="n">found_IntIndices</span> <span class="o">=</span> <span class="n">kdtree</span><span class="o">.</span><span class="n">get_indices</span><span class="p">()</span>
         <span class="n">found_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">found_ExtIndices</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">found_IntIndices</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">found_indices</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">found_indices</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
     <span class="k">def</span> <span class="nf">_apply_distmat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="n">sel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sel</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
@@ -405,7 +396,7 @@
         <span class="n">mask</span> <span class="o">=</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">exRadius</span>
         <span class="n">mask</span> <span class="o">&amp;=</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">inRadius</span>
 
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
 
 <span class="k">class</span> <span class="nc">SphericalZoneSelection</span><span class="p">(</span><span class="n">DistanceSelection</span><span class="p">):</span>
@@ -429,7 +420,7 @@
         <span class="n">kdtree</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span>
         <span class="n">found_indices</span> <span class="o">=</span> <span class="n">kdtree</span><span class="o">.</span><span class="n">get_indices</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">found_indices</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">found_indices</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
     <span class="k">def</span> <span class="nf">_apply_distmat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="n">sel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sel</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
@@ -440,7 +431,7 @@
                                      <span class="n">group</span><span class="o">.</span><span class="n">positions</span><span class="p">,</span>
                                      <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
 
 <span class="k">class</span> <span class="nc">CylindricalSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">):</span>
@@ -501,7 +492,7 @@
             <span class="c1"># Only for cylayer, cyzone doesn&#39;t have inRadius</span>
             <span class="k">pass</span>
 
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
 
 <span class="k">class</span> <span class="nc">CylindricalZoneSelection</span><span class="p">(</span><span class="n">CylindricalSelection</span><span class="p">):</span>
@@ -546,7 +537,7 @@
         <span class="n">kdtree</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span>
         <span class="n">found_indices</span> <span class="o">=</span> <span class="n">kdtree</span><span class="o">.</span><span class="n">get_indices</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">found_indices</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">found_indices</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
     <span class="k">def</span> <span class="nf">_apply_distmat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="n">ref_coor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
@@ -556,7 +547,7 @@
 
         <span class="n">dist</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">distance_array</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">positions</span><span class="p">,</span> <span class="n">ref_coor</span><span class="p">,</span> <span class="n">box</span><span class="p">)</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">dist</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
 
 <span class="k">class</span> <span class="nc">AtomSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">):</span>
@@ -573,7 +564,7 @@
             <span class="n">sub</span> <span class="o">=</span> <span class="n">sub</span><span class="p">[</span><span class="n">sub</span><span class="o">.</span><span class="n">resids</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">resid</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">sub</span><span class="p">:</span>
             <span class="n">sub</span> <span class="o">=</span> <span class="n">sub</span><span class="p">[</span><span class="n">sub</span><span class="o">.</span><span class="n">segids</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">segid</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">sub</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sub</span><span class="o">.</span><span class="n">unique</span>
 
 
 <span class="k">class</span> <span class="nc">BondedSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">):</span>
@@ -634,7 +625,7 @@
     <span class="nd">@deprecate</span><span class="p">(</span><span class="n">old_name</span><span class="o">=</span><span class="s1">&#39;fullgroup&#39;</span><span class="p">,</span> <span class="n">new_name</span><span class="o">=</span><span class="s1">&#39;global group&#39;</span><span class="p">,</span>
                <span class="n">message</span><span class="o">=</span><span class="s1">&#39; This will be removed in v0.15.0&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grp</span><span class="o">.</span><span class="n">unique</span>
 
 
 <div class="viewcode-block" id="StringSelection"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.StringSelection">[docs]</a><span class="k">class</span> <span class="nc">StringSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">):</span>
@@ -659,7 +650,7 @@
                 <span class="n">values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">)</span>
                 <span class="n">mask</span> <span class="o">|=</span> <span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">val</span><span class="p">[:</span><span class="n">wc_pos</span><span class="p">])</span>
 
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span></div>
 
 
 <div class="viewcode-block" id="AtomNameSelection"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.AtomNameSelection">[docs]</a><span class="k">class</span> <span class="nc">AtomNameSelection</span><span class="p">(</span><span class="n">StringSelection</span><span class="p">):</span>
@@ -758,7 +749,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sel_without_icodes</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
     <span class="k">def</span> <span class="nf">_sel_without_icodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
         <span class="c1"># Final mask that gets applied to group</span>
@@ -863,7 +854,7 @@
                 <span class="n">thismask</span> <span class="o">=</span> <span class="n">vals</span> <span class="o">==</span> <span class="n">lower</span>
 
             <span class="n">mask</span> <span class="o">|=</span> <span class="n">thismask</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
 
 <span class="k">class</span> <span class="nc">ByNumSelection</span><span class="p">(</span><span class="n">RangeSelection</span><span class="p">):</span>
@@ -881,7 +872,7 @@
                 <span class="n">thismask</span> <span class="o">=</span> <span class="n">vals</span> <span class="o">==</span> <span class="n">lower</span>
 
             <span class="n">mask</span> <span class="o">|=</span> <span class="n">thismask</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
 
 
@@ -927,7 +918,7 @@
 
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">resnames</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prot_res</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span></div>
 
 
 <div class="viewcode-block" id="NucleicSelection"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.NucleicSelection">[docs]</a><span class="k">class</span> <span class="nc">NucleicSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">):</span>
@@ -959,7 +950,7 @@
 
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">resnames</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nucl_res</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span></div>
 
 
 <div class="viewcode-block" id="BackboneSelection"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.BackboneSelection">[docs]</a><span class="k">class</span> <span class="nc">BackboneSelection</span><span class="p">(</span><span class="n">ProteinSelection</span><span class="p">):</span>
@@ -974,7 +965,7 @@
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb_atoms</span><span class="p">)</span>
         <span class="n">mask</span> <span class="o">&amp;=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">resnames</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prot_res</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span></div>
 
 
 <div class="viewcode-block" id="NucleicBackboneSelection"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.NucleicBackboneSelection">[docs]</a><span class="k">class</span> <span class="nc">NucleicBackboneSelection</span><span class="p">(</span><span class="n">NucleicSelection</span><span class="p">):</span>
@@ -989,7 +980,7 @@
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb_atoms</span><span class="p">)</span>
         <span class="n">mask</span> <span class="o">&amp;=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">resnames</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nucl_res</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span></div>
 
 
 <div class="viewcode-block" id="BaseSelection"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.BaseSelection">[docs]</a><span class="k">class</span> <span class="nc">BaseSelection</span><span class="p">(</span><span class="n">NucleicSelection</span><span class="p">):</span>
@@ -1009,7 +1000,7 @@
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_atoms</span><span class="p">)</span>
         <span class="n">mask</span> <span class="o">&amp;=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">resnames</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nucl_res</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span></div>
 
 
 <div class="viewcode-block" id="NucleicSugarSelection"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.NucleicSugarSelection">[docs]</a><span class="k">class</span> <span class="nc">NucleicSugarSelection</span><span class="p">(</span><span class="n">NucleicSelection</span><span class="p">):</span>
@@ -1021,7 +1012,7 @@
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sug_atoms</span><span class="p">)</span>
         <span class="n">mask</span> <span class="o">&amp;=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">resnames</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nucl_res</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span></div>
 
 
 <div class="viewcode-block" id="PropertySelection"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.PropertySelection">[docs]</a><span class="k">class</span> <span class="nc">PropertySelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">):</span>
@@ -1075,7 +1066,7 @@
             <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span></div>
 
 
 <span class="k">class</span> <span class="nc">SameSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">):</span>
@@ -1124,7 +1115,7 @@
             <span class="n">allfrags</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">fragments</span><span class="p">)</span>
 
             <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">allfrags</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
         <span class="c1"># [xyz] must come before self.prop_trans lookups too!</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">pos_idx</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}[</span><span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="p">]</span>
@@ -1136,7 +1127,7 @@
             <span class="n">vals</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">attrname</span><span class="p">)</span>
             <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">attrname</span><span class="p">),</span> <span class="n">vals</span><span class="p">)</span>
 
-            <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">vals</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">positions</span><span class="p">[:,</span> <span class="n">pos_idx</span><span class="p">]</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">positions</span><span class="p">[:,</span> <span class="n">pos_idx</span><span class="p">]</span>
@@ -1144,7 +1135,7 @@
             <span class="c1"># isclose only does one value at a time</span>
             <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
                               <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vals</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">unique</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span>
 
 
 <div class="viewcode-block" id="SelectionParser"><a class="viewcode-back" href="../../../documentation_pages/core/selection.html#MDAnalysis.core.selection.SelectionParser">[docs]</a><span class="k">class</span> <span class="nc">SelectionParser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
