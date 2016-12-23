@@ -203,12 +203,31 @@ hand, if the  are very unstable, we can assume that residue 38 is hydrophobic:</
 <span class="n">selection2</span> <span class="o">=</span> <span class="s2">&quot;resid 38&quot;</span>
 <span class="n">HBL_analysis</span> <span class="o">=</span> <span class="n">HBL</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span> <span class="n">selection1</span><span class="p">,</span> <span class="n">selection2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
 <span class="n">HBL_analysis</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="c1">#now we print the data ready to graph. The first two columns are the HBLc vs t graph and</span>
 <span class="c1">#the second two columns are the HBLi vs t graph</span>
 <span class="k">for</span> <span class="n">HBLc</span><span class="p">,</span> <span class="n">HBLi</span> <span class="ow">in</span> <span class="n">HBL_analysis</span><span class="o">.</span><span class="n">timeseries</span><span class="p">:</span>
-      <span class="k">print</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">HBLc</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">i</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">HBLi</span><span class="p">)</span>
-      <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+      <span class="k">print</span><span class="p">(</span><span class="s2">&quot;{time} {HBLc} {time} {HBLi}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">HBLc</span><span class="o">=</span><span class="n">HBLc</span><span class="p">,</span> <span class="n">HBLi</span><span class="o">=</span><span class="n">HBLi</span><span class="p">))</span>
+      <span class="n">time</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1">#we can also plot our data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1">#HBL continuos</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;HBLc&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;HBL Continuos&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">time</span><span class="p">),[</span><span class="n">column</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">HBL_analysis</span><span class="o">.</span><span class="n">timeseries</span><span class="p">])</span>
+
+<span class="c1">#HBL intermitent</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;HBLi&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;HBL Intermitent&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">time</span><span class="p">),[</span><span class="n">column</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">HBL_analysis</span><span class="o">.</span><span class="n">timeseries</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>where HBLc is the value for the continuos hydrogen bond lifetimes and HBLi is the value for the intermittent
@@ -225,11 +244,38 @@ hydrogen bond lifetime, t0 = 0, tf = 2000 and dtmax = 30. In this way we create 
 <span class="n">selection</span> <span class="o">=</span> <span class="s2">&quot;byres name OH2 and sphzone 6.0 protein and resid 42&quot;</span>
 <span class="n">WOR_analysis</span> <span class="o">=</span> <span class="n">WOR</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span> <span class="n">selection</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="n">WOR_analysis</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="c1">#now we print the data ready to graph. The first two columns are WOR_OH vs t graph,</span>
 <span class="c1">#the second two columns are WOR_HH vs t graph and the third two columns are WOR_dip vs t graph</span>
 <span class="k">for</span> <span class="n">WOR_OH</span><span class="p">,</span> <span class="n">WOR_HH</span><span class="p">,</span> <span class="n">WOR_dip</span> <span class="ow">in</span> <span class="n">WOR_analysis</span><span class="o">.</span><span class="n">timeseries</span><span class="p">:</span>
-      <span class="k">print</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">WOR_OH</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">i</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">WOR_HH</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">i</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">WOR_dip</span><span class="p">)</span>
+      <span class="k">print</span><span class="p">(</span><span class="s2">&quot;{time} {WOR_OH} {time} {WOR_HH} {time} {WOR_dip}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">WOR_OH</span><span class="o">=</span><span class="n">WOR_OH</span><span class="p">,</span> <span class="n">WOR_HH</span><span class="o">=</span><span class="n">WOR_HH</span><span class="p">,</span><span class="n">WOR_dip</span><span class="o">=</span><span class="n">WOR_dip</span><span class="p">))</span>
+      <span class="n">time</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1">#now, if we want, we can plot our data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1">#WOR OH</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;WOR&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;WOR OH&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">time</span><span class="p">),[</span><span class="n">column</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">WOR_analysis</span><span class="o">.</span><span class="n">timeseries</span><span class="p">])</span>
+
+<span class="c1">#WOR HH</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;WOR&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;WOR HH&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">time</span><span class="p">),[</span><span class="n">column</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">WOR_analysis</span><span class="o">.</span><span class="n">timeseries</span><span class="p">])</span>
+
+<span class="c1">#WOR dip</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;WOR&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;WOR dip&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">time</span><span class="p">),[</span><span class="n">column</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">WOR_analysis</span><span class="o">.</span><span class="n">timeseries</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>where t0 = 0, tf = 1000 and dtmax = 20. In this way we create 20 windows timesteps (20 values in the x axis),
@@ -254,15 +300,41 @@ with something (residue, protein, etc):</p>
 <span class="c1">#now we print data ready to graph. The first two columns are P(cos(theta)) vs cos(theta) for OH vector ,</span>
 <span class="c1">#the seconds two columns are P(cos(theta)) vs cos(theta) for HH vector and thirds two columns</span>
 <span class="c1">#are P(cos(theta)) vs cos(theta) for dipole vector</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bins</span><span class="p">):</span>
-      <span class="k">print</span><span class="p">(</span><span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+<span class="k">for</span> <span class="nb">bin</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bins</span><span class="p">):</span>
+      <span class="k">print</span><span class="p">(</span><span class="s2">&quot;{AD_analysisOH} {AD_analysisHH} {AD_analysisDip}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph0</span><span class="o">=</span><span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="nb">bin</span><span class="p">],</span> <span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph1</span><span class="o">=</span><span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="nb">bin</span><span class="p">],</span><span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph2</span><span class="o">=</span><span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="nb">bin</span><span class="p">]))</span>
+
+<span class="c1">#and if we want to graph our results</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1">#AD OH</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;cos theta&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;P(cos theta)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;PDF cos theta for OH&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">column</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]],[</span><span class="nb">float</span><span class="p">(</span><span class="n">column</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+<span class="c1">#AD HH</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;cos theta&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;P(cos theta)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;PDF cos theta for HH&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">column</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]],[</span><span class="nb">float</span><span class="p">(</span><span class="n">column</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+<span class="c1">#AD dip</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;cos theta&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;P(cos theta)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;PDF cos theta for dipole&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">column</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">2</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]],[</span><span class="nb">float</span><span class="p">(</span><span class="n">column</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">AD_analysis</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="mi">2</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>where P(cos(theta)) is the angular distribution or angular probabilities.</p>
 </div>
 <div class="section" id="meansquaredisplacement">
 <h2>3.8.3.4. MeanSquareDisplacement<a class="headerlink" href="#meansquaredisplacement" title="Permalink to this headline">¶</a></h2>
-<p>Analyzing mean square displacement (MSD):class:<cite>MeanSquareDisplacement</cite> for water molecules. In this case we are analyzing the average distance
+<p>Analyzing mean square displacement (MSD) <a class="reference internal" href="#MDAnalysis.analysis.waterdynamics.MeanSquareDisplacement" title="MDAnalysis.analysis.waterdynamics.MeanSquareDisplacement"><code class="xref py py-class docutils literal"><span class="pre">MeanSquareDisplacement</span></code></a> for water molecules. In this case we are analyzing the average distance
 that water molecules travels inside protein in XYZ direction (cylindric zone of radius 11[nm], Zmax 4.0[nm] and Zmin -8.0[nm]). A strong
 rise mean a fast movement of water molecules, a weak rise mean slow movement of particles:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">MDAnalysis</span>
@@ -274,10 +346,17 @@ rise mean a fast movement of water molecules, a weak rise mean slow movement of 
 <span class="n">MSD_analysis</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="c1">#now we print data ready to graph. The graph</span>
 <span class="c1">#represents MSD vs t</span>
-<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">for</span> <span class="n">msd</span> <span class="ow">in</span> <span class="n">MSD_analysis</span><span class="o">.</span><span class="n">timeseries</span><span class="p">:</span>
-      <span class="k">print</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">msd</span><span class="p">)</span>
-      <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="k">print</span><span class="p">(</span><span class="s2">&quot;{time} {msd}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">msd</span><span class="o">=</span><span class="n">msd</span><span class="p">))</span>
+      <span class="n">time</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1">#Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;MSD&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;MSD&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">time</span><span class="p">),</span><span class="n">MSD_analysis</span><span class="o">.</span><span class="n">timeseries</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -296,10 +375,17 @@ other hand, a fast decay means a short permanence time:</p>
 <span class="n">SP_analysis</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="c1">#now we print data ready to graph. The graph</span>
 <span class="c1">#represents SP vs t</span>
-<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="n">SP_analysis</span><span class="o">.</span><span class="n">timeseries</span><span class="p">:</span>
-      <span class="k">print</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span> <span class="n">sp</span><span class="p">)</span>
-      <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="k">print</span><span class="p">(</span><span class="s2">&quot;{time} {sp}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">sp</span><span class="o">=</span><span class="n">sp</span><span class="p">))</span>
+      <span class="n">time</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1">#Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;SP&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Survival Probability&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">time</span><span class="p">),</span><span class="n">MSD_analysis</span><span class="o">.</span><span class="n">timeseries</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="section" id="output">

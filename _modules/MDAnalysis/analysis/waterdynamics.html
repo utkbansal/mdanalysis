@@ -158,12 +158,31 @@
 <span class="sd">  selection2 = &quot;resid 38&quot;</span>
 <span class="sd">  HBL_analysis = HBL(universe, selection1, selection2, 0, 2000, 30)</span>
 <span class="sd">  HBL_analysis.run()</span>
-<span class="sd">  i=0</span>
+<span class="sd">  time = 0</span>
 <span class="sd">  #now we print the data ready to graph. The first two columns are the HBLc vs t graph and</span>
 <span class="sd">  #the second two columns are the HBLi vs t graph</span>
 <span class="sd">  for HBLc, HBLi in HBL_analysis.timeseries:</span>
-<span class="sd">        print(i +&quot; &quot;+ HBLc +&quot; &quot;+ i +&quot; &quot;+ HBLi)</span>
-<span class="sd">        i+=1</span>
+<span class="sd">        print(&quot;{time} {HBLc} {time} {HBLi}&quot;.format(time=time, HBLc=HBLc, HBLi=HBLi))</span>
+<span class="sd">        time += 1</span>
+<span class="sd">  </span>
+<span class="sd">  #we can also plot our data</span>
+<span class="sd">  plt.figure(1,figsize=(18, 6))</span>
+
+<span class="sd">  #HBL continuos</span>
+<span class="sd">  plt.subplot(121)</span>
+<span class="sd">  plt.xlabel(&#39;time&#39;)</span>
+<span class="sd">  plt.ylabel(&#39;HBLc&#39;)</span>
+<span class="sd">  plt.title(&#39;HBL Continuos&#39;)</span>
+<span class="sd">  plt.plot(range(0,time),[column[0] for column in HBL_analysis.timeseries])</span>
+
+<span class="sd">  #HBL intermitent</span>
+<span class="sd">  plt.subplot(122)</span>
+<span class="sd">  plt.xlabel(&#39;time&#39;)</span>
+<span class="sd">  plt.ylabel(&#39;HBLi&#39;)</span>
+<span class="sd">  plt.title(&#39;HBL Intermitent&#39;)</span>
+<span class="sd">  plt.plot(range(0,time),[column[1] for column in HBL_analysis.timeseries])</span>
+
+<span class="sd">  plt.show()</span>
 
 <span class="sd">where HBLc is the value for the continuos hydrogen bond lifetimes and HBLi is the value for the intermittent</span>
 <span class="sd">hydrogen bond lifetime, t0 = 0, tf = 2000 and dtmax = 30. In this way we create 30 windows timestep</span>
@@ -182,11 +201,38 @@
 <span class="sd">  selection = &quot;byres name OH2 and sphzone 6.0 protein and resid 42&quot;</span>
 <span class="sd">  WOR_analysis = WOR(universe, selection, 0, 1000, 20)</span>
 <span class="sd">  WOR_analysis.run()</span>
-<span class="sd">  i=0</span>
+<span class="sd">  time = 0</span>
 <span class="sd">  #now we print the data ready to graph. The first two columns are WOR_OH vs t graph,</span>
 <span class="sd">  #the second two columns are WOR_HH vs t graph and the third two columns are WOR_dip vs t graph</span>
 <span class="sd">  for WOR_OH, WOR_HH, WOR_dip in WOR_analysis.timeseries:</span>
-<span class="sd">        print(i +&quot; &quot;+ WOR_OH +&quot; &quot;+ i +&quot; &quot;+ WOR_HH +&quot; &quot;+ i +&quot; &quot;+ WOR_dip)</span>
+<span class="sd">        print(&quot;{time} {WOR_OH} {time} {WOR_HH} {time} {WOR_dip}&quot;.format(time=time, WOR_OH=WOR_OH, WOR_HH=WOR_HH,WOR_dip=WOR_dip))</span>
+<span class="sd">        time += 1</span>
+
+<span class="sd">  #now, if we want, we can plot our data</span>
+<span class="sd">  plt.figure(1,figsize=(18, 6))</span>
+
+<span class="sd">  #WOR OH</span>
+<span class="sd">  plt.subplot(131)</span>
+<span class="sd">  plt.xlabel(&#39;time&#39;)</span>
+<span class="sd">  plt.ylabel(&#39;WOR&#39;)</span>
+<span class="sd">  plt.title(&#39;WOR OH&#39;)</span>
+<span class="sd">  plt.plot(range(0,time),[column[0] for column in WOR_analysis.timeseries])</span>
+
+<span class="sd">  #WOR HH</span>
+<span class="sd">  plt.subplot(132)</span>
+<span class="sd">  plt.xlabel(&#39;time&#39;)</span>
+<span class="sd">  plt.ylabel(&#39;WOR&#39;)</span>
+<span class="sd">  plt.title(&#39;WOR HH&#39;)</span>
+<span class="sd">  plt.plot(range(0,time),[column[1] for column in WOR_analysis.timeseries])</span>
+
+<span class="sd">  #WOR dip</span>
+<span class="sd">  plt.subplot(133)</span>
+<span class="sd">  plt.xlabel(&#39;time&#39;)</span>
+<span class="sd">  plt.ylabel(&#39;WOR&#39;)</span>
+<span class="sd">  plt.title(&#39;WOR dip&#39;)</span>
+<span class="sd">  plt.plot(range(0,time),[column[2] for column in WOR_analysis.timeseries])</span>
+
+<span class="sd">  plt.show()  </span>
 
 <span class="sd">where t0 = 0, tf = 1000 and dtmax = 20. In this way we create 20 windows timesteps (20 values in the x axis),</span>
 <span class="sd">the first window is created with 1000 timestep average (1000/1), the second window is created with 500</span>
@@ -212,14 +258,41 @@
 <span class="sd">  #now we print data ready to graph. The first two columns are P(cos(theta)) vs cos(theta) for OH vector ,</span>
 <span class="sd">  #the seconds two columns are P(cos(theta)) vs cos(theta) for HH vector and thirds two columns</span>
 <span class="sd">  #are P(cos(theta)) vs cos(theta) for dipole vector</span>
-<span class="sd">  for i in range(bins):</span>
-<span class="sd">        print(AD_analysis.graph[0][i] +&quot; &quot;+ AD_analysis.graph[1][i] +&quot; &quot;+ AD_analysis.graph[2][i])</span>
+<span class="sd">  for bin in range(bins):</span>
+<span class="sd">        print(&quot;{AD_analysisOH} {AD_analysisHH} {AD_analysisDip}&quot;.format(AD_analysis.graph0=AD_analysis.graph[0][bin], AD_analysis.graph1=AD_analysis.graph[1][bin],AD_analysis.graph2=AD_analysis.graph[2][bin]))</span>
+
+<span class="sd">  #and if we want to graph our results</span>
+<span class="sd">  plt.figure(1,figsize=(18, 6))</span>
+
+<span class="sd">  #AD OH</span>
+<span class="sd">  plt.subplot(131)</span>
+<span class="sd">  plt.xlabel(&#39;cos theta&#39;)</span>
+<span class="sd">  plt.ylabel(&#39;P(cos theta)&#39;)</span>
+<span class="sd">  plt.title(&#39;PDF cos theta for OH&#39;)</span>
+<span class="sd">  plt.plot([float(column.split()[0]) for column in AD_analysis.graph[0][:-1]],[float(column.split()[1]) for column in AD_analysis.graph[0][:-1]])</span>
+
+<span class="sd">  #AD HH</span>
+<span class="sd">  plt.subplot(132)</span>
+<span class="sd">  plt.xlabel(&#39;cos theta&#39;)</span>
+<span class="sd">  plt.ylabel(&#39;P(cos theta)&#39;)</span>
+<span class="sd">  plt.title(&#39;PDF cos theta for HH&#39;)</span>
+<span class="sd">  plt.plot([float(column.split()[0]) for column in AD_analysis.graph[1][:-1]],[float(column.split()[1]) for column in AD_analysis.graph[1][:-1]])</span>
+
+<span class="sd">  #AD dip</span>
+<span class="sd">  plt.subplot(133)</span>
+<span class="sd">  plt.xlabel(&#39;cos theta&#39;)</span>
+<span class="sd">  plt.ylabel(&#39;P(cos theta)&#39;)</span>
+<span class="sd">  plt.title(&#39;PDF cos theta for dipole&#39;)</span>
+<span class="sd">  plt.plot([float(column.split()[0]) for column in AD_analysis.graph[2][:-1]],[float(column.split()[1]) for column in AD_analysis.graph[2][:-1]])</span>
+
+<span class="sd">  plt.show()</span>
+
 
 <span class="sd">where P(cos(theta)) is the angular distribution or angular probabilities.</span>
 
 <span class="sd">MeanSquareDisplacement</span>
 <span class="sd">~~~~~~~~~~~~~~~~~~~~~~</span>
-<span class="sd">Analyzing mean square displacement (MSD):class:`MeanSquareDisplacement` for water molecules. In this case we are analyzing the average distance</span>
+<span class="sd">Analyzing mean square displacement (MSD) :class:`MeanSquareDisplacement` for water molecules. In this case we are analyzing the average distance</span>
 <span class="sd">that water molecules travels inside protein in XYZ direction (cylindric zone of radius 11[nm], Zmax 4.0[nm] and Zmin -8.0[nm]). A strong</span>
 <span class="sd">rise mean a fast movement of water molecules, a weak rise mean slow movement of particles::</span>
 
@@ -232,11 +305,17 @@
 <span class="sd">  MSD_analysis.run()</span>
 <span class="sd">  #now we print data ready to graph. The graph</span>
 <span class="sd">  #represents MSD vs t</span>
-<span class="sd">  i=0</span>
+<span class="sd">  time = 0</span>
 <span class="sd">  for msd in MSD_analysis.timeseries:</span>
-<span class="sd">        print(i +&quot; &quot;+ msd)</span>
-<span class="sd">        i += 1</span>
-
+<span class="sd">        print(&quot;{time} {msd}&quot;.format(time=time, msd=msd))</span>
+<span class="sd">        time += 1</span>
+<span class="sd">  </span>
+<span class="sd">  #Plot</span>
+<span class="sd">  plt.xlabel(&#39;time&#39;)</span>
+<span class="sd">  plt.ylabel(&#39;MSD&#39;)</span>
+<span class="sd">  plt.title(&#39;MSD&#39;)</span>
+<span class="sd">  plt.plot(range(0,time),MSD_analysis.timeseries)</span>
+<span class="sd">  plt.show()</span>
 
 <span class="sd">SurvivalProbability</span>
 <span class="sd">~~~~~~~~~~~~~~~~~~~</span>
@@ -254,10 +333,18 @@
 <span class="sd">  SP_analysis.run()</span>
 <span class="sd">  #now we print data ready to graph. The graph</span>
 <span class="sd">  #represents SP vs t</span>
-<span class="sd">  i=0</span>
+<span class="sd">  time = 0</span>
 <span class="sd">  for sp in SP_analysis.timeseries:</span>
-<span class="sd">        print(i +&quot; &quot;+ sp)</span>
-<span class="sd">        i += 1</span>
+<span class="sd">        print(&quot;{time} {sp}&quot;.format(time=time, sp=sp))</span>
+<span class="sd">        time += 1</span>
+
+<span class="sd">  #Plot</span>
+<span class="sd">  plt.xlabel(&#39;time&#39;)</span>
+<span class="sd">  plt.ylabel(&#39;SP&#39;)</span>
+<span class="sd">  plt.title(&#39;Survival Probability&#39;)</span>
+<span class="sd">  plt.plot(range(0,time),MSD_analysis.timeseries)</span>
+<span class="sd">  plt.show()</span>
+<span class="sd">  </span>
 
 <span class="sd">.. Output</span>
 
@@ -1009,7 +1096,6 @@
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">totalFrames</span><span class="o">/</span><span class="n">dt</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getOneDeltaPoint</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span><span class="n">repInd</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">sumsdt</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;a=&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
             <span class="n">sumDeltaO</span> <span class="o">+=</span> <span class="n">a</span>
             <span class="n">valOList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
             <span class="n">sumsdt</span> <span class="o">+=</span>  <span class="n">dt</span>
