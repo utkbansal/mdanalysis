@@ -429,6 +429,51 @@ others are available only if scikit-learn is installed</p>
 <p><span class="versionmodified">New in version 0.16.0.</span></p>
 </div>
 <dl class="class">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusteringMethod.AffinityPropagation">
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.clustering.ClusteringMethod.</code><code class="descname">AffinityPropagation</code><span class="sig-paren">(</span><em>damping=0.9</em>, <em>preference=-1.0</em>, <em>max_iter=500</em>, <em>convergence_iter=50</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusteringMethod.html#AffinityPropagation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusteringMethod.AffinityPropagation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface to the Affinity propagation clustering procedure implemented
+in sklearn.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>damping</strong> (<em>float, optional</em>) &#8211; Damping factor (default is 0.9). Parameter for the Affinity
+Propagation for clustering.</li>
+<li><strong>preference</strong> (<em>float, optional</em>) &#8211; Preference parameter used in the Affinity Propagation algorithm
+for clustering  (default -1.0). A high preference value results
+in many clusters, a low preference will result in fewer numbers
+of clusters.</li>
+<li><strong>max_iter</strong> (<em>int, optional</em>) &#8211; Maximum number of iterations for affinity propagation (default
+is 500).</li>
+<li><strong>convergence_iter</strong> (<em>int, optional</em>) &#8211; Minimum number of unchanging iterations to achieve convergence
+(default is 50). Parameter in the Affinity Propagation for
+clustering.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusteringMethod.AffinityPropagation.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>distance_matrix</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusteringMethod.html#AffinityPropagation.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusteringMethod.AffinityPropagation.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>distance_matrix</strong> (<a class="reference internal" href="utils.html#MDAnalysis.analysis.encore.utils.TriangularMatrix" title="MDAnalysis.analysis.encore.utils.TriangularMatrix"><em>encore.utils.TriangularMatrix</em></a>) &#8211; conformational distance matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of cluster indices</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.11)">numpy.array</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="MDAnalysis.analysis.encore.clustering.ClusteringMethod.AffinityPropagationNative">
 <em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.clustering.ClusteringMethod.</code><code class="descname">AffinityPropagationNative</code><span class="sig-paren">(</span><em>damping=0.9</em>, <em>preference=-1.0</em>, <em>max_iter=500</em>, <em>convergence_iter=50</em>, <em>add_noise=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusteringMethod.html#AffinityPropagationNative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusteringMethod.AffinityPropagationNative" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interface to the natively implemented Affinity propagation procedure.</p>
@@ -488,6 +533,55 @@ clustering.</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> &#8211; either trajectory coordinate data (np.array) or an
 encore.utils.TriangularMatrix, encoding the conformational
 distance matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of cluster indices</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.11)">numpy.array</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusteringMethod.DBSCAN">
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.clustering.ClusteringMethod.</code><code class="descname">DBSCAN</code><span class="sig-paren">(</span><em>eps=0.5</em>, <em>min_samples=5</em>, <em>algorithm='auto'</em>, <em>leaf_size=30</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusteringMethod.html#DBSCAN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusteringMethod.DBSCAN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface to the DBSCAN clustering procedure implemented in sklearn.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>eps</strong> (<em>float, optional (default = 0.5)</em>) &#8211; The maximum distance between two samples for them to be
+considered as in the same neighborhood.</li>
+<li><strong>min_samples</strong> (<em>int, optional (default = 5)</em>) &#8211; The number of samples (or total weight) in a neighborhood for
+a point to be considered as a core point. This includes the
+point itself.</li>
+<li><strong>algorithm</strong> (<em>{'auto', 'ball_tree', 'kd_tree', 'brute'}, optional</em>) &#8211; The algorithm to be used by the NearestNeighbors module
+to compute pointwise distances and find nearest neighbors.
+See NearestNeighbors module documentation for details.</li>
+<li><strong>leaf_size</strong> (<em>int, optional (default = 30)</em>) &#8211; Leaf size passed to BallTree or cKDTree. This can affect the
+speed of the construction and query, as well as the memory
+required to store the tree. The optimal value depends
+on the nature of the problem.</li>
+<li><strong>sample_weight</strong> (<em>array, shape (n_samples,), optional</em>) &#8211; Weight of each sample, such that a sample with a weight of at
+least <code class="docutils literal"><span class="pre">min_samples</span></code> is by itself a core sample; a sample with
+negative weight may inhibit its eps-neighbor from being core.
+Note that weights are absolute, and default to 1.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="MDAnalysis.analysis.encore.clustering.ClusteringMethod.DBSCAN.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>distance_matrix</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/clustering/ClusteringMethod.html#DBSCAN.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.clustering.ClusteringMethod.DBSCAN.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>distance_matrix</strong> (<a class="reference internal" href="utils.html#MDAnalysis.analysis.encore.utils.TriangularMatrix" title="MDAnalysis.analysis.encore.utils.TriangularMatrix"><em>encore.utils.TriangularMatrix</em></a>) &#8211; conformational distance matrix</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of cluster indices</td>
 </tr>
