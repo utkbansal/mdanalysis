@@ -128,6 +128,8 @@
 <span class="sd">.. autoclass:: SegmentGroup</span>
 <span class="sd">   :members:</span>
 <span class="sd">   :inherited-members:</span>
+<span class="sd">.. autoclass:: UpdatingAtomGroup</span>
+<span class="sd">   :members:</span>
 
 <span class="sd">Chemical units</span>
 <span class="sd">--------------</span>
@@ -168,9 +170,10 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    Two dictionaries. One with a set of :class:`_TopologyAttrContainer` classes</span>
-<span class="sd">    to serve as bases for universe-specific MDA container classes. Another,</span>
-<span class="sd">    with the final merged versions of those classes. The classes themselves are</span>
-<span class="sd">    used as hashing keys.</span>
+<span class="sd">    to serve as bases for universe-specific MDA container classes. Another with</span>
+<span class="sd">    the final merged versions of those classes. The classes themselves are used</span>
+<span class="sd">    as hashing keys.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">bases</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">classes</span> <span class="o">=</span> <span class="p">{}</span>
@@ -236,9 +239,15 @@
     <span class="k">def</span> <span class="nf">_mix</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates a subclass with ourselves and another class as parents.</span>
 
-<span class="sd">        Classes mixed at this point always override :meth:`__new__`, causing</span>
-<span class="sd">        further instantiations to shortcut to :meth:`object.__new__` (skipping</span>
-<span class="sd">        the cache-fetch process for :class:`_MutableBase` subclasses).</span>
+<span class="sd">        Classes mixed at this point override :meth:`__new__`, causing further</span>
+<span class="sd">        instantiations to shortcut to :meth:`~object.__new__` (skipping the</span>
+<span class="sd">        cache-fetch process for :class:`_MutableBase` subclasses).</span>
+
+<span class="sd">        The new class will have an attribute `_derived_class` added, pointing</span>
+<span class="sd">        to itself. This pointer instructs which class to use when</span>
+<span class="sd">        slicing/adding instances of the new class. At initialization time the</span>
+<span class="sd">        new class may choose to point `_derived_class` to another class (as is</span>
+<span class="sd">        done in the initialization of :class:`UpdatingAtomGroup`).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -251,7 +260,9 @@
 <span class="sd">            A class of parents :class:`_ImmutableBase`, *other* and this class.</span>
 <span class="sd">            Its name is the same as *other*&#39;s.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="p">(</span><span class="n">_ImmutableBase</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">cls</span><span class="p">),</span> <span class="p">{})</span>
+        <span class="n">newcls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="p">(</span><span class="n">_ImmutableBase</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">cls</span><span class="p">),</span> <span class="p">{})</span>
+        <span class="n">newcls</span><span class="o">.</span><span class="n">_derived_class</span> <span class="o">=</span> <span class="n">newcls</span>
+        <span class="k">return</span> <span class="n">newcls</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_add_prop</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
@@ -277,7 +288,7 @@
 
 <span class="k">class</span> <span class="nc">_MutableBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Base class that merges appropriate :class:`TopologyAttrContainer` classes.</span>
+<span class="sd">    Base class that merges appropriate :class:`_TopologyAttrContainer` classes.</span>
 
 <span class="sd">    Implements :meth:`__new__`. In it the instantiating class is fetched from</span>
 <span class="sd">    :attr:`Universe._classes`. If there is a cache miss, a merged class is made</span>
@@ -285,15 +296,32 @@
 
 <span class="sd">    The classes themselves are used as the cache dictionary keys for simplcity</span>
 <span class="sd">    in cache retrieval.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># This signature must be kept in sync with the __init__ signature of</span>
-    <span class="c1">#  GroupBase and ComponentBase.</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># This pre-initialization wrapper must be pretty generic to</span>
+        <span class="c1"># allow for different initialization schemes of the possible classes.</span>
+        <span class="c1"># All we really need here is to fish a universe out of the arg list.</span>
+        <span class="c1"># The AtomGroup cases get priority and are fished out first.</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">ix</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">args</span>
-        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="c1"># deprecated AtomGroup init method..</span>
-            <span class="n">u</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">universe</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">universe</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># deprecated AtomGroup init method..</span>
+                <span class="n">u</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">universe</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+                <span class="c1"># Let&#39;s be generic and get the first argument that&#39;s either a</span>
+                <span class="c1"># Universe, a Group, or a Component, and go from there.</span>
+                <span class="c1"># This is where the UpdatingAtomGroup args get matched.</span>
+                <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="o">+</span><span class="nb">tuple</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="p">(</span><span class="n">MDAnalysis</span><span class="o">.</span><span class="n">Universe</span><span class="p">,</span> <span class="n">GroupBase</span><span class="p">,</span>
+                                        <span class="n">ComponentBase</span><span class="p">)):</span>
+                        <span class="n">u</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">universe</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;No universe, or universe-containing &quot;</span>
+                                   <span class="s2">&quot;object passed to the initialization of &quot;</span>
+                                    <span class="s2">&quot;{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">_classes</span><span class="p">[</span><span class="n">cls</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
@@ -306,8 +334,8 @@
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Attempted to instantiate class &#39;{}&#39; but &quot;</span>
                                 <span class="s2">&quot;none of its parents are known to the &quot;</span>
                                 <span class="s2">&quot;universe. Currently possible parent &quot;</span>
-                                <span class="s2">&quot;classes are: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                    <span class="n">cls</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">_class_bases</span><span class="o">.</span><span class="n">keys</span><span class="p">()))))</span>
+                                <span class="s2">&quot;classes are: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+                                    <span class="nb">str</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">_class_bases</span><span class="o">.</span><span class="n">keys</span><span class="p">()))))</span>
             <span class="n">newcls</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">_classes</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent_cls</span><span class="o">.</span><span class="n">_mix</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
             <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">newcls</span><span class="p">)</span>
 
@@ -318,7 +346,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># When mixed via _TopologyAttrContainer._mix this class has MRO priority.</span>
     <span class="c1">#  Setting __new__ like this will avoid having to go through the</span>
-    <span class="c1">#  cache lookup if the class is reused (as in ag.__class__(...)).</span>
+    <span class="c1">#  cache lookup if the class is reused (as in ag._derived_class(...)).</span>
     <span class="n">__new__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">__new__</span>
 
 
@@ -362,12 +390,16 @@
                 <span class="c1"># hack to make lists into numpy arrays</span>
                 <span class="c1"># important for boolean slicing</span>
                 <span class="n">item</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ix</span><span class="p">[</span><span class="n">item</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+            <span class="c1"># We specify _derived_class instead of self.__class__ to allow</span>
+            <span class="c1"># subclasses, such as UpdatingAtomGroup, to control the class</span>
+            <span class="c1"># resulting from slicing.</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_derived_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ix</span><span class="p">[</span><span class="n">item</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">name</span>
-        <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;&lt;{}Group with {} {}s&gt;&quot;</span>
-                <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;&lt;{}Group with {} {}{}&gt;&quot;</span>
+                <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;s&quot;</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:]))</span> <span class="c1"># Shorthand for a conditional plural &#39;s&#39;.</span>
 
     <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Concatenate the Group with another Group or Component of the same</span>
@@ -396,7 +428,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">o_ix</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">_ix</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_ix</span><span class="p">,</span> <span class="n">o_ix</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_derived_class</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_ix</span><span class="p">,</span> <span class="n">o_ix</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Using built-in sum requires supporting 0 + self. If other is</span>
@@ -414,7 +446,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">other</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_derived_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;unsupported operand type(s) for +:&quot;</span>
                             <span class="s2">&quot; &#39;{}&#39; and &#39;{}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
@@ -885,7 +917,7 @@
         <span class="n">dests</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">apply_PBC</span><span class="p">(</span><span class="n">centers</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)</span>
         <span class="n">shifts</span> <span class="o">=</span> <span class="n">dests</span> <span class="o">-</span> <span class="n">centers</span>
 
-        <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">izip</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">shifts</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">shifts</span><span class="p">):</span>
             <span class="c1"># Save some needless shifts</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">):</span>
                 <span class="n">o</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
@@ -956,7 +988,7 @@
             <span class="c1"># eg:</span>
             <span class="c1"># if attr in _ATTR_ERRORS:</span>
             <span class="c1"># raise NDE(_ATTR_ERRORS[attr])</span>
-            <span class="k">raise</span> <span class="n">NoDataError</span><span class="p">(</span><span class="s2">&quot;AtomGroup has no fragments this requires Bonds&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">NoDataError</span><span class="p">(</span><span class="s2">&quot;AtomGroup has no fragments; this requires Bonds&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">_topology</span><span class="p">,</span> <span class="s1">&#39;names&#39;</span><span class="p">):</span>
             <span class="c1"># Ugly hack to make multiple __getattr__s work</span>
             <span class="k">try</span><span class="p">:</span>
@@ -988,19 +1020,19 @@
     <span class="k">def</span> <span class="nf">residues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
         <span class="c1"># Can set with Res, ResGroup or list/tuple of Res</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">Residue</span><span class="p">):</span>
-            <span class="n">rix</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">((</span><span class="n">new</span><span class="o">.</span><span class="n">resindex</span><span class="p">,))</span>
+            <span class="n">r_ix</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">((</span><span class="n">new</span><span class="o">.</span><span class="n">resindex</span><span class="p">,))</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">ResidueGroup</span><span class="p">):</span>
-            <span class="n">rix</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">resindices</span>
+            <span class="n">r_ix</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">resindices</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">rix</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">resindex</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">new</span><span class="p">]</span>
+                <span class="n">r_ix</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">resindex</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">new</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can only set AtomGroup residues to Residue &quot;</span>
                                 <span class="s2">&quot;or ResidueGroup not {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                                     <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">new</span>
                                               <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">Residue</span><span class="p">))</span>
                                 <span class="p">))</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rix</span><span class="p">,</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">rix</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r_ix</span><span class="p">,</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_ix</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Incorrect size: {} for AtomGroup of size: {}&quot;</span>
                              <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">new</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
         <span class="c1"># Optimisation TODO:</span>
@@ -1008,7 +1040,7 @@
         <span class="c1"># Ideally all changes would happen and *afterwards* tables are built</span>
         <span class="c1"># Alternatively, if the changes didn&#39;t rebuild table, this list</span>
         <span class="c1"># comprehension isn&#39;t terrible.</span>
-        <span class="k">for</span> <span class="n">at</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rix</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">at</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_ix</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">tt</span><span class="o">.</span><span class="n">move_atom</span><span class="p">(</span><span class="n">at</span><span class="o">.</span><span class="n">ix</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -1141,6 +1173,8 @@
 
         <span class="k">return</span> <span class="n">trj_ts</span><span class="o">.</span><span class="n">copy_slice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
 
+    <span class="c1"># As with universe.select_atoms, needing to fish out specific kwargs</span>
+    <span class="c1"># (namely, &#39;updating&#39;) doesn&#39;t allow a very clean signature.</span>
 <div class="viewcode-block" id="AtomGroup.select_atoms"><a class="viewcode-back" href="../../../documentation_pages/core/groups.html#MDAnalysis.core.groups.AtomGroup.select_atoms">[docs]</a>    <span class="k">def</span> <span class="nf">select_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sel</span><span class="p">,</span> <span class="o">*</span><span class="n">othersel</span><span class="p">,</span> <span class="o">**</span><span class="n">selgroups</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Select atoms using a selection string.</span>
 
@@ -1153,6 +1187,9 @@
 <span class="sd">        which will then be available to the selection parser.</span>
 
 <span class="sd">        Subselections can be grouped with parentheses.</span>
+
+<span class="sd">        Selections can be set to update automatically on frame change, by</span>
+<span class="sd">        setting the `updating` named argument to `True`.</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -1288,37 +1325,77 @@
 
 <span class="sd">        **Preexisting selections**</span>
 
-<span class="sd">            group *group-name*</span>
+<span class="sd">            group `group-name`</span>
 <span class="sd">                selects the atoms in the :class:`AtomGroup` passed to the</span>
-<span class="sd">                function as an argument named *group-name*. Only the atoms</span>
-<span class="sd">                common to *group-name* and the instance :meth:`~select_atoms`</span>
-<span class="sd">                was called from will be considered. *group-name* will be</span>
-<span class="sd">                 included in the parsing just by comparison of atom indices.</span>
-<span class="sd">                This means that it is up to the user to make sure they were</span>
-<span class="sd">                defined in an appropriate :class:`Universe`.</span>
+<span class="sd">                function as an argument named `group-name`. Only the atoms</span>
+<span class="sd">                common to `group-name` and the instance</span>
+<span class="sd">                :meth:`~MDAnalysis.core.groups.AtomGroup.select_atoms`</span>
+<span class="sd">                was called from will be considered, unless ``group`` is</span>
+<span class="sd">                preceded by the ``global`` keyword. `group-name` will be</span>
+<span class="sd">                included in the parsing just by comparison of atom indices.</span>
+<span class="sd">                This means that it is up to the user to make sure the</span>
+<span class="sd">                `group-name` group was defined in an appropriate</span>
+<span class="sd">                :class:`Universe`.</span>
 
-<span class="sd">            fullgroup *group-name*</span>
-<span class="sd">                just like the ``group`` keyword with the difference that all the</span>
-<span class="sd">                atoms of *group-name* are included. The resulting selection may</span>
-<span class="sd">                therefore have atoms that were initially absent from the</span>
-<span class="sd">                instance :meth:`~select_atoms` was called from.</span>
+<span class="sd">            global *selection*</span>
+<span class="sd">                by default, when issuing</span>
+<span class="sd">                :meth:`~MDAnalysis.core.groups.AtomGroup.select_atoms` from an</span>
+<span class="sd">                :class:`~MDAnalysis.core.groups.AtomGroup`, selections and</span>
+<span class="sd">                subselections are returned intersected with the atoms of that</span>
+<span class="sd">                instance. Prefixing a selection term with ``global`` causes its</span>
+<span class="sd">                selection to be returned in its entirety.  As an example, the</span>
+<span class="sd">                ``global`` keyword allows for</span>
+<span class="sd">                ``lipids.select_atoms(&quot;around 10 global protein&quot;)`` --- where</span>
+<span class="sd">                ``lipids`` is a group that does not contain any proteins. Were</span>
+<span class="sd">                ``global`` absent, the result would be an empty selection since</span>
+<span class="sd">                the ``protein`` subselection would itself be empty. When issuing</span>
+<span class="sd">                :meth:`~MDAnalysis.core.groups.AtomGroup.select_atoms` from a</span>
+<span class="sd">                :class:`~MDAnalysis.core.universe.Universe`, ``global`` is ignored. </span>
+
+<span class="sd">        **Dynamic selections**</span>
+<span class="sd">            If :meth:`~MDAnalysis.core.groups.AtomGroup.select_atoms` is</span>
+<span class="sd">            invoked with named argument `updating` set to `True`, an</span>
+<span class="sd">            :class:`~MDAnalysis.core.groups.UpdatingAtomGroup` instance will be</span>
+<span class="sd">            returned, instead of a regular</span>
+<span class="sd">            :class:`~MDAnalysis.core.groups.AtomGroup`. It behaves just like</span>
+<span class="sd">            the latter, with the difference that the selection expressions are</span>
+<span class="sd">            re-evaluated every time the trajectory frame changes (this happens</span>
+<span class="sd">            lazily, only when the</span>
+<span class="sd">            :class:`~MDAnalysis.core.groups.UpdatingAtomGroup` is accessed so</span>
+<span class="sd">            that there is no redundant updating going on).</span>
+<span class="sd">            Issuing an updating selection from an already updating group will</span>
+<span class="sd">            cause later updates to also reflect the updating of the base group.</span>
+<span class="sd">            A non-updating selection or a slicing operation made on an</span>
+<span class="sd">            :class:`~MDAnalysis.core.groups.UpdatingAtomGroup` will return a</span>
+<span class="sd">            static :class:`~MDAnalysis.core.groups.AtomGroup`, which will no</span>
+<span class="sd">            longer update across frames.</span>
 
 
 <span class="sd">        .. versionchanged:: 0.7.4</span>
 <span class="sd">           Added *resnum* selection.</span>
 <span class="sd">        .. versionchanged:: 0.8.1</span>
 <span class="sd">           Added *group* and *fullgroup* selections.</span>
+<span class="sd">        .. deprecated:: 0.11</span>
+<span class="sd">           The use of ``fullgroup`` has been deprecated in favor of the equivalent</span>
+<span class="sd">           ``global group``.</span>
 <span class="sd">        .. versionchanged:: 0.13.0</span>
 <span class="sd">           Added *bonded* selection</span>
 <span class="sd">        .. versionchanged:: 0.16.0</span>
 <span class="sd">           Resid selection now takes icodes into account where present.</span>
+<span class="sd">        .. versionadded:: 0.16.0</span>
+<span class="sd">           Updating selections now possible by setting the ``updating`` argument.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">atomgrp</span> <span class="o">=</span> <span class="n">selection</span><span class="o">.</span><span class="n">Parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">sel</span><span class="p">,</span> <span class="n">selgroups</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">othersel</span><span class="p">:</span>
-            <span class="c1"># Generate a selection for each selection string</span>
-            <span class="k">for</span> <span class="n">sel</span> <span class="ow">in</span> <span class="n">othersel</span><span class="p">:</span>
-                <span class="n">atomgrp</span> <span class="o">+=</span> <span class="n">selection</span><span class="o">.</span><span class="n">Parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">sel</span><span class="p">,</span> <span class="n">selgroups</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">updating</span> <span class="o">=</span> <span class="n">selgroups</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;updating&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+        <span class="n">sel_strs</span> <span class="o">=</span> <span class="p">(</span><span class="n">sel</span><span class="p">,)</span> <span class="o">+</span> <span class="n">othersel</span>
+        <span class="n">selections</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">selection</span><span class="o">.</span><span class="n">Parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">selgroups</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sel_strs</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">updating</span><span class="p">:</span>
+            <span class="n">atomgrp</span> <span class="o">=</span> <span class="n">UpdatingAtomGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selections</span><span class="p">,</span> <span class="n">sel_strs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Apply the first selection and sum to it</span>
+            <span class="n">atomgrp</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">sel</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">sel</span> <span class="ow">in</span> <span class="n">selections</span><span class="p">[</span><span class="mi">1</span><span class="p">:]],</span>
+                          <span class="n">selections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">atomgrp</span></div>
 
 <div class="viewcode-block" id="AtomGroup.split"><a class="viewcode-back" href="../../../documentation_pages/core/groups.html#MDAnalysis.core.groups.AtomGroup.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
@@ -1607,19 +1684,19 @@
     <span class="k">def</span> <span class="nf">segments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
         <span class="c1"># Can set with Seg, SegGroup or list/tuple of Seg</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">Segment</span><span class="p">):</span>
-            <span class="n">six</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">((</span><span class="n">new</span><span class="o">.</span><span class="n">segindex</span><span class="p">,))</span>
+            <span class="n">s_ix</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">((</span><span class="n">new</span><span class="o">.</span><span class="n">segindex</span><span class="p">,))</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">SegmentGroup</span><span class="p">):</span>
-            <span class="n">six</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">segindices</span>
+            <span class="n">s_ix</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">segindices</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">six</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">segindex</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">new</span><span class="p">]</span>
+                <span class="n">s_ix</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">segindex</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">new</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can only set ResidueGroup residues to Segment &quot;</span>
                                 <span class="s2">&quot;or ResidueGroup not {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                                     <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">new</span>
                                               <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">Segment</span><span class="p">))</span>
                                 <span class="p">))</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">six</span><span class="p">,</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">six</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s_ix</span><span class="p">,</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">s_ix</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Incorrect size: {} for ResidueGroup of size: {}&quot;</span>
                              <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">new</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
         <span class="c1"># Optimisation TODO:</span>
@@ -1627,7 +1704,7 @@
         <span class="c1"># Ideally all changes would happen and *afterwards* tables are built</span>
         <span class="c1"># Alternatively, if the changes didn&#39;t rebuild table, this list</span>
         <span class="c1"># comprehension isn&#39;t terrible.</span>
-        <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">six</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s_ix</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">tt</span><span class="o">.</span><span class="n">move_residue</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">ix</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -1997,6 +2074,149 @@
         <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;{cls} has no attribute {attr}&quot;</span>
                              <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="n">attr</span><span class="p">))</span></div>
 
+<span class="c1"># Accessing these attrs doesn&#39;t trigger an update. The class and instance</span>
+<span class="c1"># methods of UpdatingAtomGroup that are used during __init__ must all be</span>
+<span class="c1"># here, otherwise we get __getattribute__ infinite loops. </span>
+<span class="n">_UAG_SHORTCUT_ATTRS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># Class information of the UAG</span>
+    <span class="s2">&quot;__class__&quot;</span><span class="p">,</span> <span class="s2">&quot;_derived_class&quot;</span><span class="p">,</span>
+    <span class="c1"># Metadata of the UAG</span>
+    <span class="s2">&quot;_base_group&quot;</span><span class="p">,</span> <span class="s2">&quot;_selections&quot;</span><span class="p">,</span> <span class="s2">&quot;_lastupdate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;level&quot;</span><span class="p">,</span> <span class="s2">&quot;_u&quot;</span><span class="p">,</span> <span class="s2">&quot;universe&quot;</span><span class="p">,</span>
+    <span class="c1"># Methods of the UAG</span>
+    <span class="s2">&quot;ensure_updated&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;is_uptodate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;update_selection&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<div class="viewcode-block" id="UpdatingAtomGroup"><a class="viewcode-back" href="../../../documentation_pages/core/groups.html#MDAnalysis.core.groups.UpdatingAtomGroup">[docs]</a><span class="k">class</span> <span class="nc">UpdatingAtomGroup</span><span class="p">(</span><span class="n">AtomGroup</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;:class:`AtomGroup` subclass that dynamically updates its selected atoms.</span>
+
+<span class="sd">    Accessing any attribute/method of an :class:`UpdatingAtomGroup` instance</span>
+<span class="sd">    triggers a check for the last frame the group was updated. If the last</span>
+<span class="sd">    frame matches the current trajectory frame, the attribute is returned</span>
+<span class="sd">    normally; otherwise the group is updated (the stored selections are</span>
+<span class="sd">    re-applied), and only then is the attribute returned.</span>
+
+<span class="sd">    .. versionadded:: 0.16.0</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># WARNING: This class has __getattribute__ and __getattr__ methods (the</span>
+    <span class="c1"># latter inherited from AtomGroup). Because of this bugs introduced in the</span>
+    <span class="c1"># class that cause an AttributeError may be very hard to diagnose and</span>
+    <span class="c1"># debug: the most obvious symptom is an infinite loop going through both</span>
+    <span class="c1"># __getattribute__ and __getattr__, and a solution might be to add said</span>
+    <span class="c1"># attribute to _UAG_SHORTCUT_ATTRS.</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_group</span><span class="p">,</span> <span class="n">selections</span><span class="p">,</span> <span class="n">strings</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        base_group : :class:`AtomGroup`</span>
+<span class="sd">            group on which *selections* are to be applied.</span>
+<span class="sd">        selections : a tuple of :class:`~MDAnalysis.core.selection.Selection` instances</span>
+<span class="sd">            selections ready to be applied to *base_group*.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Because we&#39;re implementing __getattribute__, which needs _u for</span>
+        <span class="c1"># its check, no self.attribute access can be made before this line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_u</span> <span class="o">=</span> <span class="n">base_group</span><span class="o">.</span><span class="n">universe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_selections</span> <span class="o">=</span> <span class="n">selections</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selection_strings</span> <span class="o">=</span> <span class="n">strings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_group</span> <span class="o">=</span> <span class="n">base_group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lastupdate</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_derived_class</span> <span class="o">=</span> <span class="n">base_group</span><span class="o">.</span><span class="n">_derived_class</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selections</span><span class="p">:</span>
+            <span class="c1"># Allows the creation of a cheap placeholder UpdatingAtomGroup</span>
+            <span class="c1"># by passing an empty selection tuple.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ensure_updated</span><span class="p">()</span>
+
+<div class="viewcode-block" id="UpdatingAtomGroup.update_selection"><a class="viewcode-back" href="../../../documentation_pages/core/groups.html#MDAnalysis.core.groups.UpdatingAtomGroup.update_selection">[docs]</a>    <span class="k">def</span> <span class="nf">update_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forces the reevaluation and application of the group&#39;s selection(s).</span>
+
+<span class="sd">        This method is triggered automatically when accessing attributes, if</span>
+<span class="sd">        the last update occurred under a different trajectory frame.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_group</span>
+        <span class="n">sels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selections</span>
+        <span class="k">if</span> <span class="n">sels</span><span class="p">:</span>
+            <span class="c1"># As with select_atoms, we select the first sel and then sum to it.</span>
+            <span class="n">ix</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">sel</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">bg</span><span class="p">)</span> <span class="k">for</span> <span class="n">sel</span> <span class="ow">in</span> <span class="n">sels</span><span class="p">[</span><span class="mi">1</span><span class="p">:]],</span>
+                     <span class="n">sels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">bg</span><span class="p">))</span><span class="o">.</span><span class="n">ix</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="c1"># Run back through AtomGroup init with this information to remake ourselves</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">UpdatingAtomGroup</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_uptodate</span> <span class="o">=</span> <span class="bp">True</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_uptodate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks whether the selection needs updating</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            `True` if the group&#39;s selection is up-to-date, `False` otherwise.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">frame</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lastupdate</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span> <span class="c1"># self._u has no trajectory</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lastupdate</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="nd">@is_uptodate.setter</span>
+    <span class="k">def</span> <span class="nf">is_uptodate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_lastupdate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">frame</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span> <span class="c1"># self._u has no trajectory</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_lastupdate</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># This always marks the selection as outdated</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lastupdate</span> <span class="o">=</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="UpdatingAtomGroup.ensure_updated"><a class="viewcode-back" href="../../../documentation_pages/core/groups.html#MDAnalysis.core.groups.UpdatingAtomGroup.ensure_updated">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_updated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks whether the selection needs updating and updates it, if needed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            `True` if the group was already up-to-date, `False` otherwise.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_uptodate</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_selection</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">status</span></div>
+
+    <span class="k">def</span> <span class="nf">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="c1"># ALL attribute access goes through here</span>
+        <span class="c1"># If the requested attribute isn&#39;t in the shortcut list, update ourselves</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_UAG_SHORTCUT_ATTRS</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ensure_updated</span><span class="p">()</span>
+        <span class="c1"># Going via object.__getattribute__ then bypasses this check stage</span>
+        <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">basestr</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">UpdatingAtomGroup</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_strings</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">basestr</span>
+        <span class="n">sels</span> <span class="o">=</span> <span class="s2">&quot;&#39;{}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;&#39; + &#39;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_strings</span><span class="p">))</span>
+        <span class="c1"># Cheap comparison. Might fail for corner cases but this is</span>
+        <span class="c1"># mostly cosmetic.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_group</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">atoms</span><span class="p">:</span>
+            <span class="n">basegrp</span> <span class="o">=</span> <span class="s2">&quot;the entire Universe.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">basegrp</span> <span class="o">=</span> <span class="s2">&quot;another AtomGroup.&quot;</span>
+        <span class="c1"># With a shorthand to conditionally append the &#39;s&#39; in &#39;selections&#39;.</span>
+        <span class="k">return</span> <span class="s2">&quot;{}, with selection{} {} on {}&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">basestr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="s2">&quot;s&quot;</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_strings</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:],</span> <span class="n">sels</span><span class="p">,</span> <span class="n">basegrp</span><span class="p">)</span></div>
+
 <span class="c1"># Define relationships between these classes</span>
 <span class="c1"># with Level objects</span>
 <span class="n">ATOMLEVEL</span> <span class="o">=</span> <span class="n">levels</span><span class="o">.</span><span class="n">Level</span><span class="p">(</span><span class="s1">&#39;atom&#39;</span><span class="p">,</span> <span class="n">Atom</span><span class="p">,</span> <span class="n">AtomGroup</span><span class="p">)</span>
@@ -2016,7 +2236,6 @@
 <span class="n">ResidueGroup</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">RESIDUELEVEL</span>
 <span class="n">Segment</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">SEGMENTLEVEL</span>
 <span class="n">SegmentGroup</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">SEGMENTLEVEL</span>
-
 
 <span class="k">def</span> <span class="nf">requires</span><span class="p">(</span><span class="o">*</span><span class="n">attrs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Decorator to check if all AtomGroup arguments have certain attributes</span>

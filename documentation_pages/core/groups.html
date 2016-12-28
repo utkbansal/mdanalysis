@@ -718,6 +718,8 @@ selections).</p>
 <p>Existing <a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> objects can be passed as named arguments,
 which will then be available to the selection parser.</p>
 <p>Subselections can be grouped with parentheses.</p>
+<p>Selections can be set to update automatically on frame change, by
+setting the <cite>updating</cite> named argument to <cite>True</cite>.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sel</span> <span class="o">=</span> <span class="n">universe</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s2">&quot;segid DMPC and not ( name H* or name O* )&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sel</span>
@@ -854,34 +856,70 @@ and the index runs from 1 up to the total number of atoms.</dd>
 <p><strong>Preexisting selections</strong></p>
 <blockquote>
 <div><dl class="docutils">
-<dt>group <em>group-name</em></dt>
-<dd><p class="first">selects the atoms in the <a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> passed to the
-function as an argument named <em>group-name</em>. Only the atoms
-common to <em>group-name</em> and the instance <a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup.select_atoms" title="MDAnalysis.core.groups.AtomGroup.select_atoms"><code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code></a>
-was called from will be considered. <em>group-name</em> will be</p>
-<blockquote>
-<div>included in the parsing just by comparison of atom indices.</div></blockquote>
-<p class="last">This means that it is up to the user to make sure they were
-defined in an appropriate <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>.</p>
-</dd>
-<dt>fullgroup <em>group-name</em></dt>
-<dd>just like the <code class="docutils literal"><span class="pre">group</span></code> keyword with the difference that all the
-atoms of <em>group-name</em> are included. The resulting selection may
-therefore have atoms that were initially absent from the
-instance <a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup.select_atoms" title="MDAnalysis.core.groups.AtomGroup.select_atoms"><code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code></a> was called from.</dd>
+<dt>group <cite>group-name</cite></dt>
+<dd>selects the atoms in the <a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> passed to the
+function as an argument named <cite>group-name</cite>. Only the atoms
+common to <cite>group-name</cite> and the instance
+<a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup.select_atoms" title="MDAnalysis.core.groups.AtomGroup.select_atoms"><code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code></a>
+was called from will be considered, unless <code class="docutils literal"><span class="pre">group</span></code> is
+preceded by the <code class="docutils literal"><span class="pre">global</span></code> keyword. <cite>group-name</cite> will be
+included in the parsing just by comparison of atom indices.
+This means that it is up to the user to make sure the
+<cite>group-name</cite> group was defined in an appropriate
+<code class="xref py py-class docutils literal"><span class="pre">Universe</span></code>.</dd>
+<dt>global <em>selection</em></dt>
+<dd>by default, when issuing
+<a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup.select_atoms" title="MDAnalysis.core.groups.AtomGroup.select_atoms"><code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code></a> from an
+<a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>, selections and
+subselections are returned intersected with the atoms of that
+instance. Prefixing a selection term with <code class="docutils literal"><span class="pre">global</span></code> causes its
+selection to be returned in its entirety.  As an example, the
+<code class="docutils literal"><span class="pre">global</span></code> keyword allows for
+<code class="docutils literal"><span class="pre">lipids.select_atoms(&quot;around</span> <span class="pre">10</span> <span class="pre">global</span> <span class="pre">protein&quot;)</span></code> &#8212; where
+<code class="docutils literal"><span class="pre">lipids</span></code> is a group that does not contain any proteins. Were
+<code class="docutils literal"><span class="pre">global</span></code> absent, the result would be an empty selection since
+the <code class="docutils literal"><span class="pre">protein</span></code> subselection would itself be empty. When issuing
+<a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup.select_atoms" title="MDAnalysis.core.groups.AtomGroup.select_atoms"><code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code></a> from a
+<a class="reference internal" href="universe.html#MDAnalysis.core.universe.Universe" title="MDAnalysis.core.universe.Universe"><code class="xref py py-class docutils literal"><span class="pre">Universe</span></code></a>, <code class="docutils literal"><span class="pre">global</span></code> is ignored.</dd>
 </dl>
 </div></blockquote>
+<dl class="docutils">
+<dt><strong>Dynamic selections</strong></dt>
+<dd>If <a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup.select_atoms" title="MDAnalysis.core.groups.AtomGroup.select_atoms"><code class="xref py py-meth docutils literal"><span class="pre">select_atoms()</span></code></a> is
+invoked with named argument <cite>updating</cite> set to <cite>True</cite>, an
+<a class="reference internal" href="#MDAnalysis.core.groups.UpdatingAtomGroup" title="MDAnalysis.core.groups.UpdatingAtomGroup"><code class="xref py py-class docutils literal"><span class="pre">UpdatingAtomGroup</span></code></a> instance will be
+returned, instead of a regular
+<a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>. It behaves just like
+the latter, with the difference that the selection expressions are
+re-evaluated every time the trajectory frame changes (this happens
+lazily, only when the
+<a class="reference internal" href="#MDAnalysis.core.groups.UpdatingAtomGroup" title="MDAnalysis.core.groups.UpdatingAtomGroup"><code class="xref py py-class docutils literal"><span class="pre">UpdatingAtomGroup</span></code></a> is accessed so
+that there is no redundant updating going on).
+Issuing an updating selection from an already updating group will
+cause later updates to also reflect the updating of the base group.
+A non-updating selection or a slicing operation made on an
+<a class="reference internal" href="#MDAnalysis.core.groups.UpdatingAtomGroup" title="MDAnalysis.core.groups.UpdatingAtomGroup"><code class="xref py py-class docutils literal"><span class="pre">UpdatingAtomGroup</span></code></a> will return a
+static <a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>, which will no
+longer update across frames.</dd>
+</dl>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 0.7.4: </span>Added <em>resnum</em> selection.</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 0.8.1: </span>Added <em>group</em> and <em>fullgroup</em> selections.</p>
 </div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 0.11: </span>The use of <code class="docutils literal"><span class="pre">fullgroup</span></code> has been deprecated in favor of the equivalent
+<code class="docutils literal"><span class="pre">global</span> <span class="pre">group</span></code>.</p>
+</div>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 0.13.0: </span>Added <em>bonded</em> selection</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 0.16.0: </span>Resid selection now takes icodes into account where present.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0: </span>Updating selections now possible by setting the <code class="docutils literal"><span class="pre">updating</span></code> argument.</p>
 </div>
 </dd></dl>
 
@@ -2124,6 +2162,72 @@ be used.</p>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.9.2.</span></p>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="MDAnalysis.core.groups.UpdatingAtomGroup">
+<em class="property">class </em><code class="descclassname">MDAnalysis.core.groups.</code><code class="descname">UpdatingAtomGroup</code><span class="sig-paren">(</span><em>base_group</em>, <em>selections</em>, <em>strings</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/groups.html#UpdatingAtomGroup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.groups.UpdatingAtomGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a> subclass that dynamically updates its selected atoms.</p>
+<p>Accessing any attribute/method of an <a class="reference internal" href="#MDAnalysis.core.groups.UpdatingAtomGroup" title="MDAnalysis.core.groups.UpdatingAtomGroup"><code class="xref py py-class docutils literal"><span class="pre">UpdatingAtomGroup</span></code></a> instance
+triggers a check for the last frame the group was updated. If the last
+frame matches the current trajectory frame, the attribute is returned
+normally; otherwise the group is updated (the stored selections are
+re-applied), and only then is the attribute returned.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0.</span></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base_group</strong> (<a class="reference internal" href="#MDAnalysis.core.groups.AtomGroup" title="MDAnalysis.core.groups.AtomGroup"><code class="xref py py-class docutils literal"><span class="pre">AtomGroup</span></code></a>) &#8211; group on which <em>selections</em> are to be applied.</li>
+<li><strong>selections</strong> (a tuple of <code class="xref py py-class docutils literal"><span class="pre">Selection</span></code> instances) &#8211; selections ready to be applied to <em>base_group</em>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="MDAnalysis.core.groups.UpdatingAtomGroup.ensure_updated">
+<code class="descname">ensure_updated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/groups.html#UpdatingAtomGroup.ensure_updated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.groups.UpdatingAtomGroup.ensure_updated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the selection needs updating and updates it, if needed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if the group was already up-to-date, <cite>False</cite> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDAnalysis.core.groups.UpdatingAtomGroup.is_uptodate">
+<code class="descname">is_uptodate</code><a class="headerlink" href="#MDAnalysis.core.groups.UpdatingAtomGroup.is_uptodate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the selection needs updating</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if the group&#8217;s selection is up-to-date, <cite>False</cite> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.core.groups.UpdatingAtomGroup.update_selection">
+<code class="descname">update_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/groups.html#UpdatingAtomGroup.update_selection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.groups.UpdatingAtomGroup.update_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forces the reevaluation and application of the group&#8217;s selection(s).</p>
+<p>This method is triggered automatically when accessing attributes, if
+the last update occurred under a different trajectory frame.</p>
 </dd></dl>
 
 </dd></dl>
