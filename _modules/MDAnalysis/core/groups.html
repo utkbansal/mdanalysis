@@ -2084,7 +2084,7 @@
     <span class="s2">&quot;_base_group&quot;</span><span class="p">,</span> <span class="s2">&quot;_selections&quot;</span><span class="p">,</span> <span class="s2">&quot;_lastupdate&quot;</span><span class="p">,</span>
     <span class="s2">&quot;level&quot;</span><span class="p">,</span> <span class="s2">&quot;_u&quot;</span><span class="p">,</span> <span class="s2">&quot;universe&quot;</span><span class="p">,</span>
     <span class="c1"># Methods of the UAG</span>
-    <span class="s2">&quot;ensure_updated&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;_ensure_updated&quot;</span><span class="p">,</span>
     <span class="s2">&quot;is_uptodate&quot;</span><span class="p">,</span>
     <span class="s2">&quot;update_selection&quot;</span><span class="p">,</span>
 <span class="p">}</span>
@@ -2130,7 +2130,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selections</span><span class="p">:</span>
             <span class="c1"># Allows the creation of a cheap placeholder UpdatingAtomGroup</span>
             <span class="c1"># by passing an empty selection tuple.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ensure_updated</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_updated</span><span class="p">()</span>
 
 <div class="viewcode-block" id="UpdatingAtomGroup.update_selection"><a class="viewcode-back" href="../../../documentation_pages/core/groups.html#MDAnalysis.core.groups.UpdatingAtomGroup.update_selection">[docs]</a>    <span class="k">def</span> <span class="nf">update_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -2155,7 +2155,11 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">is_uptodate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Checks whether the selection needs updating</span>
+<span class="sd">        Checks whether the selection needs updating based on frame number only.</span>
+
+<span class="sd">        Modifications to the coordinate data that render selections stale are</span>
+<span class="sd">        not caught, and in those cases :attr:`is_uptodate` may return an</span>
+<span class="sd">        erroneous value.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -2179,7 +2183,7 @@
             <span class="c1"># This always marks the selection as outdated</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lastupdate</span> <span class="o">=</span> <span class="bp">None</span>
 
-<div class="viewcode-block" id="UpdatingAtomGroup.ensure_updated"><a class="viewcode-back" href="../../../documentation_pages/core/groups.html#MDAnalysis.core.groups.UpdatingAtomGroup.ensure_updated">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_updated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_ensure_updated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Checks whether the selection needs updating and updates it, if needed.</span>
 
@@ -2192,13 +2196,13 @@
         <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_uptodate</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">update_selection</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">status</span></div>
+        <span class="k">return</span> <span class="n">status</span>
 
     <span class="k">def</span> <span class="nf">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="c1"># ALL attribute access goes through here</span>
         <span class="c1"># If the requested attribute isn&#39;t in the shortcut list, update ourselves</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_UAG_SHORTCUT_ATTRS</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ensure_updated</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_updated</span><span class="p">()</span>
         <span class="c1"># Going via object.__getattribute__ then bypasses this check stage</span>
         <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 

@@ -2190,26 +2190,13 @@ re-applied), and only then is the attribute returned.</p>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="MDAnalysis.core.groups.UpdatingAtomGroup.ensure_updated">
-<code class="descname">ensure_updated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/groups.html#UpdatingAtomGroup.ensure_updated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.groups.UpdatingAtomGroup.ensure_updated" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the selection needs updating and updates it, if needed.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if the group was already up-to-date, <cite>False</cite> otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="attribute">
 <dt id="MDAnalysis.core.groups.UpdatingAtomGroup.is_uptodate">
 <code class="descname">is_uptodate</code><a class="headerlink" href="#MDAnalysis.core.groups.UpdatingAtomGroup.is_uptodate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the selection needs updating</p>
+<dd><p>Checks whether the selection needs updating based on frame number only.</p>
+<p>Modifications to the coordinate data that render selections stale are
+not caught, and in those cases <a class="reference internal" href="#MDAnalysis.core.groups.UpdatingAtomGroup.is_uptodate" title="MDAnalysis.core.groups.UpdatingAtomGroup.is_uptodate"><code class="xref py py-attr docutils literal"><span class="pre">is_uptodate</span></code></a> may return an
+erroneous value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
