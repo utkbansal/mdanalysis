@@ -1267,7 +1267,11 @@ coordinates)</p>
 <dl class="attribute">
 <dt id="MDAnalysis.coordinates.DCD.DCDReader.totaltime">
 <code class="descname">totaltime</code><a class="headerlink" href="#MDAnalysis.coordinates.DCD.DCDReader.totaltime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Total length of the trajectory n_frames * dt.</p>
+<dd><p>Total length of the trajectory</p>
+<p>The time is calculated as <code class="docutils literal"><span class="pre">(n_frames</span> <span class="pre">-</span> <span class="pre">1)</span> <span class="pre">*</span> <span class="pre">dt</span></code>, i.e., we assume that
+the first frame no time as elapsed. Thus, a trajectory with two frames will
+be considered to have a length of a single time step <cite>dt</cite> and a
+&#8220;trajectory&#8221; with a single frame will be reported as length 0.</p>
 </dd></dl>
 
 </dd></dl>

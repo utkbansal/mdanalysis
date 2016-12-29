@@ -1181,8 +1181,15 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">totaltime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Total length of the trajectory n_frames * dt.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+        <span class="sd">&quot;&quot;&quot;Total length of the trajectory</span>
+
+<span class="sd">        The time is calculated as ``(n_frames - 1) * dt``, i.e., we assume that</span>
+<span class="sd">        the first frame no time as elapsed. Thus, a trajectory with two frames will</span>
+<span class="sd">        be considered to have a length of a single time step `dt` and a</span>
+<span class="sd">        &quot;trajectory&quot; with a single frame will be reported as length 0.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
