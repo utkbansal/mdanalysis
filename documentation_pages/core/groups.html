@@ -64,6 +64,7 @@
 <li><a class="reference internal" href="#classes">8.1.2.1. Classes</a><ul>
 <li><a class="reference internal" href="#collections">8.1.2.1.1. Collections</a></li>
 <li><a class="reference internal" href="#chemical-units">8.1.2.1.2. Chemical units</a></li>
+<li><a class="reference internal" href="#levels">8.1.2.1.3. Levels</a></li>
 </ul>
 </li>
 </ul>
@@ -2468,6 +2469,23 @@ If it is a Segment, this is the index of the segment.</p>
 
 </dd></dl>
 
+</div>
+<div class="section" id="levels">
+<h3>8.1.2.1.3. Levels<a class="headerlink" href="#levels" title="Permalink to this headline">¶</a></h3>
+<p>Each of the above classes has a level attribute.  This can be used to
+verify that two objects are of the same level, or to access a particular
+class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">()</span>
+
+<span class="n">ag</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">at</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
+
+<span class="n">ag</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="n">at</span><span class="o">.</span><span class="n">level</span>  <span class="c1"># Returns True</span>
+
+<span class="n">ag</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">singular</span>  <span class="c1"># Returns Atom class</span>
+<span class="n">at</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">plural</span>  <span class="c1"># Returns AtomGroup class</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>

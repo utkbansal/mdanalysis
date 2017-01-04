@@ -144,9 +144,28 @@
 <span class="sd">   :members:</span>
 <span class="sd">   :inherited-members:</span>
 
+<span class="sd">Levels</span>
+<span class="sd">------</span>
+
+<span class="sd">Each of the above classes has a level attribute.  This can be used to</span>
+<span class="sd">verify that two objects are of the same level, or to access a particular</span>
+<span class="sd">class::</span>
+
+<span class="sd">   u = mda.Universe()</span>
+
+<span class="sd">   ag = u.atoms[:10]</span>
+<span class="sd">   at = u.atoms[11]</span>
+
+<span class="sd">   ag.level == at.level  # Returns True</span>
+
+<span class="sd">   ag.level.singular  # Returns Atom class</span>
+<span class="sd">   at.level.plural  # Returns AtomGroup class</span>
+
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">six.moves</span> <span class="kn">import</span> <span class="nb">zip</span>
 
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
@@ -159,7 +178,6 @@
 <span class="kn">from</span> <span class="nn">..lib</span> <span class="kn">import</span> <span class="n">transformations</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">selection</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">flags</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">levels</span>
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">NoDataError</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">topologyobjects</span>
 
@@ -1915,9 +1933,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">residue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">residueclass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">singular</span>
-        <span class="k">return</span> <span class="n">residueclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">resindices</span><span class="p">[</span><span class="bp">self</span><span class="p">],</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">resindices</span><span class="p">[</span><span class="bp">self</span><span class="p">]]</span>
 
     <span class="nd">@residue.setter</span>
     <span class="k">def</span> <span class="nf">residue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
@@ -1928,9 +1944,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">segment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">segmentclass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">singular</span>
-        <span class="k">return</span> <span class="n">segmentclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">segindices</span><span class="p">[</span><span class="bp">self</span><span class="p">],</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">segments</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">segindices</span><span class="p">[</span><span class="bp">self</span><span class="p">]]</span>
 
     <span class="nd">@segment.setter</span>
     <span class="k">def</span> <span class="nf">segment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
@@ -2021,15 +2035,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">atomsclass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">plural</span>
-        <span class="k">return</span> <span class="n">atomsclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="bp">self</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                          <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="bp">self</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">segment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">segmentclass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">singular</span>
-        <span class="k">return</span> <span class="n">segmentclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">segindices</span><span class="p">[</span><span class="bp">self</span><span class="p">],</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">segments</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">segindices</span><span class="p">[</span><span class="bp">self</span><span class="p">]]</span>
 
     <span class="nd">@segment.setter</span>
     <span class="k">def</span> <span class="nf">segment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
@@ -2050,15 +2060,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">atomsclass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">plural</span>
-        <span class="k">return</span> <span class="n">atomsclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="bp">self</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                          <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="bp">self</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">residues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">residuesclass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">child</span><span class="o">.</span><span class="n">plural</span>
-        <span class="k">return</span> <span class="n">residuesclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">resindices</span><span class="p">[</span><span class="bp">self</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                             <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_u</span><span class="o">.</span><span class="n">_topology</span><span class="o">.</span><span class="n">resindices</span><span class="p">[</span><span class="bp">self</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
 
     <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
         <span class="c1"># Segment.r1 access</span>
@@ -2223,16 +2229,10 @@
 
 <span class="c1"># Define relationships between these classes</span>
 <span class="c1"># with Level objects</span>
-<span class="n">ATOMLEVEL</span> <span class="o">=</span> <span class="n">levels</span><span class="o">.</span><span class="n">Level</span><span class="p">(</span><span class="s1">&#39;atom&#39;</span><span class="p">,</span> <span class="n">Atom</span><span class="p">,</span> <span class="n">AtomGroup</span><span class="p">)</span>
-<span class="n">RESIDUELEVEL</span> <span class="o">=</span> <span class="n">levels</span><span class="o">.</span><span class="n">Level</span><span class="p">(</span><span class="s1">&#39;residue&#39;</span><span class="p">,</span> <span class="n">Residue</span><span class="p">,</span> <span class="n">ResidueGroup</span><span class="p">)</span>
-<span class="n">SEGMENTLEVEL</span> <span class="o">=</span> <span class="n">levels</span><span class="o">.</span><span class="n">Level</span><span class="p">(</span><span class="s1">&#39;segment&#39;</span><span class="p">,</span> <span class="n">Segment</span><span class="p">,</span> <span class="n">SegmentGroup</span><span class="p">)</span>
-
-<span class="n">ATOMLEVEL</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">RESIDUELEVEL</span>
-<span class="n">ATOMLEVEL</span><span class="o">.</span><span class="n">child</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="n">RESIDUELEVEL</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">SEGMENTLEVEL</span>
-<span class="n">RESIDUELEVEL</span><span class="o">.</span><span class="n">child</span> <span class="o">=</span> <span class="n">ATOMLEVEL</span>
-<span class="n">SEGMENTLEVEL</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="n">SEGMENTLEVEL</span><span class="o">.</span><span class="n">child</span> <span class="o">=</span> <span class="n">RESIDUELEVEL</span>
+<span class="n">_Level</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Level&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;singular&#39;</span><span class="p">,</span> <span class="s1">&#39;plural&#39;</span><span class="p">])</span>
+<span class="n">ATOMLEVEL</span> <span class="o">=</span> <span class="n">_Level</span><span class="p">(</span><span class="s1">&#39;atom&#39;</span><span class="p">,</span> <span class="n">Atom</span><span class="p">,</span> <span class="n">AtomGroup</span><span class="p">)</span>
+<span class="n">RESIDUELEVEL</span> <span class="o">=</span> <span class="n">_Level</span><span class="p">(</span><span class="s1">&#39;residue&#39;</span><span class="p">,</span> <span class="n">Residue</span><span class="p">,</span> <span class="n">ResidueGroup</span><span class="p">)</span>
+<span class="n">SEGMENTLEVEL</span> <span class="o">=</span> <span class="n">_Level</span><span class="p">(</span><span class="s1">&#39;segment&#39;</span><span class="p">,</span> <span class="n">Segment</span><span class="p">,</span> <span class="n">SegmentGroup</span><span class="p">)</span>
 
 <span class="n">Atom</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">ATOMLEVEL</span>
 <span class="n">AtomGroup</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">ATOMLEVEL</span>
