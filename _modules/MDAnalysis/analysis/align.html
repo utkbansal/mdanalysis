@@ -265,7 +265,7 @@
 <span class="kn">import</span> <span class="nn">MDAnalysis.analysis.rms</span> <span class="kn">as</span> <span class="nn">rms</span>
 <span class="kn">from</span> <span class="nn">MDAnalysis.coordinates.memory</span> <span class="kn">import</span> <span class="n">MemoryReader</span>
 <span class="c1"># remove after rms_fit_trj deprecation over</span>
-<span class="kn">from</span> <span class="nn">MDAnalysis.lib.log</span> <span class="kn">import</span> <span class="n">ProgressMeter</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.lib.log</span> <span class="kn">import</span> <span class="n">ProgressMeter</span><span class="p">,</span> <span class="n">_set_verbose</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">AnalysisBase</span>
 
@@ -587,8 +587,8 @@
 <span class="sd">            exact methods</span>
 <span class="sd">        force : boolean, optional</span>
 <span class="sd">            Force overwrite of filename for rmsd-fitting</span>
-<span class="sd">        quiet : boolean, optional</span>
-<span class="sd">            Set logger to show minimal information</span>
+<span class="sd">        verbose : boolean, optional</span>
+<span class="sd">            Set logger to show more information</span>
 <span class="sd">        start : int, optional</span>
 <span class="sd">            First frame of trajectory to analyse, Default: 0</span>
 <span class="sd">        stop : int, optional</span>
@@ -604,9 +604,9 @@
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        If set to `quiet`, it is recommended to wrap the statement in a ``try</span>
-<span class="sd">        ...  finally`` to guarantee restoring of the log level in the case of</span>
-<span class="sd">        an exception.</span>
+<span class="sd">        If set to `verbose=False`, it is recommended to wrap the statement in a</span>
+<span class="sd">        ``try ...  finally`` to guarantee restoring of the log level in the</span>
+<span class="sd">        case of an exception.</span>
 
 <span class="sd">        The `in_memory` option changes the `mobile` universe to an in-memory</span>
 <span class="sd">        representation (see :mod:`MDAnalysis.coordinates.memory`) for the</span>
@@ -637,7 +637,7 @@
         <span class="c1"># do this after setting the memory reader to have a reference to the</span>
         <span class="c1"># right reader.</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">AlignTraj</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">mobile</span><span class="o">.</span><span class="n">trajectory</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quiet</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">disable</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARN</span><span class="p">)</span>
 
         <span class="c1"># store reference to mobile atoms</span>
@@ -684,7 +684,7 @@
 
     <span class="k">def</span> <span class="nf">_conclude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quiet</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">disable</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmsdfile</span><span class="p">):</span>
@@ -708,8 +708,9 @@
         <span class="n">tol_mass</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
         <span class="n">strict</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-        <span class="n">quiet</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
         <span class="n">in_memory</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">quiet</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;RMS-fit trajectory to a reference structure using a selection.</span>
 
@@ -758,9 +759,9 @@
 <span class="sd">      *force*</span>
 <span class="sd">         - ``True``: Overwrite an existing output trajectory (default)</span>
 <span class="sd">         - ``False``: simply return if the file already exists</span>
-<span class="sd">      *quiet*</span>
-<span class="sd">         - ``True``: suppress progress and logging for levels INFO and below.</span>
-<span class="sd">         - ``False``: show all status messages and do not change the the logging</span>
+<span class="sd">      *verbose*</span>
+<span class="sd">         - ``False``: suppress progress and logging for levels INFO and below.</span>
+<span class="sd">         - ``True``: show all status messages and do not change the the logging</span>
 <span class="sd">           level (default)</span>
 <span class="sd">      *in_memory*</span>
 <span class="sd">         Default: ``False``</span>
@@ -788,9 +789,13 @@
 <span class="sd">       and new *strict* keyword. The new default is to be lenient whereas</span>
 <span class="sd">       the old behavior was the equivalent of *strict* = ``True``.</span>
 
+<span class="sd">    .. deprecated:: 0.16::</span>
+<span class="sd">       The keyword argument *quiet* is deprecated in vafor of *verbose*.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">frames</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">trajectory</span>
-    <span class="k">if</span> <span class="n">quiet</span><span class="p">:</span>
+    <span class="n">verbose</span> <span class="o">=</span> <span class="n">_set_verbose</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="c1"># should be part of a try ... finally to guarantee restoring the log</span>
         <span class="c1"># level</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">disable</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARN</span><span class="p">)</span>
@@ -849,7 +854,7 @@
     <span class="n">percentage</span> <span class="o">=</span> <span class="n">ProgressMeter</span><span class="p">(</span>
         <span class="n">n_frames</span><span class="p">,</span>
         <span class="n">interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
         <span class="n">format</span><span class="o">=</span><span class="s2">&quot;Fitted frame </span><span class="si">%(step)5d</span><span class="s2">/</span><span class="si">%(numsteps)d</span><span class="s2">  [</span><span class="si">%(percentage)5.1f%%</span><span class="s2">]      r&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">ts</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">frames</span><span class="p">):</span>
@@ -884,7 +889,7 @@
         <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">rmsdfile</span><span class="p">,</span> <span class="n">rmsd</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wrote RMSD timeseries  to file </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rmsdfile</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">quiet</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="c1"># should be part of a try ... finally to guarantee restoring the log</span>
         <span class="c1"># level</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">disable</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">)</span>

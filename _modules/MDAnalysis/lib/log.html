@@ -156,6 +156,7 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">version</span>
 
@@ -245,7 +246,7 @@
 
 <div class="viewcode-block" id="echo"><a class="viewcode-back" href="../../../documentation_pages/lib/log.html#MDAnalysis.echo">[docs]</a><span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simple string output that immediately prints to the console.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
 
@@ -287,6 +288,59 @@
         <span class="k">return</span> <span class="n">_new_format</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_legacy_format</span>
+
+
+<span class="k">def</span> <span class="nf">_set_verbose</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                 <span class="n">was</span><span class="o">=</span><span class="s1">&#39;quiet&#39;</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="s1">&#39;verbose&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the expected value of verbosity</span>
+
+<span class="sd">    This function aims at handling the deprecation of the *quiet* keyword in</span>
+<span class="sd">    versin 0.16.</span>
+
+<span class="sd">    This function issues a deprecation warning if *quiet* was set (is not</span>
+<span class="sd">    None), and raises a ValueError if *verbose* and *quiet* are set to</span>
+<span class="sd">    contradicting values.</span>
+
+<span class="sd">    If *verbose* is set, then the function returns the set value of *verbose*.</span>
+<span class="sd">    If it is not set, but *quiet* is set, then the function returns</span>
+<span class="sd">    `not quiet`. Finally, if none of *verbose* nor *quiet* is set, then</span>
+<span class="sd">    *default* is returned.</span>
+
+<span class="sd">    During the deprecation phase of the *quiet* keyword, this function is</span>
+<span class="sd">    expected to be used as follow:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       def method(verbose=None, quiet=None):</span>
+<span class="sd">           # *verbose* and *quiet* are set to None to distinguish explicitly</span>
+<span class="sd">           # set values.</span>
+<span class="sd">           self.verbose = _set_verbose(verbose, quiet, default=True)</span>
+
+<span class="sd">    At the end of the deprecation period, the code above should be replaced by:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       def method(verbose=True):</span>
+<span class="sd">           # The *quiet* keyword disapeard and the default value for *verbose*</span>
+<span class="sd">           # is set to the actual default value.</span>
+<span class="sd">           self.verbose = verbose</span>
+
+<span class="sd">    In `MDAnalysis.analysis.hbonds.hbonds_analysis`, the deprecation scheme is</span>
+<span class="sd">    more complex: *quiet* becomes *verbose*, and *verbose* becomes *debug*.</span>
+<span class="sd">    Hence, this function allows to use diffrent argument names to display in</span>
+<span class="sd">    error messages and deprecation warnings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">quiet</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Keyword *{}* is deprecated (from version 0.16); &quot;</span>
+                      <span class="s2">&quot;use *{}* instead.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">was</span><span class="p">,</span> <span class="n">now</span><span class="p">),</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">verbose</span> <span class="o">==</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Keywords *{}* and *{}* are contradicting each other.&quot;</span>
+                             <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="n">was</span><span class="p">))</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">quiet</span>
+    <span class="k">elif</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">verbose</span>
 
 
 <div class="viewcode-block" id="ProgressMeter"><a class="viewcode-back" href="../../../documentation_pages/lib/log.html#MDAnalysis.ProgressMeter">[docs]</a><span class="k">class</span> <span class="nc">ProgressMeter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -334,7 +388,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numsteps</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                 <span class="n">quiet</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">format_handling</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">):</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                 <span class="n">format_handling</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ==========</span>
@@ -361,9 +416,9 @@
 <span class="sd">        offset: int</span>
 <span class="sd">            number to add to *step*; e.g. if *step* is 0-based (as in MDAnalysis)</span>
 <span class="sd">            then one should set *offset* = 1; for 1-based steps, choose 0. [1]</span>
-<span class="sd">        quiet: bool</span>
-<span class="sd">            If ``True``, disable all output, ``False`` print all messages as</span>
-<span class="sd">            specified, [``False``]</span>
+<span class="sd">        verbose: bool</span>
+<span class="sd">            If ``False``, disable all output, ``True`` print all messages as</span>
+<span class="sd">            specified, [``True``]</span>
 <span class="sd">        dynamic: bool</span>
 <span class="sd">            If ``True``, each line will be printed on top of the previous one.</span>
 <span class="sd">            This is done by prepedind the format with ``\r``. [``True``]</span>
@@ -380,13 +435,19 @@
 
 <span class="sd">        .. versionchanged:: 0.16</span>
 <span class="sd">           Keyword argument *dynamic* replaces ``\r`` in the format.</span>
+
+<span class="sd">        .. deprecated:: 0.16</span>
+<span class="sd">           Keyword argument *quiet* is deprecated in favor of *verbose*.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">numsteps</span> <span class="o">=</span> <span class="n">numsteps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dynamic</span> <span class="o">=</span> <span class="n">dynamic</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">numouts</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">quiet</span> <span class="o">=</span> <span class="n">quiet</span>
+
+        <span class="c1"># The *quiet* keyword argument is deprecated.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">_set_verbose</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">format</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">format</span> <span class="o">=</span> <span class="s2">&quot;Step {step:5d}/{numsteps} [{percentage:5.1f}%]&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">format_handler</span> <span class="o">=</span> <span class="n">_new_format</span>
@@ -428,12 +489,12 @@
 <span class="sd">        *kwargs* are additional attributes that can be references in</span>
 <span class="sd">        the format string.</span>
 
-<span class="sd">        .. Note:: If *quiet* = ``True`` has been set in the</span>
-<span class="sd">                  constructor or if :attr:`ProgressMeter.quiet` has</span>
-<span class="sd">                  been set to ``True`` the no messages will be</span>
+<span class="sd">        .. Note:: If *verbose* = ``False`` has been set in the</span>
+<span class="sd">                  constructor or if :attr:`ProgressMeter.verbose` has</span>
+<span class="sd">                  been set to ``False``, then no messages will be</span>
 <span class="sd">                  printed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span>

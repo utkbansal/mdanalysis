@@ -192,7 +192,7 @@ HELANAL - A program to characterise helix geometry in proteins.
 <h2>3.7.2.2. Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="MDAnalysis.analysis.helanal.helanal_trajectory">
-<code class="descclassname">MDAnalysis.analysis.helanal.</code><code class="descname">helanal_trajectory</code><span class="sig-paren">(</span><em>universe</em>, <em>selection='name CA'</em>, <em>start=None</em>, <em>end=None</em>, <em>begin=None</em>, <em>finish=None</em>, <em>matrix_filename='bending_matrix.dat'</em>, <em>origin_pdbfile='origin.pdb'</em>, <em>summary_filename='summary.txt'</em>, <em>screw_filename='screw.xvg'</em>, <em>tilt_filename='local_tilt.xvg'</em>, <em>fitted_tilt_filename='fit_tilt.xvg'</em>, <em>bend_filename='local_bend.xvg'</em>, <em>twist_filename='unit_twist.xvg'</em>, <em>prefix='helanal_'</em>, <em>ref_axis=None</em>, <em>quiet=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/helanal.html#helanal_trajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.helanal.helanal_trajectory" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">MDAnalysis.analysis.helanal.</code><code class="descname">helanal_trajectory</code><span class="sig-paren">(</span><em>universe</em>, <em>selection='name CA'</em>, <em>start=None</em>, <em>end=None</em>, <em>begin=None</em>, <em>finish=None</em>, <em>matrix_filename='bending_matrix.dat'</em>, <em>origin_pdbfile='origin.pdb'</em>, <em>summary_filename='summary.txt'</em>, <em>screw_filename='screw.xvg'</em>, <em>tilt_filename='local_tilt.xvg'</em>, <em>fitted_tilt_filename='fit_tilt.xvg'</em>, <em>bend_filename='local_bend.xvg'</em>, <em>twist_filename='unit_twist.xvg'</em>, <em>prefix='helanal_'</em>, <em>ref_axis=None</em>, <em>verbose=None</em>, <em>quiet=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/helanal.html#helanal_trajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.helanal.helanal_trajectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform <a class="reference external" href="http://www.ccrnp.ncifcrf.gov/users/kumarsan/HELANAL/helanal.html">HELANAL</a> helix analysis on all frames in <em>universe</em>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -261,8 +261,8 @@ end of the trajectory [<code class="docutils literal"><span class="pre">None</sp
 <dd><p class="first last">Calculate tilt angle relative to the axis; if <code class="docutils literal"><span class="pre">None</span></code> then <code class="docutils literal"><span class="pre">[0,0,1]</span></code>
 is chosen [<code class="docutils literal"><span class="pre">None</span></code>]</p>
 </dd>
-<dt><em>quiet</em></dt>
-<dd><p class="first last">Suppress most diagnostic output.</p>
+<dt><em>verbose</em></dt>
+<dd><p class="first last">Toggle diagnostic outputs. [<code class="docutils literal"><span class="pre">True</span></code>]</p>
 </dd>
 </dl>
 </td>
@@ -281,6 +281,10 @@ current time stamp of trajectory object.</p>
 <p><span class="versionmodified">Changed in version 0.13.0: </span>New <em>quiet</em> keyword to silence frame progress output and most of the
 output that used to be printed to stdout is now logged to the logger
 <em>MDAnalysis.analysis.helanal</em> (at logelevel <em>INFO</em>).</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 0.16: </span>The <em>quiet</em> keyword argument is deprecated in favor of the New
+<em>verbose</em> one.</p>
 </div>
 </dd></dl>
 

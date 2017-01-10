@@ -526,7 +526,7 @@ regenerated from the saved data with</p>
 
 <dl class="function">
 <dt id="MDAnalysis.analysis.density.density_from_Universe">
-<code class="descclassname">MDAnalysis.analysis.density.</code><code class="descname">density_from_Universe</code><span class="sig-paren">(</span><em>universe</em>, <em>delta=1.0</em>, <em>atomselection='name OH2'</em>, <em>start=None</em>, <em>stop=None</em>, <em>step=None</em>, <em>metadata=None</em>, <em>padding=2.0</em>, <em>cutoff=0</em>, <em>soluteselection=None</em>, <em>use_kdtree=True</em>, <em>update_selection=False</em>, <em>quiet=False</em>, <em>interval=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/density.html#density_from_Universe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.density.density_from_Universe" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">MDAnalysis.analysis.density.</code><code class="descname">density_from_Universe</code><span class="sig-paren">(</span><em>universe</em>, <em>delta=1.0</em>, <em>atomselection='name OH2'</em>, <em>start=None</em>, <em>stop=None</em>, <em>step=None</em>, <em>metadata=None</em>, <em>padding=2.0</em>, <em>cutoff=0</em>, <em>soluteselection=None</em>, <em>use_kdtree=True</em>, <em>update_selection=False</em>, <em>verbose=None</em>, <em>interval=1</em>, <em>quiet=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/analysis/density.html#density_from_Universe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.density.density_from_Universe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a density grid from a <code class="xref py py-class docutils literal"><span class="pre">MDAnalysis.Universe</span></code> object.</p>
 <p>The trajectory is read, frame by frame, and the atoms selected with <em>atomselection</em> are
 histogrammed on a grid with spacing <em>delta</em>:</p>
@@ -586,10 +586,10 @@ in Angstroem [2.0]</p>
 - <code class="docutils literal"><span class="pre">True</span></code>: atom selection is updated for each frame, can be slow
 - <code class="docutils literal"><span class="pre">False</span></code>: atoms are only selected at the beginning</p>
 </dd>
-<dt>quiet</dt>
-<dd><p class="first">Print status update to the screen for every <em>interval</em> frame? [<code class="docutils literal"><span class="pre">False</span></code>]
-- <code class="docutils literal"><span class="pre">True</span></code>: no status updates when a new frame is processed
-- <code class="docutils literal"><span class="pre">False</span></code>: status update every frame (including number of atoms</p>
+<dt>verbose</dt>
+<dd><p class="first">Print status update to the screen for every <em>interval</em> frame? [<code class="docutils literal"><span class="pre">True</span></code>]
+- <code class="docutils literal"><span class="pre">False</span></code>: no status updates when a new frame is processed
+- <code class="docutils literal"><span class="pre">True</span></code>: status update every frame (including number of atoms</p>
 <blockquote class="last">
 <div><p>processed, which is interesting with <code class="docutils literal"><span class="pre">update_selection=True</span></code>)</p>
 </div></blockquote>
@@ -613,6 +613,9 @@ in Angstroem [2.0]</p>
 </table>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 0.13.0: </span><em>update_selection</em> and <em>quite</em> keywords added</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 0.16: </span>The keyword argument <em>quiet</em> is deprecated in favor of <em>verbose</em>.</p>
 </div>
 </dd></dl>
 

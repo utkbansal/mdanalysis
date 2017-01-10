@@ -402,7 +402,7 @@ the atoms selected in the reference trajectory</li>
 <li><strong>strict</strong> (<em>boolean, optional</em>) &#8211; Force <cite>get_matching_atoms</cite> to fail if atoms can&#8217;t be found using
 exact methods</li>
 <li><strong>force</strong> (<em>boolean, optional</em>) &#8211; Force overwrite of filename for rmsd-fitting</li>
-<li><strong>quiet</strong> (<em>boolean, optional</em>) &#8211; Set logger to show minimal information</li>
+<li><strong>verbose</strong> (<em>boolean, optional</em>) &#8211; Set logger to show more information</li>
 <li><strong>start</strong> (<em>int, optional</em>) &#8211; First frame of trajectory to analyse, Default: 0</li>
 <li><strong>stop</strong> (<em>int, optional</em>) &#8211; Last frame of trajectory to analyse, Default: -1</li>
 <li><strong>step</strong> (<em>int, optional</em>) &#8211; Step between frames to analyse, Default: 1</li>
@@ -417,9 +417,9 @@ the coordinates of <cite>mobile</cite> are changed in memory.</li>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>If set to <cite>quiet</cite>, it is recommended to wrap the statement in a <code class="docutils literal"><span class="pre">try</span>
-<span class="pre">...</span>&nbsp; <span class="pre">finally</span></code> to guarantee restoring of the log level in the case of
-an exception.</p>
+<p>If set to <cite>verbose=False</cite>, it is recommended to wrap the statement in a
+<code class="docutils literal"><span class="pre">try</span> <span class="pre">...</span>&nbsp; <span class="pre">finally</span></code> to guarantee restoring of the log level in the
+case of an exception.</p>
 <p>The <cite>in_memory</cite> option changes the <cite>mobile</cite> universe to an in-memory
 representation (see <a class="reference internal" href="../coordinates/memory.html#module-MDAnalysis.coordinates.memory" title="MDAnalysis.coordinates.memory"><code class="xref py py-mod docutils literal"><span class="pre">MDAnalysis.coordinates.memory</span></code></a>) for the
 remainder of the Python session. If <code class="docutils literal"><span class="pre">mobile.trajectory```is</span> <span class="pre">already</span> <span class="pre">a</span>

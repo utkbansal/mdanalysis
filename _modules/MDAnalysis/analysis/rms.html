@@ -213,7 +213,7 @@
 <span class="kn">import</span> <span class="nn">MDAnalysis.lib.qcprot</span> <span class="kn">as</span> <span class="nn">qcp</span>
 <span class="kn">from</span> <span class="nn">MDAnalysis.analysis.base</span> <span class="kn">import</span> <span class="n">AnalysisBase</span>
 <span class="kn">from</span> <span class="nn">MDAnalysis.exceptions</span> <span class="kn">import</span> <span class="n">SelectionError</span><span class="p">,</span> <span class="n">NoDataError</span>
-<span class="kn">from</span> <span class="nn">MDAnalysis.lib.log</span> <span class="kn">import</span> <span class="n">ProgressMeter</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.lib.log</span> <span class="kn">import</span> <span class="n">ProgressMeter</span><span class="p">,</span> <span class="n">_set_verbose</span>
 <span class="kn">from</span> <span class="nn">MDAnalysis.lib.util</span> <span class="kn">import</span> <span class="n">asiterable</span>
 
 
@@ -631,7 +631,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">atomgroup</span> <span class="o">=</span> <span class="n">atomgroup</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rmsf</span> <span class="o">=</span> <span class="bp">None</span>
 
-<div class="viewcode-block" id="RMSF.run"><a class="viewcode-back" href="../../../documentation_pages/analysis/rms.html#MDAnalysis.analysis.rms.RMSF.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">progout</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="RMSF.run"><a class="viewcode-back" href="../../../documentation_pages/analysis/rms.html#MDAnalysis.analysis.rms.RMSF.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">progout</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate RMSF of given atoms across a trajectory.</span>
 
 <span class="sd">        This method implements an algorithm for computing sums of squares while</span>
@@ -650,22 +651,26 @@
 <span class="sd">        progout : int (optional)</span>
 <span class="sd">            number of frames to iterate through between updates to progress</span>
 <span class="sd">            output; ``None`` for no updates [10]</span>
-<span class="sd">        quiet : bool (optional)</span>
-<span class="sd">            if ``True``, suppress all output (implies *progout* = ``None``)</span>
-<span class="sd">            [``False``]</span>
+<span class="sd">        verbose : bool (optional)</span>
+<span class="sd">            if ``False``, suppress all output (implies *progout* = ``None``)</span>
+<span class="sd">            [``True``]</span>
 
 <span class="sd">        References</span>
 <span class="sd">        ----------</span>
 <span class="sd">        .. [Welford1962] B. P. Welford (1962). &quot;Note on a Method for</span>
 <span class="sd">           Calculating Corrected Sums of Squares and Products.&quot; Technometrics</span>
 <span class="sd">           4(3):419-420.</span>
+
+<span class="sd">        .. deprecated:: 0.16</span>
+<span class="sd">           The keyword argument *quiet* is deprecated in favor of *verbose*.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atomgroup</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span>
         <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">check_slice_indices</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
         <span class="n">sumsquares</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">atomgroup</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
         <span class="n">means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sumsquares</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="n">verbose</span> <span class="o">=</span> <span class="n">_set_verbose</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="n">progout</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="c1"># set up progress output</span>
@@ -674,7 +679,7 @@
                                        <span class="n">interval</span><span class="o">=</span><span class="n">progout</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">percentage</span> <span class="o">=</span> <span class="n">ProgressMeter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atomgroup</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span>
-                                       <span class="n">quiet</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                                       <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">ts</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atomgroup</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">:</span><span class="n">step</span><span class="p">]):</span>
             <span class="n">sumsquares</span> <span class="o">+=</span> <span class="p">(</span><span class="n">k</span><span class="o">/</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atomgroup</span><span class="o">.</span><span class="n">positions</span> <span class="o">-</span> <span class="n">means</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>

@@ -134,7 +134,7 @@
 <span class="kn">import</span> <span class="nn">MDAnalysis</span>
 <span class="kn">from</span> <span class="nn">..lib</span> <span class="kn">import</span> <span class="n">util</span>
 <span class="kn">from</span> <span class="nn">..lib.util</span> <span class="kn">import</span> <span class="n">cached</span>
-<span class="kn">from</span> <span class="nn">..lib.log</span> <span class="kn">import</span> <span class="n">ProgressMeter</span>
+<span class="kn">from</span> <span class="nn">..lib.log</span> <span class="kn">import</span> <span class="n">ProgressMeter</span><span class="p">,</span> <span class="n">_set_verbose</span>
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">NoDataError</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">groups</span>
 <span class="kn">from</span> <span class="nn">.groups</span> <span class="kn">import</span> <span class="p">(</span><span class="n">GroupBase</span><span class="p">,</span> <span class="n">Atom</span><span class="p">,</span> <span class="n">Residue</span><span class="p">,</span> <span class="n">Segment</span><span class="p">,</span>
@@ -448,7 +448,7 @@
 
         <span class="k">return</span> <span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">format</span></div>
 
-<div class="viewcode-block" id="Universe.transfer_to_memory"><a class="viewcode-back" href="../../../documentation_pages/core/universe.html#MDAnalysis.core.universe.Universe.transfer_to_memory">[docs]</a>    <span class="k">def</span> <span class="nf">transfer_to_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_interval</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Universe.transfer_to_memory"><a class="viewcode-back" href="../../../documentation_pages/core/universe.html#MDAnalysis.core.universe.Universe.transfer_to_memory">[docs]</a>    <span class="k">def</span> <span class="nf">transfer_to_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_interval</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Transfer the trajectory to in memory representation.</span>
 
 <span class="sd">        Replaces the current trajectory reader object with one of type</span>
@@ -459,14 +459,16 @@
 <span class="sd">        ----------</span>
 <span class="sd">        frame_interval : int, optional</span>
 <span class="sd">            Read in every nth frame. [1]</span>
-<span class="sd">        quiet : bool, optional</span>
+<span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Will print the progress of loading trajectory to memory, if</span>
-<span class="sd">            set to True. Default value is quiet.</span>
+<span class="sd">            set to True. Default value is False.</span>
 
 
 <span class="sd">        .. versionadded:: 0.16.0</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">..coordinates.memory</span> <span class="kn">import</span> <span class="n">MemoryReader</span>
+
+        <span class="n">verbose</span> <span class="o">=</span> <span class="n">_set_verbose</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="p">,</span> <span class="n">MemoryReader</span><span class="p">):</span>
             <span class="c1"># Try to extract coordinates using Timeseries object</span>
@@ -479,7 +481,7 @@
             <span class="c1"># fall back to a slower approach</span>
             <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
                 <span class="n">pm</span> <span class="o">=</span> <span class="n">ProgressMeter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span>
-                                   <span class="n">interval</span><span class="o">=</span><span class="n">frame_interval</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">)</span>
+                                   <span class="n">interval</span><span class="o">=</span><span class="n">frame_interval</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
                 <span class="n">coordinates</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># TODO: use pre-allocated array</span>
                 <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="p">[::</span><span class="n">frame_interval</span><span class="p">]:</span>
                     <span class="n">coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">positions</span><span class="p">))</span>

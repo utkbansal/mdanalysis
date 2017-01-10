@@ -428,7 +428,7 @@
 <span class="kn">from</span> <span class="nn">MDAnalysis</span> <span class="kn">import</span> <span class="n">MissingDataWarning</span><span class="p">,</span> <span class="n">NoDataError</span><span class="p">,</span> <span class="n">SelectionError</span><span class="p">,</span> <span class="n">SelectionWarning</span>
 <span class="kn">from</span> <span class="nn">MDAnalysis.lib.util</span> <span class="kn">import</span> <span class="n">parse_residue</span>
 <span class="kn">from</span> <span class="nn">MDAnalysis.lib.mdamath</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">angle</span>
-<span class="kn">from</span> <span class="nn">MDAnalysis.lib.log</span> <span class="kn">import</span> <span class="n">ProgressMeter</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.lib.log</span> <span class="kn">import</span> <span class="n">ProgressMeter</span><span class="p">,</span> <span class="n">_set_verbose</span>
 <span class="kn">from</span> <span class="nn">MDAnalysis.lib.NeighborSearch</span> <span class="kn">import</span> <span class="n">AtomNeighborSearch</span>
 
 
@@ -502,7 +502,7 @@
                  <span class="n">distance</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="mf">120.0</span><span class="p">,</span>
                  <span class="n">forcefield</span><span class="o">=</span><span class="s1">&#39;CHARMM27&#39;</span><span class="p">,</span> <span class="n">donors</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">acceptors</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">start</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">detect_hydrogens</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">):</span>
+                 <span class="n">debug</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">detect_hydrogens</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set up calculation of hydrogen bonds between two selections in a universe.</span>
 
 <span class="sd">        The timeseries is accessible as the attribute :attr:`HydrogenBondAnalysis.timeseries`.</span>
@@ -587,7 +587,7 @@
 <span class="sd">          *step*</span>
 <span class="sd">            read every *step* between *start* and *stop*, ``None`` selects 1.</span>
 <span class="sd">            Note that not all trajectory reader from 1 [``None``]</span>
-<span class="sd">          *verbose*</span>
+<span class="sd">          *debug*</span>
 <span class="sd">            If set to ``True`` enables per-frame debug logging. This is disabled</span>
 <span class="sd">            by default because it generates a very large amount of output in</span>
 <span class="sd">            the log file. (Note that a logger must have been started to see</span>
@@ -635,6 +635,11 @@
 
 <span class="sd">        .. versionchanged:: 0.11.0</span>
 <span class="sd">           Initial checks for selections that potentially raise :exc:`SelectionError`.</span>
+
+<span class="sd">        .. deprecated:: 0.16</span>
+<span class="sd">           The *verbose* keyword argument is replaced by *debug*. Note that the</span>
+<span class="sd">           *verbose* keyword argument is now comsistently used to toggle</span>
+<span class="sd">           progress meters throuthout the library.</span>
 
 <span class="sd">        .. _`Issue 138`: https://github.com/MDAnalysis/mdanalysis/issues/138</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -686,10 +691,19 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># placeholder for output table</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># always enable debug output for initial selection update</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># always enable debug output for initial selection update</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_selection_1</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_selection_2</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>  <span class="c1"># per-frame debugging output?</span>
+        <span class="c1"># per-frame debugging output?</span>
+        <span class="c1"># This line must be changed at the end of the deprecation period for</span>
+        <span class="c1"># the *quiet* keyword argument. Then it must become:</span>
+        <span class="c1"># self.debug = debug</span>
+        <span class="c1"># In the signature, *verbose* must be removed and the default value</span>
+        <span class="c1"># for *debug* must be set to False.</span>
+        <span class="c1"># See the docstring for lib.log._set_verbose, the pull request #1150,</span>
+        <span class="c1"># and the issue #903.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">_set_verbose</span><span class="p">(</span><span class="n">debug</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                                  <span class="n">was</span><span class="o">=</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="n">now</span><span class="o">=</span><span class="s1">&#39;debug&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_parameters</span><span class="p">()</span>
 
@@ -889,7 +903,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">logger_debug</span><span class="p">(</span><span class="s2">&quot;Selection 2 donor hydrogens: {0:d}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_s2_donors_h</span><span class="p">)))</span>
 
     <span class="k">def</span> <span class="nf">logger_debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
 
 <div class="viewcode-block" id="HydrogenBondAnalysis.run"><a class="viewcode-back" href="../../../../documentation_pages/analysis/hbond_analysis.html#MDAnalysis.analysis.hbonds.hbond_analysis.HydrogenBondAnalysis.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -899,10 +913,10 @@
 <span class="sd">        :attr:`HydrogenBondAnalysis.timeseries` (see there for output</span>
 <span class="sd">        format).</span>
 
-<span class="sd">        The method accepts a number of keywords, amongst them *quiet* (default</span>
-<span class="sd">        ``False``), which silences the porgress output (see</span>
-<span class="sd">        :class:`~MDAnalysis.lib.log.ProgressMeter`) and *verbose* (which can</span>
-<span class="sd">        be used to change the value provided with the class constructor).</span>
+<span class="sd">        The method accepts a number of keywords, amongst them *verbose*</span>
+<span class="sd">        (default ``True``), which toggles the porgress output (see</span>
+<span class="sd">        :class:`~MDAnalysis.lib.log.ProgressMeter`) and *debug* which can</span>
+<span class="sd">        be used to change the debug value provided to the class constructor.</span>
 
 <span class="sd">        .. SeeAlso:: :meth:`HydrogenBondAnalysis.generate_table` for processing</span>
 <span class="sd">                     the data into a different format.</span>
@@ -918,10 +932,15 @@
 <span class="sd">           no donors or acceptors were found in a particular frame.</span>
 
 <span class="sd">        .. deprecated:: 0.15.0</span>
-<span class="sd">            The donor and acceptor indices being 1-based is deprecated in favor of</span>
-<span class="sd">            a zero-based index. This can be accessed by &quot;donor_index&quot; or</span>
-<span class="sd">            &quot;acceptor_index&quot; removal of the 1-based indices is targeted</span>
-<span class="sd">            for version 0.16.0</span>
+<span class="sd">           The donor and acceptor indices being 1-based is deprecated in favor</span>
+<span class="sd">           of a zero-based index. This can be accessed by &quot;donor_index&quot; or</span>
+<span class="sd">           &quot;acceptor_index&quot; removal of the 1-based indices is targeted</span>
+<span class="sd">           for version 0.16.0</span>
+
+<span class="sd">        .. deprecated:: 0.16</span>
+<span class="sd">           The *quiet* keyword argument is deprecated in favor of the *verbose*</span>
+<span class="sd">           one. Previous use of *verbose* now corresponds to the new keyword</span>
+<span class="sd">           argument *debug*.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;HBond analysis: starting&quot;</span><span class="p">)</span>
@@ -932,12 +951,12 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">remove_duplicates</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Hidden feature remove_duplicates=False activated: you will probably get duplicate H-bonds.&quot;</span><span class="p">)</span>
 
-        <span class="n">verbose</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">verbose</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Toggling verbose to </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;HBond analysis: For full step-by-step debugging output use verbose=True&quot;</span><span class="p">)</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">debug</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Toggling debug to </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;HBond analysis: For full step-by-step debugging output use debug=True&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">timeseries</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timesteps</span> <span class="o">=</span> <span class="p">[]</span>
@@ -949,9 +968,12 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Problem reading trajectory or trajectory slice incompatible.&quot;</span><span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span>
             <span class="k">raise</span>
+        <span class="n">verbose</span> <span class="o">=</span> <span class="n">_set_verbose</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span>
+                               <span class="n">quiet</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;quiet&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span>
+                               <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">pm</span> <span class="o">=</span> <span class="n">ProgressMeter</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">),</span>
                            <span class="n">format</span><span class="o">=</span><span class="s2">&quot;HBonds frame </span><span class="si">%(step)5d</span><span class="s2">/</span><span class="si">%(numsteps)d</span><span class="s2"> [</span><span class="si">%(percentage)5.1f%%</span><span class="s2">]</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">,</span>
-                           <span class="n">quiet</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;quiet&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+                           <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">time</span>
