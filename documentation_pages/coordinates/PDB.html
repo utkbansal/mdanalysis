@@ -468,20 +468,7 @@ coordinates and closes the file.</p>
 <dl class="method">
 <dt id="MDAnalysis.coordinates.PDB.PDBWriter._write_pdb_bonds">
 <code class="descname">_write_pdb_bonds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/coordinates/PDB.html#PDBWriter._write_pdb_bonds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.coordinates.PDB.PDBWriter._write_pdb_bonds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes out all the bond records; works only for Universe objects.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p>All bonds are written out, using the old atom numbers - this is
-incorrect. Once a selection is made, the atom numbers have to be
-updated (currently they are unmodified) and bonds have to be
-selected for, only if all the atoms for a bond are still present.</p>
-<p class="last">Therefore, this method raises a <code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> if CONECT
-records for anything smaller than the <code class="xref py py-class docutils literal"><span class="pre">Universe</span></code> are written.</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified">Changed in version 0.7.6: </span>Only write CONECT records if <code class="xref py py-attr docutils literal"><span class="pre">PDBWriter.bonds</span></code> <code class="docutils literal"><span class="pre">==</span> <span class="pre">True</span></code>.
-Raises <code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> if it would produce wrong output.</p>
-</div>
+<dd><p>Writes out all the bond records</p>
 </dd></dl>
 
 <dl class="method">
