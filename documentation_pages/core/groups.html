@@ -466,6 +466,35 @@ will give all particles zero velocity).</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="MDAnalysis.core.groups.AtomGroup.groupby">
+<code class="descname">groupby</code><span class="sig-paren">(</span><em>topattr</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.AtomGroup.groupby" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group together items in this group according to values of <em>topattr</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topattr</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Topology attribute to group components by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Unique values of the topology attribute as keys, Groups as values.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>To group atoms with the same mass together:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ag</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;masses&#39;</span><span class="p">)</span>
+<span class="go">{12.010999999999999: &lt;AtomGroup with 462 atoms&gt;,</span>
+<span class="go">14.007: &lt;AtomGroup with 116 atoms&gt;,</span>
+<span class="go">15.999000000000001: &lt;AtomGroup with 134 atoms&gt;}</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="MDAnalysis.core.groups.AtomGroup.guess_bonds">
 <code class="descname">guess_bonds</code><span class="sig-paren">(</span><em>vdwradii=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/MDAnalysis/core/groups.html#AtomGroup.guess_bonds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.core.groups.AtomGroup.guess_bonds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Guess bonds that exist within this AtomGroup and add to Universe</p>
@@ -1349,6 +1378,35 @@ geometric center of group</td>
 </div>
 </dd></dl>
 
+<dl class="method">
+<dt id="MDAnalysis.core.groups.ResidueGroup.groupby">
+<code class="descname">groupby</code><span class="sig-paren">(</span><em>topattr</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.ResidueGroup.groupby" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group together items in this group according to values of <em>topattr</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topattr</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Topology attribute to group components by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Unique values of the topology attribute as keys, Groups as values.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>To group atoms with the same mass together:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ag</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;masses&#39;</span><span class="p">)</span>
+<span class="go">{12.010999999999999: &lt;AtomGroup with 462 atoms&gt;,</span>
+<span class="go">14.007: &lt;AtomGroup with 116 atoms&gt;,</span>
+<span class="go">15.999000000000001: &lt;AtomGroup with 134 atoms&gt;}</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0.</span></p>
+</div>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="MDAnalysis.core.groups.ResidueGroup.ix">
 <code class="descname">ix</code><a class="headerlink" href="#MDAnalysis.core.groups.ResidueGroup.ix" title="Permalink to this definition">¶</a></dt>
@@ -1866,6 +1924,35 @@ geometric center of group</td>
 <code class="docutils literal"><span class="pre">True</span></code> then the <cite>pbc</cite> keyword is used by default.</p>
 <div class="versionchanged">
 <p><span class="versionmodified">Changed in version 0.8: </span>Added <cite>pbc</cite> keyword</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDAnalysis.core.groups.SegmentGroup.groupby">
+<code class="descname">groupby</code><span class="sig-paren">(</span><em>topattr</em><span class="sig-paren">)</span><a class="headerlink" href="#MDAnalysis.core.groups.SegmentGroup.groupby" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group together items in this group according to values of <em>topattr</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topattr</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Topology attribute to group components by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Unique values of the topology attribute as keys, Groups as values.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>To group atoms with the same mass together:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ag</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;masses&#39;</span><span class="p">)</span>
+<span class="go">{12.010999999999999: &lt;AtomGroup with 462 atoms&gt;,</span>
+<span class="go">14.007: &lt;AtomGroup with 116 atoms&gt;,</span>
+<span class="go">15.999000000000001: &lt;AtomGroup with 134 atoms&gt;}</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.16.0.</span></p>
 </div>
 </dd></dl>
 
