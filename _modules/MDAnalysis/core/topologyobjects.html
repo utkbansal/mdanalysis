@@ -634,7 +634,7 @@
 
             <span class="c1"># Create vertical AtomGroups</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ags</span> <span class="o">=</span> <span class="p">[</span><span class="n">universe</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_bix</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]]</span>
-                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Empty TopologyGroup</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_bix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
