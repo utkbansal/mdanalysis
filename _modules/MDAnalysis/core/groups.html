@@ -173,6 +173,7 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">MDAnalysis</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">_ANCHOR_UNIVERSES</span>
 <span class="kn">from</span> <span class="nn">..lib</span> <span class="kn">import</span> <span class="n">util</span>
 <span class="kn">from</span> <span class="nn">..lib</span> <span class="kn">import</span> <span class="n">distances</span>
 <span class="kn">from</span> <span class="nn">..lib</span> <span class="kn">import</span> <span class="n">transformations</span>
@@ -182,6 +183,25 @@
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">NoDataError</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">topologyobjects</span>
 <span class="kn">from</span> <span class="nn">._get_readers</span> <span class="kn">import</span> <span class="n">get_writer_for</span>
+
+
+<span class="k">def</span> <span class="nf">_unpickle</span><span class="p">(</span><span class="n">uhash</span><span class="p">,</span> <span class="n">ix</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">_ANCHOR_UNIVERSES</span><span class="p">[</span><span class="n">uhash</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="c1"># doesn&#39;t provide as nice an error message as before as only hash of universe is stored</span>
+        <span class="c1"># maybe if we pickled the filename too we could do better...</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s2">&quot;Couldn&#39;t find a suitable Universe to unpickle AtomGroup onto &quot;</span>
+            <span class="s2">&quot;with Universe hash &#39;{}&#39;.  Available hashes: {}&quot;</span>
+            <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">uhash</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                                        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_ANCHOR_UNIVERSES</span><span class="o">.</span><span class="n">keys</span><span class="p">()])))</span>
+    <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">_unpickle_uag</span><span class="p">(</span><span class="n">basepickle</span><span class="p">,</span> <span class="n">selections</span><span class="p">,</span> <span class="n">selstrs</span><span class="p">):</span>
+    <span class="n">bfunc</span><span class="p">,</span> <span class="n">bargs</span> <span class="o">=</span> <span class="n">basepickle</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">basepickle</span><span class="p">[</span><span class="mi">1</span><span class="p">:][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">basegroup</span> <span class="o">=</span> <span class="n">bfunc</span><span class="p">(</span><span class="o">*</span><span class="n">bargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">UpdatingAtomGroup</span><span class="p">(</span><span class="n">basegroup</span><span class="p">,</span> <span class="n">selections</span><span class="p">,</span> <span class="n">selstrs</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">make_classes</span><span class="p">():</span>
@@ -1017,6 +1037,9 @@
                 <span class="k">pass</span>
         <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;{cls} has no attribute {attr}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">cls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="n">attr</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">_unpickle</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">anchor_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ix</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2220,6 +2243,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_updated</span><span class="p">()</span>
         <span class="c1"># Going via object.__getattribute__ then bypasses this check stage</span>
         <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># strategy for unpickling is:</span>
+        <span class="c1"># - unpickle base group</span>
+        <span class="c1"># - recreate UAG as created through select_atoms (basegroup and selstrs)</span>
+        <span class="c1"># even if base_group is a UAG this will work through recursion</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">_unpickle_uag</span><span class="p">,</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_group</span><span class="o">.</span><span class="n">__reduce__</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selections</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_strings</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">basestr</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">UpdatingAtomGroup</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
