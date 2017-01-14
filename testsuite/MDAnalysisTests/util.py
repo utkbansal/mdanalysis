@@ -34,8 +34,10 @@ except ImportError:
     importer = builtins.__import__
 
 from functools import wraps
-import mock
-
+try:
+    import mock
+except ImportError: # python 3
+    from unittest import mock
 
 def block_import(package):
     """Block import of a given package
