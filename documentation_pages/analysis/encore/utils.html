@@ -96,24 +96,16 @@
   <div class="section" id="module-MDAnalysis.analysis.encore.utils">
 <span id="utility-functions-for-encore"></span><h1>3.2.6.1.7. Utility functions for ENCORE<a class="headerlink" href="#module-MDAnalysis.analysis.encore.utils" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="MDAnalysis.analysis.encore.utils.AnimatedProgressBar">
-<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">AnimatedProgressBar</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#AnimatedProgressBar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.AnimatedProgressBar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extends ProgressBar to allow you to use it straighforward on a script.
-Accepts an extra keyword argument named <cite>stdout</cite>
-(by default use sys.stdout).
-The progress status may be send to any file-object.</p>
-</dd></dl>
-
-<dl class="class">
 <dt id="MDAnalysis.analysis.encore.utils.ParallelCalculation">
-<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">ParallelCalculation</code><span class="sig-paren">(</span><em>ncores</em>, <em>function</em>, <em>args=None</em>, <em>kwargs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#ParallelCalculation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">ParallelCalculation</code><span class="sig-paren">(</span><em>n_jobs</em>, <em>function</em>, <em>args=None</em>, <em>kwargs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#ParallelCalculation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic parallel calculation class. Can use arbitrary functions,
 arguments to functions and kwargs to functions.</p>
 <dl class="attribute">
-<dt id="MDAnalysis.analysis.encore.utils.ParallelCalculation.ncores">
-<code class="descname">ncores</code><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation.ncores" title="Permalink to this definition">¶</a></dt>
+<dt id="MDAnalysis.analysis.encore.utils.ParallelCalculation.n_jobs">
+<code class="descname">n_jobs</code><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ParallelCalculation.n_jobs" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
-<p>Number of cores to be used for parallel calculation</p>
+<p>Number of cores to be used for parallel calculation. If -1 use all
+available cores.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -149,13 +141,13 @@ function, similarly as described for the args attribute.</p>
 len(kwargs).</p>
 </dd></dl>
 
-<p>Class constructor.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ncores</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Number of cores to be used for parallel calculation</li>
+<li><strong>n_jobs</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Number of cores to be used for parallel calculation. If -1 use all
+available cores.</li>
 <li><strong>function</strong> (<em>object that supports __call__, as functions</em>) &#8211; function to be run in parallel.</li>
 <li><strong>args</strong> (<em>list of tuples</em>) &#8211; Arguments for function; see the ParallelCalculation class
 description.</li>
@@ -209,25 +201,6 @@ finished</li>
 </dd></dl>
 
 <dl class="class">
-<dt id="MDAnalysis.analysis.encore.utils.ProgressBar">
-<em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">ProgressBar</code><span class="sig-paren">(</span><em>start=0</em>, <em>end=10</em>, <em>width=12</em>, <em>fill='='</em>, <em>blank='.'</em>, <em>format='[%(fill)s&gt;%(blank)s] %(progress)s%%'</em>, <em>incremental=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#ProgressBar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ProgressBar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handle and draw a progress barr.
-From <a class="reference external" href="https://github.com/ikame/progressbar">https://github.com/ikame/progressbar</a></p>
-<dl class="method">
-<dt id="MDAnalysis.analysis.encore.utils.ProgressBar.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#ProgressBar.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ProgressBar.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resets the current progress to the start point</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="MDAnalysis.analysis.encore.utils.ProgressBar.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>progress</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#ProgressBar.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.ProgressBar.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the progress value instead of incrementing it</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="MDAnalysis.analysis.encore.utils.TriangularMatrix">
 <em class="property">class </em><code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">TriangularMatrix</code><span class="sig-paren">(</span><em>size</em>, <em>metadata=None</em>, <em>loadfile=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#TriangularMatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.TriangularMatrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Triangular matrix class. This class is designed to provide a
@@ -242,7 +215,7 @@ accessed using the [] and () operators, similarly to a normal numpy array.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<em>int or multiprocessing.SyncrhonizeArray</em>) &#8211; Size of the matrix (number of rows or columns). If an
+<li><strong>size</strong> (<em>int / array_like</em>) &#8211; Size of the matrix (number of rows or columns). If an
 array is provided instead, the size of the triangular matrix
 will be calculated and the array copied as the matrix
 elements. Otherwise, the matrix is just initialized to zero.</li>
@@ -381,11 +354,11 @@ data as well.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="MDAnalysis.analysis.encore.utils.trm_indeces">
-<code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">trm_indeces</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#trm_indeces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.trm_indeces" title="Permalink to this definition">¶</a></dt>
+<dt id="MDAnalysis.analysis.encore.utils.trm_indices">
+<code class="descclassname">MDAnalysis.analysis.encore.utils.</code><code class="descname">trm_indices</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/MDAnalysis/analysis/encore/utils.html#trm_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MDAnalysis.analysis.encore.utils.trm_indices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate (i,j) indeces of a triangular matrix, between elements a and b.
 The matrix size is automatically determined from the number of elements.
-For instance: trm_indeces((0,0),(2,1)) yields (0,0) (1,0) (1,1) (2,0)
+For instance: trm_indices((0,0),(2,1)) yields (0,0) (1,0) (1,1) (2,0)
 (2,1).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

@@ -118,12 +118,12 @@
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">sklearn.cluster</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-   <span class="n">sklearn</span> <span class="o">=</span> <span class="bp">None</span>
-   <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;sklearn.cluster could not be imported: some functionality will &quot;</span> \
-         <span class="s2">&quot;not be available in encore.fit_clusters()&quot;</span>
-   <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">ImportWarning</span><span class="p">)</span>
-   <span class="n">logging</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-   <span class="k">del</span> <span class="n">msg</span>
+    <span class="n">sklearn</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;sklearn.cluster could not be imported: some functionality will &quot;</span> \
+          <span class="s2">&quot;not be available in encore.fit_clusters()&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">ImportWarning</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">msg</span>
 
 
 <div class="viewcode-block" id="encode_centroid_info"><a class="viewcode-back" href="../../../../../documentation_pages/analysis/encore/clustering.html#MDAnalysis.analysis.encore.clustering.ClusteringMethod.encode_centroid_info">[docs]</a><span class="k">def</span> <span class="nf">encode_centroid_info</span><span class="p">(</span><span class="n">clusters</span><span class="p">,</span> <span class="n">cluster_centers_indices</span><span class="p">):</span>
