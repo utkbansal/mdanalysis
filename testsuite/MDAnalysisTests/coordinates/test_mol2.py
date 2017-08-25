@@ -40,47 +40,43 @@ import MDAnalysis as mda
 from MDAnalysisTests import tempdir, make_Universe
 
 
-class TestMol2(TestCase):
-    def setUp(self):
-        self.tempdir = tempdir.TempDir()
-        self.outfile = os.path.join(self.tempdir.name, 'test.mol2')
-
-    def tearDown(self):
-        del self.tempdir
+class TestMol2(object):
+    @pytest.fixture()
+    def outfile(self, tmpdir):
+        return str(tmpdir) + 'test.mol2'
 
     def test_read(self):
         u = Universe(mol2_molecules)
-        assert_equal(len(u.atoms), 49)
-        assert_equal(u.trajectory.n_frames, 200)
-
+        assert len(u.atoms) == 49
+        assert u.trajectory.n_frames == 200
         u.trajectory[199]
         assert_array_almost_equal(u.atoms.positions[0], [1.7240, 11.2730, 14.1200])
 
-    def test_write(self):
+    def test_write(self, outfile):
         ref = Universe(mol2_molecules)
-        ref.atoms.write(self.outfile)
-        u = Universe(self.outfile)
-        assert_equal(len(u.atoms), len(ref.atoms))
-        assert_equal(len(u.trajectory), 1)
+        ref.atoms.write(outfile)
+        u = Universe(outfile)
+        assert len(u.atoms) == len(ref.atoms)
+        assert len(u.trajectory) == 1
         assert_array_equal(u.atoms.positions, ref.atoms.positions)
 
-    def test_write_selection(self):
+    def test_write_selection(self, outfile):
         ref = Universe(mol2_molecule)
         gr0 = ref.select_atoms("name C*")
-        gr0.write(self.outfile)
-        u = Universe(self.outfile)
+        gr0.write(outfile)
+        u = Universe(outfile)
         gr1 = u.select_atoms("name C*")
-        assert_equal(len(gr0), len(gr1))
+        assert len(gr0) == len(gr1)
 
-    def test_write_in_loop(self):
+    def test_write_in_loop(self, outfile):
         ref = Universe(mol2_molecules)
 
-        with mda.Writer(self.outfile) as W:
+        with mda.Writer(outfile) as W:
             for ts in ref.trajectory:
                 W.write(ref.atoms)
-        u = Universe(self.outfile)
-        assert_equal(len(u.atoms), len(ref.atoms))
-        assert_equal(len(u.trajectory), len(ref.trajectory))
+        u = Universe(outfile)
+        assert len(u.atoms) == len(ref.atoms)
+        assert len(u.trajectory) == len(ref.trajectory)
         assert_array_equal(u.atoms.positions, ref.atoms.positions)
         u.trajectory[199]
         ref.trajectory[199]
@@ -98,45 +94,40 @@ class TestMol2(TestCase):
         # True)
 
 
-class TestMol2_traj(TestCase):
-    def setUp(self):
-        self.universe = Universe(mol2_molecules)
-        self.traj = self.universe.trajectory
-        self.ts = self.universe.coord
+class TestMol2_traj(object):
+    @pytest.fixture(scope='class')
+    def universe(self):
+        return Universe(mol2_molecules)
 
-    def tearDown(self):
-        del self.universe
-        del self.traj
-        del self.ts
+    def test_rewind_traj(self, universe):
+        universe.trajectory.rewind()
+        assert universe.coord.frame == 0, "rewinding to frame 0"
 
-    def test_rewind_traj(self):
-        self.traj.rewind()
-        assert_equal(self.ts.frame, 0, "rewinding to frame 0")
+    def test_next_traj(self, universe):
+        universe.trajectory.rewind()
+        universe.trajectory.next()
+        assert universe.coord.frame == 1, "loading frame 1"
 
-    def test_next_traj(self):
-        self.traj.rewind()
-        self.traj.next()
-        assert_equal(self.ts.frame, 1, "loading frame 1")
+    def test_jump_traj(self, universe):
+        universe.trajectory[15]  # index is 0-based and frames are 0-based
+        assert universe.coord.frame == 15, "jumping to frame 15"
 
-    def test_jump_traj(self):
-        self.traj[15]  # index is 0-based and frames are 0-based
-        assert_equal(self.ts.frame, 15, "jumping to frame 15")
+    def test_jump_lastframe_traj(self, universe):
+        universe.trajectory[-1]
+        assert universe.coord.frame == 199, "indexing last frame with traj[-1]"
 
-    def test_jump_lastframe_traj(self):
-        self.traj[-1]
-        assert_equal(self.ts.frame, 199, "indexing last frame with traj[-1]")
-
-    def test_slice_traj(self):
-        frames = [ts.frame for ts in self.traj[5:17:3]]
+    def test_slice_traj(self, universe):
+        frames = [ts.frame for ts in universe.trajectory[5:17:3]]
         assert_equal(frames, [5, 8, 11, 14], "slicing traj [5:17:3]")
 
-    def test_reverse_traj(self):
-        frames = [ts.frame for ts in self.traj[20:5:-1]]
+    def test_reverse_traj(self, universe):
+        frames = [ts.frame for ts in universe.trajectory[20:5:-1]]
         assert_equal(frames, list(range(20, 5, -1)),
                      "reversing traj [20:5:-1]")
 
-    def test_n_frames(self):
-        assert_equal(self.universe.trajectory.n_frames, 200, "wrong number of frames in traj")
+    def test_n_frames(self, universe):
+        assert universe.trajectory.n_frames == 200, "wrong number of frames " \
+                                                    "in traj"
 
 
 class TestMOL2NoSubstructure(object):
@@ -147,15 +138,14 @@ class TestMOL2NoSubstructure(object):
 
     def test_load(self):
         r = mda.coordinates.MOL2.MOL2Reader(mol2_zinc, n_atoms=self.n_atoms)
-        assert_(r.n_atoms == 45)
+        assert r.n_atoms == 45
 
     def test_universe(self):
         u = mda.Universe(mol2_zinc)
-        assert_(len(u.atoms) == self.n_atoms)
+        assert len(u.atoms) == self.n_atoms
 
-    def test_write_nostructure(self):
-        mytempdir = tempdir.TempDir()
-        outfile = os.path.join(mytempdir.name, 'test.mol2')
+    def test_write_nostructure(self, tmpdir):
+        outfile = str(tmpdir) + 'test.mol2'
 
         u = mda.Universe(mol2_zinc)
         with mda.Writer(outfile) as W:
@@ -163,12 +153,11 @@ class TestMOL2NoSubstructure(object):
 
         u2 = mda.Universe(outfile)
 
-        assert_(len(u.atoms) == len(u2.atoms))
+        assert len(u.atoms) == len(u2.atoms)
 
 
-def test_mol2_write_NIE():
-    mytempdir = tempdir.TempDir()
-    outfile = os.path.join(mytempdir.name, 'test.mol2')
+def test_mol2_write_NIE(tmpdir):
+    outfile = str(tmpdir) + 'test.mol2'
     u = make_Universe(trajectory=True)
     with pytest.raises(NotImplementedError):
         u.atoms.write(outfile)
